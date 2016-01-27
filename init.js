@@ -40,30 +40,46 @@ function handleFileSelect(evt){
     var reader = new FileReader();
     var result;
     reader.onload = function(e){
-      result = reader.result;
+      var text = e.target.result;
+      var lines = text.split(/[\r\n]+/g);
+      for(var i = 0; i < lines.length; i++) {
+          output.push(lines[i]);
+      }
+      poems.push(new Poem(output));
 
-    }
-    reader.readAsText(files[i]);
-    console.log(result);
-    //var contents = evt.target.result;
+    };
+    reader.readAsText(f,"UTF-8");
 
-    // Code to execute for every file selected
    }
+
+
+
+   reader.onloadend = function(e){
+     for(var j=0;j<poems.length;j++){
+
+          //some sort of code that displays list of poems in poems[]
+          //each poem will be clickable and will open entire list of lines
+
+
+         poems[j].printPoem();
+     }
+   }
+
+
+
  }
 
-function Poem(file){
-  var reader = new FileReader();
-  reader.onload = function () {
-    var fileContents = this.result;
-    console.log(fileContents);
+function Poem(data){
+  this.title = data[0];
+  this.lines = [];
+  for(var i = 1; i<data.length;i++){
+    this.lines.push(new Line(this.title,data[i]));
+  }
+}
 
-  };
-
-  reader.readAsText(file);
-
-  console.log(this.result);
-
-
+Poem.prototype.printPoem = function(){
+  console.log(this.title);
+  console.log(this.lines);
 }
 
 /*
