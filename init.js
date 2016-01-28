@@ -46,7 +46,7 @@ function handleFileSelect(evt){
           output.push(lines[i]);
       }
       poems.push(new Poem(output));
-
+      output = [];
     };
     reader.readAsText(f,"UTF-8");
 
@@ -55,11 +55,13 @@ function handleFileSelect(evt){
 
 
    reader.onloadend = function(e){
+     //poems[0].printPoem();
+
      for(var j=0;j<poems.length;j++){
+
 
           //some sort of code that displays list of poems in poems[]
           //each poem will be clickable and will open entire list of lines
-
 
          poems[j].printPoem();
      }
@@ -79,7 +81,11 @@ function Poem(data){
 
 Poem.prototype.printPoem = function(){
   console.log(this.title);
-  console.log(this.lines);
+
+  for(var h=0;h<this.lines.length;h++){
+    console.log(this.lines[h].line);
+  }
+  //console.log(this.lines);
 }
 
 /*
