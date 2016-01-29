@@ -4,7 +4,6 @@ var canvas;
 var paper;
 var numPoems = 2;
 var poems = [];
-
 var buffer = 30;
 
 function init(){
@@ -49,16 +48,28 @@ function handleFileSelect(evt){
 
    }
 
-
-
    reader.onloadend = function(e){
    var poemList = selectBar.set();
-   poemList.attr({font: "24px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
      for(var j=0;j<poems.length;j++){
-         toAdd = selectBar.text(100,130+(20*j),poems[j].title);
+         toAdd = selectBar.text(20,130+(20*j),poems[j].title);
          toAdd.data('poem',poems[j]);
          toAdd.click(function(){
+         /*selectBar.clear();
+         var rect2 = selectBar.rect(0, 0, canvas.width, canvas.height);
+         rect2.attr("fill", "#0f0");
+         rect2.attr("stroke", "#000");
+         var selectHeader = selectBar.text(60,100,"Choose a Poem");
+         selectHeader.attr({font: "20px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+
+         poemList.forEach(function(e){
+           j=0;
+           selectBar.text(20,130+(200*j),e.data('poem').title);
+           e.attr({font: "16px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+           j++;
+         });
+         */
          paper.clear();
+         this.attr("fill","#fff");
          var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
          rect1.attr("fill", "#448C0E");
          rect1.attr("stroke", "#000");
@@ -66,6 +77,7 @@ function handleFileSelect(evt){
        });
          poemList.push(toAdd);
      }
+        poemList.attr({font: "16px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
  };
  }
 
@@ -78,7 +90,7 @@ function Poem(data){
 }
 
 Poem.prototype.displayPoem = function(){
-  var lineSpacing = 20;
+  var lineSpacing = 15;
   var header = paper.text(280,100,this.title);
   header.attr({font: "20px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
   var lines = paper.set();
