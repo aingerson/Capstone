@@ -102,10 +102,21 @@ Poem.prototype.displayPoem = function(){
   var lineSpacing = 12;
   var header = paper.text(buffer,buffer,this.title);
   header.attr({font: "16px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
-  var lines = paper.set();
+  var lines = [];//array of lines (set of text boxes)
+  var i,j;
   //lines.attr({font: "16px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
-  for(i=0;i<this.lines.length;i++){
-    lines.push(paper.text(buffer, (buffer*2.2)+(lineSpacing*i), this.lines[i].line));
+  for(i=0;i<this.lines.length;i++){//go through every lines
+    var thisLine = paper.set();//set of text boxes (words)
+    var x = buffer;//starting position for each line
+    for(j=0;j<this.lines[i].line.length;j++){//for every word in this lines
+      thisLine.push(paper.text(x,(buffer*2.2)+(lineSpacing*i),this.lines[i].line[j]));
+
+      thisLine[j].attr({font: "10px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+      //create new text box to be displayed at x position, constant y for this line, with text from next word of this line of poem
+      //console.log(this.lines[i].line[j]);
+      x += thisLine[j].node.getBBox().width+5;
+    }
+    lines.push(thisLine);
     lines[i].attr({font: "10px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
   }
 }
@@ -119,8 +130,8 @@ Poem.prototype.printPoem = function(){
 }
 
 function Line(poem,line){
-  this.line = line;
   this.poem = poem;
+  this.line = line.split(" ");
 }
 
 $(document).ready(function() {
