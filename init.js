@@ -10,26 +10,23 @@ var poems = [];
 function init(){
   canvas = $('#canvas')[0];
   context = canvas.getContext("2d");
-  paper = new Raphael(8, 8, canvas.width, canvas.height);
+  paper = new Raphael(8+canvas.width/3, 8, canvas.width, '100%');
+  selectBar = new Raphael(8, 8, canvas.width/3, canvas.height);
+  var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
+  rect1.attr("fill", "#448C0E");
+  rect1.attr("stroke", "#000");
+  var rect2 = selectBar.rect(0, 0, canvas.width, canvas.height);
+  rect2.attr("fill", "#0f0");
+  rect2.attr("stroke", "#000");
+  var circle = selectBar.circle(50,40,10);
+  circle.attr("fill","#f00");
   var circle = paper.circle(50,40,10);
   circle.attr("fill","#f00");
 
-  document.getElementById('files').addEventListener('change',handleFileSelect,false);
+  var selectHeader = selectBar.text(60,100,"Choose a Poem");
+  selectHeader.attr({font: "20px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
 
-  // for (var j = 0; j < numPoems; j++) {
-  //     poem = new Poem(new File([""],"poems/" + j + ".txt",null));
-  //     poems.push(poem);
-  // }
-// if (window.File && window.FileReader && window.FileList && window.Blob) {
-// var fileSelected = document.getElementById('fileToRead');
-// var fileRead = fileSelected.files[0];
-//   //Initialize the FileReader object to read the 2file
-//     var fileReader = new FileReader();
-//     fileReader.onload = function (e) {
-//       var t = paper.text(50,50,fileReader.result);
-//     }
-//     //fileReader.readAsText(fileRead);
-//   }
+  document.getElementById('files').addEventListener('change',handleFileSelect,false);
 }
 
 function handleFileSelect(evt){
@@ -55,20 +52,18 @@ function handleFileSelect(evt){
 
 
    reader.onloadend = function(e){
-     //poems[0].printPoem();
-
+   var poemList = selectBar.set();
+   poemList.attr({font: "18px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
      for(var j=0;j<poems.length;j++){
-
-
-          //some sort of code that displays list of poems in poems[]
-          //each poem will be clickable and will open entire list of lines
-
-         poems[j].printPoem();
+         toAdd = selectBar.text(100,130+(20*j),poems[j].title);
+         toAdd.data('poem',poems[j]);
+         toAdd.click(function(){
+         paper.clear();
+         this.data('poem').displayPoem();
+       });
+         poemList.push(toAdd);
      }
-   }
-
-
-
+ };
  }
 
 function Poem(data){
@@ -79,22 +74,24 @@ function Poem(data){
   }
 }
 
+Poem.prototype.displayPoem = function(){
+  var lineSpacing = 50;
+  var header = paper.text(330,100,this.title);
+  header.attr({font: "20px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+  var lines = paper.set();
+  lines.attr({font: "14px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+  for(i=0;i<this.lines.length;i++){
+    lines.push(paper.text(330, 200+(lineSpacing*i), this.lines[i].line));
+  }
+}
+
 Poem.prototype.printPoem = function(){
   console.log(this.title);
 
   for(var h=0;h<this.lines.length;h++){
     console.log(this.lines[h].line);
   }
-  //console.log(this.lines);
 }
-
-/*
-var lines = paper.set();
-for (line in poem){
-	lines.push(paper.text(330, 100, line);
-}
-	lines.attr({font: "12px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
-*/
 
 function Line(poem,line){
   this.line = line;
