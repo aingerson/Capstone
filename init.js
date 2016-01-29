@@ -5,13 +5,13 @@ var paper;
 var numPoems = 2;
 var poems = [];
 
-
+var buffer = 30;
 
 function init(){
   canvas = $('#canvas')[0];
   context = canvas.getContext("2d");
-  paper = new Raphael(8+canvas.width/3, 8, canvas.width, '100%');
-  selectBar = new Raphael(8, 8, canvas.width/3, canvas.height);
+  paper = new Raphael(buffer+canvas.width/3, buffer, canvas.width, '100%');
+  selectBar = new Raphael(buffer, buffer, canvas.width/3, canvas.height);
   var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
   rect1.attr("fill", "#448C0E");
   rect1.attr("stroke", "#000");
