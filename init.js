@@ -10,7 +10,7 @@ var buffer = 30;
 function init(){
   canvas = $('#canvas')[0];
   context = canvas.getContext("2d");
-  paper = new Raphael(buffer+canvas.width/3, buffer, canvas.width, '100%');
+  paper = new Raphael(buffer+canvas.width/3, buffer, canvas.width, canvas.height);
   selectBar = new Raphael(buffer, buffer, canvas.width/3, canvas.height);
   var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
   rect1.attr("fill", "#448C0E");
@@ -53,12 +53,15 @@ function handleFileSelect(evt){
 
    reader.onloadend = function(e){
    var poemList = selectBar.set();
-   poemList.attr({font: "18px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+   poemList.attr({font: "24px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
      for(var j=0;j<poems.length;j++){
          toAdd = selectBar.text(100,130+(20*j),poems[j].title);
          toAdd.data('poem',poems[j]);
          toAdd.click(function(){
          paper.clear();
+         var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
+         rect1.attr("fill", "#448C0E");
+         rect1.attr("stroke", "#000");
          this.data('poem').displayPoem();
        });
          poemList.push(toAdd);
@@ -75,13 +78,13 @@ function Poem(data){
 }
 
 Poem.prototype.displayPoem = function(){
-  var lineSpacing = 50;
-  var header = paper.text(330,100,this.title);
+  var lineSpacing = 20;
+  var header = paper.text(280,100,this.title);
   header.attr({font: "20px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
   var lines = paper.set();
-  lines.attr({font: "14px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
+  lines.attr({font: "16px Fontin-Sans, Arial", fill: "#000", "text-anchor": "start"});
   for(i=0;i<this.lines.length;i++){
-    lines.push(paper.text(330, 200+(lineSpacing*i), this.lines[i].line));
+    lines.push(paper.text(330, 140+(lineSpacing*i), this.lines[i].line));
   }
 }
 
