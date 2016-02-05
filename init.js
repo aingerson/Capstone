@@ -12,8 +12,8 @@ var selectBarColor = "#b1cdd1";//background left
 var displayColor = "#93d0d1";//background right
 var deselectColor = "#000";//font color of all writing
 var selectColor = "#fff";//font color of selected poem
-var poemList; // collection of raphael text (titles)
 var lineSpacing = 12;
+var poemList;
 var listY = buffer+lineSpacing;
 
 function init(){
@@ -27,6 +27,7 @@ function init(){
   var rect2 = selectBar.rect(0, 0, canvas.width, canvas.height);
   rect2.attr("fill", selectBarColor);
   rect2.attr("stroke", "#000");
+  poemList = selectBar.set();
   document.getElementById('files').addEventListener('change',handleFileSelect,false);
 }
 
@@ -55,6 +56,7 @@ function handleFileSelect(evt){
   //    item.attr("anchor","start");
       listY += lineSpacing+2;
       item.data("poem",thisPoem);
+      poemList.push(item);
       item.click(function(){
         if(selected!=null){
           selected.attr("fill", deselectColor);
@@ -63,7 +65,7 @@ function handleFileSelect(evt){
         }
         selected = this;
         //console.log(this.data('poem'));
-        this.attr("fill"),selectColor;
+        this.attr("fill",selectColor);
         this.data('poem').showPoem();
       });
 
@@ -133,6 +135,68 @@ Poem.prototype.showPoem = function(){
   }
 }
 
+function searchList(word){
+  word = word.toLowerCase();
+  if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
+    word = word.substring(0,word.length-1);
+  }
+  var found;
+  for(var i=0;i<poemList.length;i++){
+    found = 0;
+    for(var j=0;j<poemList[i].data('poem').lines.length;j++){
+    //  console.log(poemList[i].data('poem').lines[j].length);
+      for(var k=0;k<poemList[i].data('poem').lines[j].line.length;k++){
+        var w = poemList[i].data('poem').lines[j].line[k].attr('text').toLowerCase();
+        if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
+          w = w.substring(0,w.length-1);
+        }
+        //console.log(w);
+        if(w == word){
+          //console.log("found match");
+          poemList[i].attr("fill",selectColor);
+          found = 1;
+          break;
+          //this.lines[i].line[j].attr("fill", selectColor);
+        }
+        else{
+          poemList[i].attr("fill", deselectColor);
+        }
+
+      }
+      if(found) break;
+    }
+
+
+
+  }
+
+
+
+}
+
+
+Poem.prototype.searchPoem = function(word){
+  word = word.toLowerCase();
+  if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
+    word = word.substring(0,word.length-1);
+  }
+  for(var i = 0; i<this.lines.length;i++){//for every line in this poem
+    for(var j=0; j<this.lines[i].line.length;j++){//for every word in this line
+
+      var w = this.lines[i].line[j].attr('text').toLowerCase();
+      if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
+        w = w.substring(0,w.length-1);
+      }
+      if(w == word){
+        this.lines[i].line[j].attr("fill", selectColor);
+      }
+      else{
+        this.lines[i].line[j].attr("fill", deselectColor);
+      }
+    }
+  }
+}
+
 function Line(poem,line,y){
   this.poem = poem;
   var splitLine = line.split(" ");
@@ -142,6 +206,16 @@ function Line(poem,line,y){
     //console.log(splitLine[j]);
     this.line.push(paper.text(x,y,splitLine[j]));
     this.line[j].attr({font: "10px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
+
+
+
+    this.line[j].click(function(){
+    //  console.log(this.attr('text'));
+      selected.data('poem').searchPoem(this.attr('text'));
+      searchList(this.attr('text'));
+    });
+
+
     x += this.line[j].node.getBBox().width+5;
     this.line[j].hide();
   }
