@@ -12,9 +12,11 @@ var selectBarColor = "#b1cdd1";//background left
 var displayColor = "#93d0d1";//background right
 var deselectColor = "#000";//font color of all writing
 var selectColor = "#fff";//font color of selected poem
+var containsColor = "d12e22";
 var lineSpacing = 12;
 var poemList;
 var listY = buffer+lineSpacing;
+var currWord = "";
 
 function init(){
   canvas = $('#canvas')[0];
@@ -61,9 +63,15 @@ function handleFileSelect(evt){
         if(selected!=null){
           selected.attr("fill", deselectColor);
           selected.data('poem').hidePoem();
+          if(selected.data('poem').contains()) selected.attr("fill",containsColor);
           //hide poem
         }
+
+
         selected = this;
+
+        selected.data('poem').searchPoem();
+
         //console.log(this.data('poem'));
         this.attr("fill",selectColor);
         this.data('poem').showPoem();
@@ -135,35 +143,42 @@ Poem.prototype.showPoem = function(){
   }
 }
 
-function searchList(word){
-  word = word.toLowerCase();
-  if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
-    word = word.substring(0,word.length-1);
-  }
+function searchList(){
+  // word = word.toLowerCase();
+  // if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
+  //   word = word.substring(0,word.length-1);
+  // }
   var found;
   for(var i=0;i<poemList.length;i++){
     found = 0;
+    if(poemList[i]==selected){
+
+      continue;
+    }
     for(var j=0;j<poemList[i].data('poem').lines.length;j++){
     //  console.log(poemList[i].data('poem').lines[j].length);
+
       for(var k=0;k<poemList[i].data('poem').lines[j].line.length;k++){
         var w = poemList[i].data('poem').lines[j].line[k].attr('text').toLowerCase();
         if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
           w = w.substring(0,w.length-1);
         }
         //console.log(w);
-        if(w == word){
+        if(w == currWord){
           //console.log("found match");
-          poemList[i].attr("fill",selectColor);
+          poemList[i].attr("fill",containsColor);
+          poems[i].searchPoem();
           found = 1;
-          break;
+          //break;
           //this.lines[i].line[j].attr("fill", selectColor);
         }
-        else{
-          poemList[i].attr("fill", deselectColor);
-        }
+        // else{
+        //   poemList[i].attr("fill", deselectColor);
+        // }
 
       }
-      if(found) break;
+      if(!found) poemList[i].attr("fill",deselectColor);
+      //if(found) break;
     }
 
 
@@ -175,11 +190,12 @@ function searchList(word){
 }
 
 
-Poem.prototype.searchPoem = function(word){
-  word = word.toLowerCase();
-  if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
-    word = word.substring(0,word.length-1);
-  }
+Poem.prototype.searchPoem = function(){
+  if(currWord == "") return;
+  // word = word.toLowerCase();
+  // if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
+  //   word = word.substring(0,word.length-1);
+  // }
   for(var i = 0; i<this.lines.length;i++){//for every line in this poem
     for(var j=0; j<this.lines[i].line.length;j++){//for every word in this line
 
@@ -187,8 +203,8 @@ Poem.prototype.searchPoem = function(word){
       if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
         w = w.substring(0,w.length-1);
       }
-      if(w == word){
-        this.lines[i].line[j].attr("fill", selectColor);
+      if(w == currWord){
+        this.lines[i].line[j].attr("fill", containsColor);
       }
       else{
         this.lines[i].line[j].attr("fill", deselectColor);
@@ -196,6 +212,31 @@ Poem.prototype.searchPoem = function(word){
     }
   }
 }
+
+Poem.prototype.contains = function(){
+  if(currWord == "") return;
+  // word = word.toLowerCase();
+  // if(word.includes(',') || word.includes('.') || word.includes('?') || word.includes('!')){
+  //   word = word.substring(0,word.length-1);
+  // }
+  for(var i = 0; i<this.lines.length;i++){//for every line in this poem
+    for(var j=0; j<this.lines[i].line.length;j++){//for every word in this line
+
+      var w = this.lines[i].line[j].attr('text').toLowerCase();
+      if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
+        w = w.substring(0,w.length-1);
+      }
+      if(w == currWord){
+        return 1;
+      }
+    }
+  }
+
+  return 0;
+}
+
+
+
 
 function Line(poem,line,y){
   this.poem = poem;
@@ -211,8 +252,17 @@ function Line(poem,line,y){
 
     this.line[j].click(function(){
     //  console.log(this.attr('text'));
-      selected.data('poem').searchPoem(this.attr('text'));
-      searchList(this.attr('text'));
+
+      var w = this.attr('text').toLowerCase();
+      if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
+        w = w.substring(0,w.length-1);
+      }
+      currWord = w;
+
+      //selected.data('poem').searchPoem(this.attr('text'));
+      selected.data('poem').searchPoem();
+      searchList();
+
     });
 
 
