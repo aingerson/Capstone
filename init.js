@@ -17,7 +17,7 @@ var lineSpacing = 12;
 var poemList;
 var listY = buffer+lineSpacing;
 var currWord = "";
-var insigWords = ["of","a","the","in","over","to","is","was","and","or","its","it","for","my","your","his","though","can","at","but"];
+var insigWords = ["of","a","the","in","over","to","is","was","and","or","its","it","for","my","your","his","though","can","at","but","from","have","has"];
 
 var sigWords = [];
 
@@ -206,6 +206,10 @@ function searchAllPoems(word){
     if(w == currWord){
       sigWords[i].attr("fill",containsColor);
     }
+    else{
+      sigWords[i].attr("fill",deselectColor)
+    }
+
 
   }
 }
