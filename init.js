@@ -20,13 +20,18 @@ var currWord = "";
 
 function init(){
   poemCanvas = $('#poem')[0];
-  poemcontext = canvas.getContext("2d");
-  poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), canvas.height);
-  selectBar = new Raphael(canvasBuffer, canvasBuffer, canvas.width/ratio, canvas.height);
-  var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
+  poemContext = poemCanvas.getContext("2d");
+  poemPaper = new Raphael(poemCanvas.width,canvasBuffer,poemCanvas.width,poemCanvas.height);
+  //poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), poemCanvas.height);
+
+  selectBarCanvas = $('#list')[0];
+  selectContext = selectBarCanvas.getContext("2d");
+  selectBar = new Raphael(canvasBuffer,canvasBuffer,selectBarCanvas.width,selectBarCanvas.height);
+  //selectBar = new Raphael(canvasBuffer, canvasBuffer, poemCanvas.width/ratio, poemCanvas.height);
+  var rect1 = poemPaper.rect(0, 0, poemCanvas.width, poemCanvas.height);
   rect1.attr("fill", displayColor);
   rect1.attr("stroke", "#000");
-  var rect2 = selectBar.rect(0, 0, canvas.width, canvas.height);
+  var rect2 = selectBar.rect(0, 0, poemCanvas.width, poemCanvas.height);
   rect2.attr("fill", selectBarColor);
   rect2.attr("stroke", "#000");
   poemList = selectBar.set();
@@ -114,7 +119,7 @@ function handleFileSelect(evt){
 function Poem(data){
   var y = buffer;
   this.titleString= data[0];
-  this.title = paper.text(buffer,y,data[0]);
+  this.title = poemPaper.text(buffer,y,data[0]);
   this.title.attr({font: "16px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
   this.lines = [];//array of lines
   this.title.hide();
@@ -241,11 +246,11 @@ Poem.prototype.contains = function(){
 function Line(poem,line,y){
   this.poem = poem;
   var splitLine = line.split(" ");
-  this.line = paper.set();
+  this.line = poemPaper.set();
   x = buffer;
   for(var j=0;j<splitLine.length;j++){
     //console.log(splitLine[j]);
-    this.line.push(paper.text(x,y,splitLine[j]));
+    this.line.push(poemPaper.text(x,y,splitLine[j]));
     this.line[j].attr({font: "10px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
 
 
