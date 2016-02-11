@@ -49,3 +49,15 @@ circuits and paths
 Line as a data structure?
 
 Click on line and read whole poem
+
+
+
+
+
+
+2/5 goals:
+- optimize loading and searching
+- while scanning, build graph nodes to display
+- dragging lines to playground (right) / clickable adding to dynamic graph
+- insignificant words
+- scrolling
