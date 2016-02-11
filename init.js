@@ -1,7 +1,7 @@
 
-var context;
-var canvas;
-var paper;
+var poemContext;
+var poemCanvas;
+var poemPaper;
 
 var poems = [];
 var canvasBuffer = 30;
@@ -19,9 +19,9 @@ var listY = buffer+lineSpacing;
 var currWord = "";
 
 function init(){
-  canvas = $('#canvas')[0];
-  context = canvas.getContext("2d");
-  paper = new Raphael(canvasBuffer+(canvas.width/ratio), canvasBuffer, 2*(canvas.width/ratio), canvas.height);
+  poemCanvas = $('#poem')[0];
+  poemcontext = canvas.getContext("2d");
+  poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), canvas.height);
   selectBar = new Raphael(canvasBuffer, canvasBuffer, canvas.width/ratio, canvas.height);
   var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
   rect1.attr("fill", displayColor);
