@@ -18,12 +18,6 @@ var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
 var lineSpacing = 12;
 /*
-var poemList;
-var listY = buffer+lineSpacing;
-var currWord = "";
-var insigWords = ["of","a","the","in","over","to","is","was","and","or","its","it","for","my","your","his","though","can","at","but"];
-
-var sigWords = [];
 
 sidebarW = 200;
 sidebarH = 800;
@@ -45,101 +39,6 @@ function init(){
   rect2.attr("fill", selectBarColor);
   rect2.attr("stroke", "#000");
 
-  poemList = selectBar.set();
-  document.getElementById('files').addEventListener('change',handleFileSelect,false);
-}
-
-function handleFileSelect(evt){
-  var files = evt.target.files;
-  var output = [];
-
-  for (var i = 0, f; f = files[i]; i++) {
-    var reader = new FileReader();
-    var result;
-    reader.onload = function(e){
-      var text = e.target.result;
-      //var lines = text.split(/[\r\n]+/g);
-      var lines = text.split("\n");
-
-      for(var i = 0; i < lines.length; i++) {
-          output.push(lines[i]);
-      }
-
-      var thisPoem = new Poem(output);
-      poems.push(thisPoem);
-
-      var item = selectBar.text(buffer,listY,output[0]);
-      item.attr({font: "12px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
-      //console.log(item);
-  //    item.attr("anchor","start");
-      listY += lineSpacing+2;
-      item.data("poem",thisPoem);
-      poemList.push(item);
-      item.click(function(){
-        if(selected!=null){
-          selected.attr("fill", deselectColor);
-          selected.data('poem').hidePoem();
-          if(selected.data('poem').contains()) selected.attr("fill",containsColor);
-          //hide poem
-        }
-
-
-        selected = this;
-
-        selected.data('poem').searchPoem();
-
-
-        //console.log(this.data('poem'));
-        this.attr("fill",selectColor);
-        this.data('poem').showPoem();
-      });
-
-      output = [];
-
-
-    };
-    reader.readAsText(f,"UTF-8");
-
-   }
-
- //   reader.onloadend = function(e){
- //     var selectHeader = selectBar.text(buffer,buffer,"Choose a Poem");
- //     selectHeader.attr({font: "20px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
- //
- //     poemList = selectBar.set();
- //     for(var j=0;j<poems.length;j++){
- //         toAdd = selectBar.text(buffer,(buffer*2)+(15*j),poems[j].titleString);
- //         toAdd.data('poem',poems[j]);
- //         toAdd.click(function(){
- //         if(selected!=null){
- //           selected.attr("fill", deselectColor);
- //           this.data('poem').hidePoem();
- //         }
- //          selected = this;
- //         this.attr("fill",selectColor);
- //
- //         this.data('poem').showPoem();
- //       });
- //         poemList.push(toAdd);
- //     }
- //        poemList.attr({font: "12px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
- // };
- }
-
-
-
-function Poem(data){
-  var y = buffer;
-  this.titleString= data[0];
-  this.title = poemPaper.text(buffer,y,data[0]);
-  this.title.attr({font: "16px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
-  this.lines = [];//array of lines
-  this.title.hide();
-  y += lineSpacing;
-  for(var i = 1; i<data.length;i++){
-    this.lines.push(new Line(this.title,data[i],y));
-    y += lineSpacing;
-  }
 */
 var poemList; //list of poem name raphael objects
 var listY = buffer + lineSpacing; //y coordinate of poem list names
@@ -307,40 +206,10 @@ function normalize(w) {
     return w;
 }
 
-<<<<<<< HEAD
-function Line(poem,line,y){
-  this.poem = poem;
-  var splitLine = line.split(" ");
-  this.line = poemPaper.set();
-  x = buffer;
-  for(var j=0;j<splitLine.length;j++){
-    //console.log(splitLine[j]);
-    this.line.push(poemPaper.text(x,y,splitLine[j]));
-    this.line[j].attr({font: "10px Fontin-Sans, Helvetica", fill: deselectColor, "text-anchor": "start"});
-
-    var w = this.line[j].attr('text').toLowerCase();
-    if(w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')){
-      w = w.substring(0,w.length-1);
-    }
-
-    if(!contains(insigWords,w)){
-      this.line[j].click(function(){
-        var thisWord = this.attr('text').toLowerCase();
-        if(thisWord.includes(',') || thisWord.includes('.') || thisWord.includes('?') || thisWord.includes('!')){
-          thisWord = thisWord.substring(0,thisWord.length-1);
-        }
-        currWord = thisWord;
-        //selected.data('poem').searchPoem();
-        searchAllPoems(currWord);
-        searchList();
-      });
-      sigWords.push(this.line[j]);
-=======
 //Searches list of insignificant words (defined globally) and returns whether it is insignificant
 function isInsig(e) {
     for (var i = 0; i < insigWords.length; i++) {
         if (insigWords[i] == e) return true;
->>>>>>> b800df456c4e2825797e206662af594ae5f835e7
     }
     return false;
 }
