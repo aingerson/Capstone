@@ -21,22 +21,26 @@ var insigWords = ["of","a","the","in","over","to","is","was","and","or","its","i
 
 var sigWords = [];
 
+sidebarW = 200;
+sidebarH = 800;
+
 function init(){
-  poemCanvas = $('#poem')[0];
-  poemContext = poemCanvas.getContext("2d");
-  poemPaper = new Raphael(poemCanvas.width,canvasBuffer,poemCanvas.width,poemCanvas.height);
+  poemCanvas = $('#poemdiv')[0];
+  poemPaper = new Raphael('poem',poemCanvas.width,poemCanvas.height);
   //poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), poemCanvas.height);
 
   selectBarCanvas = $('#list')[0];
-  selectContext = selectBarCanvas.getContext("2d");
-  selectBar = new Raphael(canvasBuffer,canvasBuffer,selectBarCanvas.width,selectBarCanvas.height);
+  selectBar = new Raphael('sidebar',sidebarW,sidebarH);
   //selectBar = new Raphael(canvasBuffer, canvasBuffer, poemCanvas.width/ratio, poemCanvas.height);
+
   var rect1 = poemPaper.rect(0, 0, poemCanvas.width, poemCanvas.height);
   rect1.attr("fill", displayColor);
   rect1.attr("stroke", "#000");
-  var rect2 = selectBar.rect(0, 0, poemCanvas.width, poemCanvas.height);
+
+  var rect2 = selectBar.rect(0, 0, sidebarW, sidebarH);
   rect2.attr("fill", selectBarColor);
   rect2.attr("stroke", "#000");
+
   poemList = selectBar.set();
   document.getElementById('files').addEventListener('change',handleFileSelect,false);
 }

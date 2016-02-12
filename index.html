@@ -11,21 +11,43 @@
 input {
 	position:absolute;
 	width:300px;
-
 }
 canvas {
 	border: 1 solid black;
+}
+#poemdiv {
+	width: 400px;
+	height: 400px;
+	float:left;
+	overflow: auto;
+}
+#sidebar {
+	width: 400px;
+	height: 400px;
+	overflow: auto;
+	float:left;
+}
+#list {
+	width:400px;;
+	height:400px;
+}
+#poem {
+	width:800px;
+	height:800px;
 }
 </style>
 </head>
 <body>
 	<input type="file" id="files" name="files[]" multiple/>
-	<canvas id = "list" width="600" height="300">
-		Poem List
-	</canvas>
-	<canvas id="poem" width="400"  height="300">
+	<div id='sidebar'>
+	<canvas id="list"></canvas>
+	</div>
+	<div id='poemdiv'>
+	<canvas id="poem">
 		If you see this, your browser doesn't support HTML5 canvas elements!
 	</canvas>
 </div>
+</head>
+<body>
 </body>
 </html>
