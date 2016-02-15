@@ -4,8 +4,8 @@ var poemPaper;
 
 var poems = [];
 var context;
-var canvas;
-var paper;
+var poemCanvas;
+var poemPaper;
 
 var canvasBuffer = 30;
 var buffer = 20; //border buffer
@@ -17,11 +17,8 @@ var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
 var lineSpacing = 12;
+
 /*
-
-sidebarW = 200;
-sidebarH = 800;
-
 function init(){
   poemCanvas = $('#poemdiv')[0];
   poemPaper = new Raphael('poem',poemCanvas.width,poemCanvas.height);
@@ -48,14 +45,31 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is", "was", "and", "or"
 
 //initializes canvases
 function init() {
-    canvas = $('#canvas')[0];
+    /*canvas = $('#canvas')[0];
     context = canvas.getContext("2d");
-    paper = new Raphael(canvasBuffer + (canvas.width / ratio), canvasBuffer, 2 * (canvas.width / ratio), canvas.height);
+    poemPaper = new Raphael(canvasBuffer + (canvas.width / ratio), canvasBuffer, 2 * (canvas.width / ratio), canvas.height);
     selectBar = new Raphael(canvasBuffer, canvasBuffer, canvas.width / ratio, canvas.height);
-    var rect1 = paper.rect(0, 0, canvas.width, canvas.height);
+    var rect1 = poemPaper.rect(0, 0, canvas.width, canvas.height);
     rect1.attr("fill", displayColor);
     rect1.attr("stroke", "#000");
     var rect2 = selectBar.rect(0, 0, canvas.width, canvas.height);
+    rect2.attr("fill", selectBarColor);
+    rect2.attr("stroke", "#000");
+    */
+    poemCanvas = $('#poem')[0];
+    poemPaper = new Raphael('poemdiv','100%',"100%");
+    console.log(poemPaper.width);
+    //poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), poemCanvas.height);
+
+    selectBarCanvas = $('#list')[0];
+    selectBar = new Raphael('listdiv','100%','100%');
+    //selectBar = new Raphael(canvasBuffer, canvasBuffer, poemCanvas.width/ratio, poemCanvas.height);
+
+    var rect1 = poemPaper.rect(0, 0, '100%', '100%');
+    rect1.attr("fill", displayColor);
+    rect1.attr("stroke", "#000");
+
+    var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", selectBarColor);
     rect2.attr("stroke", "#000");
     poemList = selectBar.set();
@@ -108,7 +122,7 @@ function handleFileSelect(evt) {
 //creates a new Poem object
 function Poem(data) {
     var y = buffer; //y coordinate for title and lines
-    this.title = paper.text(buffer, y, data[0]); //poem title text
+    this.title = poemPaper.text(buffer, y, data[0]); //poem title text
     this.title.attr({
         font: "16px Fontin-Sans, Helvetica",
         fill: deselectColor,
@@ -122,7 +136,7 @@ function Poem(data) {
         var splitLine = data[i].split(" "); //split the line into an array of words
         x = buffer; //start on the left
         for (var j = 0; j < splitLine.length; j++) { //go through every word
-            var thisWord = paper.text(x, y, splitLine[j]); //make a new text box
+            var thisWord = poemPaper.text(x, y, splitLine[j]); //make a new text box
             thisWord.attr({
                 font: "10px Fontin-Sans, Helvetica",
                 fill: deselectColor,
