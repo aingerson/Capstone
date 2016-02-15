@@ -57,7 +57,7 @@ function init() {
     rect2.attr("stroke", "#000");
     */
     poemCanvas = $('#poem')[0];
-    poemPaper = new Raphael('poemdiv','100%',"100%");
+    poemPaper = new Raphael('poemdiv','100%',3000);
     console.log(poemPaper.width);
     //poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), poemCanvas.height);
 
@@ -65,7 +65,7 @@ function init() {
     selectBar = new Raphael('listdiv','100%','100%');
     //selectBar = new Raphael(canvasBuffer, canvasBuffer, poemCanvas.width/ratio, poemCanvas.height);
 
-    var rect1 = poemPaper.rect(0, 0, '100%', '100%');
+    var rect1 = poemPaper.rect(0, 0, '100%',3000);
     rect1.attr("fill", displayColor);
     rect1.attr("stroke", "#000");
 
