@@ -4,39 +4,19 @@ var poemPaper;
 
 var poems = [];
 var context;
-var poemCanvas;
 var poemPaper;
 
 var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
 var selected = null; //selected poem
-var selectBarColor = "#b1cdd1"; //background left
-var displayColor = "#93d0d1"; //background right
+var selectBarColor = "aabae2"; //background left
+var displayColor = "FFFDFC"; //background right
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
 var lineSpacing = 12;
 
-/*
-function init(){
-  poemCanvas = $('#poemdiv')[0];
-  poemPaper = new Raphael('poem',poemCanvas.width,poemCanvas.height);
-  //poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), poemCanvas.height);
-
-  selectBarCanvas = $('#list')[0];
-  selectBar = new Raphael('sidebar',sidebarW,sidebarH);
-  //selectBar = new Raphael(canvasBuffer, canvasBuffer, poemCanvas.width/ratio, poemCanvas.height);
-
-  var rect1 = poemPaper.rect(0, 0, poemCanvas.width, poemCanvas.height);
-  rect1.attr("fill", displayColor);
-  rect1.attr("stroke", "#000");
-
-  var rect2 = selectBar.rect(0, 0, sidebarW, sidebarH);
-  rect2.attr("fill", selectBarColor);
-  rect2.attr("stroke", "#000");
-
-*/
 var poemList; //list of poem name raphael objects
 var listY = buffer + lineSpacing; //y coordinate of poem list names
 var currWord = ""; //current selected word
@@ -45,33 +25,21 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is", "was", "and", "or"
 
 //initializes canvases
 function init() {
-    /*canvas = $('#canvas')[0];
-    context = canvas.getContext("2d");
-    poemPaper = new Raphael(canvasBuffer + (canvas.width / ratio), canvasBuffer, 2 * (canvas.width / ratio), canvas.height);
-    selectBar = new Raphael(canvasBuffer, canvasBuffer, canvas.width / ratio, canvas.height);
-    var rect1 = poemPaper.rect(0, 0, canvas.width, canvas.height);
-    rect1.attr("fill", displayColor);
-    rect1.attr("stroke", "#000");
-    var rect2 = selectBar.rect(0, 0, canvas.width, canvas.height);
-    rect2.attr("fill", selectBarColor);
-    rect2.attr("stroke", "#000");
-    */
-    poemCanvas = $('#poem')[0];
-    poemPaper = new Raphael('poemdiv','100%',3000);
-    console.log(poemPaper.width);
-    //poemPaper = new Raphael(canvasBuffer+(poemCanvas.width/ratio), canvasBuffer, 2*(poemCanvas.width/ratio), poemCanvas.height);
-
-    selectBarCanvas = $('#list')[0];
-    selectBar = new Raphael('listdiv','100%','100%');
-    //selectBar = new Raphael(canvasBuffer, canvasBuffer, poemCanvas.width/ratio, poemCanvas.height);
+    poemPaper = new Raphael('poem','100%','100%');
+    selectBar = new Raphael('list','100%','100%');
+    treePaper = new Raphael('tree','100%','100%');
 
     var rect1 = poemPaper.rect(0, 0, '100%',3000);
     rect1.attr("fill", displayColor);
-    rect1.attr("stroke", "#000");
+    poemPaper.setSize('100%', 2800);
+    $(poemPaper.canvas).parent().height("600px");
 
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", selectBarColor);
-    rect2.attr("stroke", "#000");
+
+    var rect3 = treePaper.rect(0, 0, '100%', '100%');
+    rect3.attr("fill", 'D7C9E2');
+
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
 }
@@ -148,6 +116,7 @@ function Poem(data) {
                     var word = normalize(this.attr("text")); //get rid of case and punctuation
                     currWord = word; //this is now the selected word
                     searchPoems(); //search all the poems for this word
+                    displayTree();
                 });
                 this.sigWords.push(thisWord); //add this word to the searchable word list
             }
