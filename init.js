@@ -1,6 +1,7 @@
 var poemContext;
 var poemCanvas;
 var poemPaper;
+var treePaper;
 
 var poems = [];
 var context;
@@ -189,20 +190,20 @@ function searchPoems() {
         }
     }
     //console.log(foundWords);
-    var conns = paper.set();
-    var x = buffer*2;
-    var y = 400;
-    var headWord = paper.text(x, y, currWord);
-    x += 90;
+    var conns = treePaper.set();
+    var x = buffer;
+    var y = buffer;
+    var headWord = treePaper.text(x, y, currWord);
+    x += buffer*3;
     for(var k=0; k<foundWords.length; k++){
-      var thisWord = paper.text(x,y,foundWords[k]);
+      var thisWord = treePaper.text(x,y,foundWords[k]);
       thisWord.click(function() { //make it clickable
           var word = normalize(this.attr("text")); //get rid of case and punctuation
           currWord = word; //this is now the selected word
           searchPoems(); //search all the poems for this word
       });
       conns.push(thisWord);
-      y += 20;
+      y += lineSpacing;
     }
 
     var next = new Node(headWord,conns,head);
@@ -225,7 +226,7 @@ Poem.prototype.contains = function() {
 //gets rid of casing and punctuation
 function normalize(w) {
     w = w.toLowerCase();
-    if (w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!')) {
+    if (w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!') || w.includes(';')) {
         w = w.substring(0, w.length - 1);
     }
     return w;
