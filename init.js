@@ -10,8 +10,13 @@ var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
 var selected = null; //selected poem
+//<<<<<<< Updated upstream
 var selectBarColor = "aabae2"; //background left
 var displayColor = "FFFDFC"; //background right
+// =======
+// var selectBarColor = "#adb9c7"; //background left
+// var displayColor = "#fffefe"; //background right
+// >>>>>>> Stashed changes
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
@@ -20,7 +25,13 @@ var lineSpacing = 12;
 var poemList; //list of poem name raphael objects
 var listY = buffer + lineSpacing; //y coordinate of poem list names
 var currWord = ""; //current selected word
-var insigWords = ["of", "a", "the", "in", "over", "to", "is", "was", "and", "or", "its", "it", "for", "my", "your", "his", "though", "can", "at", "but", "from", "have", "has"];
+var insigWords = ["of", "a", "the", "in", "over", "to", "is",
+"was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
+"can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
+"she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
+"do","not","go","come","here","into","that","so"];
+var head;
+var dist = 2;
 
 
 //initializes canvases
@@ -42,6 +53,7 @@ function init() {
 
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
+    head = null;
 }
 
 function handleFileSelect(evt) {
@@ -111,7 +123,7 @@ function Poem(data) {
                 "text-anchor": "start"
             });
             var w = normalize(splitLine[j]); //get rid of case and punctuation to check word
-            if (!isInsig(w)) { //if this word is a significant word
+            if (!isInList(w,insigWords)) { //if this word is a significant word
                 thisWord.click(function() { //make it clickable
                     var word = normalize(this.attr("text")); //get rid of case and punctuation
                     currWord = word; //this is now the selected word
@@ -147,6 +159,7 @@ Poem.prototype.showPoem = function() {
 
 //searches all poems for the currently selected word and changes highlighting appropriately
 function searchPoems() {
+  var foundWords = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
         var found = false; //marks whether we found the word in the poem
@@ -155,6 +168,15 @@ function searchPoems() {
             if (w == currWord) { //this is the word we're looking for
                 p.sigWords[j].attr("fill", containsColor); //color it
                 found = true; //and remember that you found one
+
+                for(var d = j-dist; d<j+dist; d++){
+                  if(d>=0 && d<p.sigWords.length){
+                    var word = normalize(p.sigWords[d].attr('text'));
+                    if(!isInList(word,foundWords) && word != "")
+                    foundWords.push(word);
+                  }
+                }
+
             } else {
                 p.sigWords[j].attr("fill", deselectColor); //make sure its unselected
             }
@@ -166,6 +188,26 @@ function searchPoems() {
             poemList[i].attr("fill", deselectColor); //did not find the word in this poem
         }
     }
+    //console.log(foundWords);
+    var conns = paper.set();
+    var x = buffer*2;
+    var y = 400;
+    var headWord = paper.text(x, y, currWord);
+    x += 90;
+    for(var k=0; k<foundWords.length; k++){
+      var thisWord = paper.text(x,y,foundWords[k]);
+      thisWord.click(function() { //make it clickable
+          var word = normalize(this.attr("text")); //get rid of case and punctuation
+          currWord = word; //this is now the selected word
+          searchPoems(); //search all the poems for this word
+      });
+      conns.push(thisWord);
+      y += 20;
+    }
+
+    var next = new Node(headWord,conns,head);
+    head = next;
+    displayTree();
 }
 
 //returns whether this poem contains the current word
@@ -190,11 +232,32 @@ function normalize(w) {
 }
 
 //Searches list of insignificant words (defined globally) and returns whether it is insignificant
-function isInsig(e) {
-    for (var i = 0; i < insigWords.length; i++) {
-        if (insigWords[i] == e) return true;
+function isInList(e,list) {
+    for (var i = 0; i < list.length; i++) {
+        if (list[i] == e) return true;
     }
     return false;
+}
+
+
+function displayTree(){
+  if(head.prev!=null){
+    head.prev.thisWord.hide();
+    for(var i=0;i<head.prev.connWords.length;i++){
+      head.prev.connWords[i].hide();
+    }
+  }
+  head.thisWord.show();
+  for(var j=0;j<head.connWords.length;j++){
+    head.connWords[j].show();
+  }
+}
+
+
+function Node(thisWord,connWords,prev){
+  this.thisWord = thisWord;//Raph
+  this.connWords = connWords;//Raph
+  this.prev = prev;//Node
 }
 
 //when the page is done loading, initialize
