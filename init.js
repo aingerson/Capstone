@@ -11,13 +11,9 @@ var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
 var selected = null; //selected poem
-//<<<<<<< Updated upstream
+
 var selectBarColor = "aabae2"; //background left
 var displayColor = "FFFDFC"; //background right
-// =======
-// var selectBarColor = "#adb9c7"; //background left
-// var displayColor = "#fffefe"; //background right
-// >>>>>>> Stashed changes
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
@@ -43,8 +39,6 @@ function init() {
 
     var rect1 = poemPaper.rect(0, 0, '100%',3000);
     rect1.attr("fill", displayColor);
-    poemPaper.setSize('100%', 2800);
-    $(poemPaper.canvas).parent().height("600px");
 
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", selectBarColor);
@@ -52,9 +46,22 @@ function init() {
     var rect3 = treePaper.rect(0, 0, '100%', '100%');
     rect3.attr("fill", 'D7C9E2');
 
+    adjustSizes(1000,2000,300);
+
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
+}
+
+function adjustSizes(poemListHeight, tallestPoemHeight, longestTitleHeight){
+  poemPaper.setSize('100%', tallestPoemHeight+30);
+  $(poemPaper.canvas).parent().height("400px");
+
+  selectBar.setSize(longestTitleHeight, poemListHeight);
+  $(selectBar.canvas).parent().height("400px");
+
+  treePaper.setSize('100%', 800);
+  $(treePaper.canvas).parent().height("400px");
 }
 
 function handleFileSelect(evt) {
