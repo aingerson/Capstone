@@ -33,6 +33,8 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "do","not","go","come","here","into","that","so"];
 var head;
 var dist = 2;
+var maxWidth = 0;
+var maxHeight = 0;
 
 
 //initializes canvases
@@ -96,12 +98,12 @@ function handleFileSelect(evt) {
         };
         reader.readAsText(f, "UTF-8");
     }
-
 }
 
 
 //creates a new Poem object
 function Poem(data) {
+    var localWidth = 0;
     var y = buffer; //y coordinate for title and lines
     this.title = poemPaper.text(buffer, y, data[0]); //poem title text
     this.title.attr({
@@ -113,6 +115,7 @@ function Poem(data) {
     this.words = []; //all words of this poem (for displaying purposes)
     this.title.hide(); //Poem created on load, start with poem hidden
     y += lineSpacing; //move y coordinate down for first line
+
     for (var i = 1; i < data.length; i++) { //go through every line
         var splitLine = data[i].split(" "); //split the line into an array of words
         x = buffer; //start on the left
@@ -138,7 +141,11 @@ function Poem(data) {
             thisWord.hide(); //when word is created, start hidden
         };
         y += lineSpacing; //move to the next line
+        if(x>localWidth) localWidth = x;
     }
+
+    if(localWidth>maxWidth) maxWidth = localWidth;
+    if(y>maxHeight) maxHeight = y;
 }
 
 //hides entire poem
