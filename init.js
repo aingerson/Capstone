@@ -63,7 +63,7 @@ function init() {
     rect3.attr("fill", treeColor);
     rect3.attr("stroke-width", 10);
     rect3.attr("stroke", treeStroke);
-
+    
     adjustSizes();
 
     poemList = selectBar.set();
@@ -121,6 +121,9 @@ function handleFileSelect(evt) {
             });
         };
         reader.readAsText(f, "UTF-8");
+        reader.onloadend = function(e){
+          adjustSizes();
+        };
     }
     //console.log(maxWidth);
     //console.log(maxHeight);
@@ -243,7 +246,7 @@ function searchPoems() {
     center.attr("fill", 'FFFFFF');
     center.attr("stroke", 'FFFFFF');
     var headWord = treePaper.text(headX, headY, currWord);
-    var x = headX - buffer*3;
+    var x = headX - buffer*4;
     var y = headY-(foundLeft.length/2*lineSpacing);
     for(var k=0; k<foundLeft.length; k++){
       var thisWord = treePaper.text(x,y,foundLeft[k]);
@@ -255,7 +258,7 @@ function searchPoems() {
       connLeft.push(thisWord);
       y += lineSpacing;
     }
-    x = headX+ (buffer*3);
+    x = headX+ (buffer*4);
     y = headY-(foundRight.length/2*lineSpacing);
     for(var k=0; k<foundRight.length; k++){
       var thisWord = treePaper.text(x,y,foundRight[k]);
