@@ -29,8 +29,8 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "do","not","go","come","here","into","that","so"];
 var head;
 var dist = 2;
-var maxWidth = 0;
-var maxHeight = 0;
+var maxWidth = 500;
+var maxHeight = 2000;
 
 
 //initializes canvases
@@ -39,7 +39,7 @@ function init() {
     selectBar = new Raphael('list','100%','100%');
     treePaper = new Raphael('tree','100%','100%');
 
-    var rect1 = poemPaper.rect(0, 0, '100%',3000);
+    var rect1 = poemPaper.rect(0, 0, '100%','100%');
     rect1.attr("fill", displayColor);
 
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
@@ -48,18 +48,18 @@ function init() {
     var rect3 = treePaper.rect(0, 0, '100%', '100%');
     rect3.attr("fill", 'D7C9E2');
 
-    adjustSizes(1000,2000,300);
+    adjustSizes();
 
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 }
 
-function adjustSizes(poemListHeight, tallestPoemHeight, longestTitleHeight){
-  poemPaper.setSize('100%', tallestPoemHeight+30);
+function adjustSizes(){
+  poemPaper.setSize('100%', maxHeight+30);
   $(poemPaper.canvas).parent().height("400px");
 
-  selectBar.setSize(longestTitleHeight, poemListHeight);
+  selectBar.setSize(maxWidth, maxHeight);
   $(selectBar.canvas).parent().height("400px");
 
   treePaper.setSize('100%', 800);
@@ -106,7 +106,6 @@ function handleFileSelect(evt) {
         reader.readAsText(f, "UTF-8");
     }
 }
-
 
 //creates a new Poem object
 function Poem(data) {
