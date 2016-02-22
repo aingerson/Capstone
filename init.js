@@ -16,6 +16,7 @@ var selected = null; //selected poem
 var listColor = "aabae2"; //background left
 var poemColor = "FFFDFC"; //background right
 var treeColor = "D7C9E2";
+var treeStroke = "B2A7BC";
 // =======
 // var listColor = "#adb9c7"; //background left
 // var poemColor = "#fffefe"; //background right
@@ -52,18 +53,23 @@ function init() {
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
     rect1.attr("fill", poemColor);
+        rect1.attr("stroke", poemColor);
 
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", listColor);
+        rect2.attr("stroke", listColor);
 
     var rect3 = treePaper.rect(0, 0, '100%', '100%');
     rect3.attr("fill", treeColor);
+    rect3.attr("stroke-width", 10);
+    rect3.attr("stroke", treeStroke);
 
     adjustSizes();
 
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
+
 }
 
 function adjustSizes(){
@@ -224,13 +230,18 @@ function searchPoems() {
         }
     }
     //console.log(foundWords);
-
+    //+++++++++++++++++
+    //this is where tree displaying stuff should happen vvv
+    //+++++++++++++++++
     var treeWidth = $("#tree").width();
     var treeHeight = $("#tree").height();
     var connLeft = treePaper.set();
     var connRight = treePaper.set();
     var headX = treeWidth/2;
     var headY = treeHeight/2;
+    var center = treePaper.ellipse(headX, headY, 40, 20);
+    center.attr("fill", 'FFFFFF');
+    center.attr("stroke", 'FFFFFF');
     var headWord = treePaper.text(headX, headY, currWord);
     var x = headX - buffer*3;
     var y = headY-(foundLeft.length/2*lineSpacing);
@@ -302,6 +313,7 @@ function displayTree(){
       head.prev.connRight[i].hide();
     }
   }
+  head.thisWord.attr({'font-size':18});
   head.thisWord.show();
   for(var j=0;j<head.connLeft.length;j++){
     head.connLeft[j].show();
