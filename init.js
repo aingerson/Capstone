@@ -30,7 +30,7 @@ var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
 var lineSpacing = 12;
-
+var time = 80;
 var poemList; //list of poem name raphael objects
 var listY = buffer + lineSpacing; //y coordinate of poem list names
 var currWord = ""; //current selected word
@@ -38,11 +38,12 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
 "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
 "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
-"do","not","go","come","here","into","that","so","an","shall","no"];
+"do","not","go","come","here","into","that","so","an","shall","no","by"];
 var head;
 var dist = 2;
 var maxWidth = 500;
 var maxHeight = 2000;
+var center = null;
 
 
 //initializes canvases
@@ -63,7 +64,7 @@ function init() {
     rect3.attr("fill", treeColor);
     rect3.attr("stroke-width", 10);
     rect3.attr("stroke", treeStroke);
-    
+
     adjustSizes();
 
     poemList = selectBar.set();
@@ -242,11 +243,21 @@ function searchPoems() {
     var connRight = treePaper.set();
     var headX = treeWidth/2;
     var headY = treeHeight/2;
-    var center = treePaper.ellipse(headX, headY, 40, 20);
-    center.attr("fill", 'FFFFFF');
-    center.attr("stroke", 'FFFFFF');
-    var headWord = treePaper.text(headX, headY, currWord);
-    var x = headX - buffer*4;
+    var temp = treePaper.text(headX, headY, currWord);
+    if(center==null){
+      center = treePaper.ellipse(headX, headY, temp.node.getBBox().width+5, temp.node.getBBox().height+5);
+      center.attr("fill", 'FFFFFF');
+      center.attr("stroke", 'FFFFFF');
+    }
+    else{
+      center.animate({rx: temp.node.getBBox().width+5},time);
+    //  center.rx = headWord.node.getBBox().width;
+      //center.ry = headWord.node.getBBox().height;
+    }
+    temp.hide();
+    var headWord = treePaper.text(headX,headY,currWord);
+
+    var x = headX - buffer*5;
     var y = headY-(foundLeft.length/2*lineSpacing);
     for(var k=0; k<foundLeft.length; k++){
       var thisWord = treePaper.text(x,y,foundLeft[k]);
@@ -258,7 +269,7 @@ function searchPoems() {
       connLeft.push(thisWord);
       y += lineSpacing;
     }
-    x = headX+ (buffer*4);
+    x = headX+ (buffer*5);
     y = headY-(foundRight.length/2*lineSpacing);
     for(var k=0; k<foundRight.length; k++){
       var thisWord = treePaper.text(x,y,foundRight[k]);
