@@ -11,9 +11,20 @@ var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
 var selected = null; //selected poem
-
-var selectBarColor = "aabae2"; //background left
-var displayColor = "FFFDFC"; //background right
+//<<<<<<< HEAD
+//<<<<<<< Updated upstream
+var listColor = "aabae2"; //background left
+var poemColor = "FFFDFC"; //background right
+var treeColor = "D7C9E2";
+// =======
+// var listColor = "#adb9c7"; //background left
+// var poemColor = "#fffefe"; //background right
+// >>>>>>> Stashed changes
+// =======
+//
+// var selectBarColor = "aabae2"; //background left
+// var displayColor = "FFFDFC"; //background right
+// >>>>>>> origin/master
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
@@ -26,7 +37,7 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
 "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
 "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
-"do","not","go","come","here","into","that","so"];
+"do","not","go","come","here","into","that","so","an","shall","no"];
 var head;
 var dist = 2;
 var maxWidth = 500;
@@ -40,13 +51,13 @@ function init() {
     treePaper = new Raphael('tree','100%','100%');
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
-    rect1.attr("fill", displayColor);
+    rect1.attr("fill", poemColor);
 
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
-    rect2.attr("fill", selectBarColor);
+    rect2.attr("fill", listColor);
 
     var rect3 = treePaper.rect(0, 0, '100%', '100%');
-    rect3.attr("fill", 'D7C9E2');
+    rect3.attr("fill", treeColor);
 
     adjustSizes();
 
@@ -105,6 +116,8 @@ function handleFileSelect(evt) {
         };
         reader.readAsText(f, "UTF-8");
     }
+    //console.log(maxWidth);
+    //console.log(maxHeight);
 }
 
 //creates a new Poem object
@@ -173,7 +186,8 @@ Poem.prototype.showPoem = function() {
 
 //searches all poems for the currently selected word and changes highlighting appropriately
 function searchPoems() {
-  var foundWords = [];
+  var foundLeft = [];
+  var foundRight = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
         var found = false; //marks whether we found the word in the poem
@@ -183,11 +197,18 @@ function searchPoems() {
                 p.sigWords[j].attr("fill", containsColor); //color it
                 found = true; //and remember that you found one
 
-                for(var d = j-dist; d<j+dist; d++){
-                  if(d>=0 && d<p.sigWords.length){
+                for(var d = j-dist; d<j; d++){
+                  if(d>=0){
                     var word = normalize(p.sigWords[d].attr('text'));
-                    if(!isInList(word,foundWords) && word != "")
-                    foundWords.push(word);
+                    if(!isInList(word,foundLeft) && word != "")
+                    foundLeft.push(word);
+                  }
+                }
+                for(var d = j+1; d<j+dist; d++){
+                  if(d<p.sigWords.length){
+                    var word = normalize(p.sigWords[d].attr('text'));
+                    if(!isInList(word,foundRight) && word != "")
+                      foundRight.push(word);
                   }
                 }
 
@@ -203,23 +224,40 @@ function searchPoems() {
         }
     }
     //console.log(foundWords);
-    var conns = treePaper.set();
-    var x = buffer;
-    var y = buffer;
-    var headWord = treePaper.text(x, y, currWord);
-    x += buffer*3;
-    for(var k=0; k<foundWords.length; k++){
-      var thisWord = treePaper.text(x,y,foundWords[k]);
+
+    var treeWidth = $("#tree").width();
+    var treeHeight = $("#tree").height();
+    var connLeft = treePaper.set();
+    var connRight = treePaper.set();
+    var headX = treeWidth/2;
+    var headY = treeHeight/2;
+    var headWord = treePaper.text(headX, headY, currWord);
+    var x = headX - buffer*3;
+    var y = headY-(foundLeft.length/2*lineSpacing);
+    for(var k=0; k<foundLeft.length; k++){
+      var thisWord = treePaper.text(x,y,foundLeft[k]);
       thisWord.click(function() { //make it clickable
-          var word = normalize(this.attr("text")); //get rid of case and punctuation
-          currWord = word; //this is now the selected word
+          //var word = normalize(this.attr("text")); //get rid of case and punctuation
+          currWord = this.attr('text'); //this is now the selected word
           searchPoems(); //search all the poems for this word
       });
-      conns.push(thisWord);
+      connLeft.push(thisWord);
+      y += lineSpacing;
+    }
+    x = headX+ (buffer*3);
+    y = headY-(foundRight.length/2*lineSpacing);
+    for(var k=0; k<foundRight.length; k++){
+      var thisWord = treePaper.text(x,y,foundRight[k]);
+      thisWord.click(function() { //make it clickable
+          //var word = normalize(this.attr("text")); //get rid of case and punctuation
+          currWord = this.attr('text'); //this is now the selected word
+          searchPoems(); //search all the poems for this word
+      });
+      connRight.push(thisWord);
       y += lineSpacing;
     }
 
-    var next = new Node(headWord,conns,head);
+    var next = new Node(headWord,connLeft,connRight,head);
     head = next;
     displayTree();
 }
@@ -239,7 +277,7 @@ Poem.prototype.contains = function() {
 //gets rid of casing and punctuation
 function normalize(w) {
     w = w.toLowerCase();
-    if (w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!') || w.includes(';')) {
+    if (w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!') || w.includes(';') || w.includes(':')) {
         w = w.substring(0, w.length - 1);
     }
     return w;
@@ -257,20 +295,27 @@ function isInList(e,list) {
 function displayTree(){
   if(head.prev!=null){
     head.prev.thisWord.hide();
-    for(var i=0;i<head.prev.connWords.length;i++){
-      head.prev.connWords[i].hide();
+    for(var i=0;i<head.prev.connLeft.length;i++){
+      head.prev.connLeft[i].hide();
+    }
+    for(var i=0;i<head.prev.connRight.length;i++){
+      head.prev.connRight[i].hide();
     }
   }
   head.thisWord.show();
-  for(var j=0;j<head.connWords.length;j++){
-    head.connWords[j].show();
+  for(var j=0;j<head.connLeft.length;j++){
+    head.connLeft[j].show();
+  }
+  for(var j=0;j<head.connRight.length;j++){
+    head.connRight[j].show();
   }
 }
 
 
-function Node(thisWord,connWords,prev){
+function Node(thisWord,left,right,prev){
   this.thisWord = thisWord;//Raph
-  this.connWords = connWords;//Raph
+  this.connLeft = left;//Raph
+  this.connRight = right;
   this.prev = prev;//Node
 }
 
