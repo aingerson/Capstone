@@ -11,6 +11,7 @@ var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
 var selected = null; //selected poem
+//<<<<<<< HEAD
 //<<<<<<< Updated upstream
 var listColor = "aabae2"; //background left
 var poemColor = "FFFDFC"; //background right
@@ -19,6 +20,11 @@ var treeColor = "D7C9E2";
 // var listColor = "#adb9c7"; //background left
 // var poemColor = "#fffefe"; //background right
 // >>>>>>> Stashed changes
+// =======
+//
+// var selectBarColor = "aabae2"; //background left
+// var displayColor = "FFFDFC"; //background right
+// >>>>>>> origin/master
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
@@ -34,8 +40,8 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "do","not","go","come","here","into","that","so","an","shall","no"];
 var head;
 var dist = 2;
-var maxWidth = 0;
-var maxHeight = 0;
+var maxWidth = 500;
+var maxHeight = 2000;
 
 
 //initializes canvases
@@ -44,10 +50,8 @@ function init() {
     selectBar = new Raphael('list','100%','100%');
     treePaper = new Raphael('tree','100%','100%');
 
-    var rect1 = poemPaper.rect(0, 0, '100%',3000);
+    var rect1 = poemPaper.rect(0, 0, '100%','100%');
     rect1.attr("fill", poemColor);
-    poemPaper.setSize('100%', 2800);
-    $(poemPaper.canvas).parent().height("600px");
 
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", listColor);
@@ -55,9 +59,22 @@ function init() {
     var rect3 = treePaper.rect(0, 0, '100%', '100%');
     rect3.attr("fill", treeColor);
 
+    adjustSizes();
+
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
+}
+
+function adjustSizes(){
+  poemPaper.setSize('100%', maxHeight+30);
+  $(poemPaper.canvas).parent().height("400px");
+
+  selectBar.setSize(maxWidth, maxHeight);
+  $(selectBar.canvas).parent().height("400px");
+
+  treePaper.setSize('100%', 800);
+  $(treePaper.canvas).parent().height("400px");
 }
 
 function handleFileSelect(evt) {
@@ -102,7 +119,6 @@ function handleFileSelect(evt) {
     //console.log(maxWidth);
     //console.log(maxHeight);
 }
-
 
 //creates a new Poem object
 function Poem(data) {
