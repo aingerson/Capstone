@@ -13,7 +13,7 @@ div {
 #toprow {
 	margin-top:35px;
 	height:400px;
-	width:95%;
+	width:100%;
 	float:middle;
 	display:block;
 	position:relative;
@@ -38,10 +38,9 @@ div {
 }
 #graph{
   margin-top:20px;
-	width:95%;
+	width:90%;
 	height:400px;
 	display:block;
-  position: relative;
   float: middle;
   box-shadow: -3px 3px 5px #888888;
 }

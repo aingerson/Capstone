@@ -75,8 +75,6 @@ function init() {
     rect4.attr("fill",graphColor);
     rect4.attr("stroke",graphColor);
 
-    adjustSizes();
-
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
@@ -85,18 +83,18 @@ function init() {
 
 function adjustSizes(){
   poemPaper.setSize('100%', maxHeight+(buffer*2));
-  //$(poemPaper.canvas).parent().height("400px");
-  document.getElementById('poem').style.height = maxHeight+(buffer*2);
-  document.getElementById('poem').style.width = maxWidth;
+  $(poemPaper.canvas).parent().height("400px");
 
   selectBar.setSize(maxWidth, maxHeight+(buffer*2));
   //$(selectBar.canvas).parent().height(maxHeight+(buffer*2));
-  document.getElementById('list').style.height = maxHeight+(buffer*2);
-  document.getElementById('list').style.width = maxWidth;
+  $(selectBar.canvas).parent().height("400px");
+  //document.getElementById('list').style.height = maxHeight+(buffer*2);
+  //document.getElementById('list').style.width = maxWidth;
 
   treePaper.setSize('100%', maxWidth);
-  document.getElementById('tree').style.height = maxHeight+(buffer*2);
-  document.getElementById('tree').style.width = maxWidth;
+  $(treePaper.canvas).parent().height("400px");
+  //document.getElementById('tree').style.height = maxHeight+(buffer*2);
+  //document.getElementById('tree').style.width = maxWidth;
 
   //$(treePaper.canvas).parent().height("400px");
 }
