@@ -2,6 +2,7 @@ var poemContext;
 var poemCanvas;
 var poemPaper;
 var treePaper;
+var graphPaper;
 
 var poems = [];
 var context;
@@ -16,6 +17,8 @@ var selected = null; //selected poem
 var listColor = "aabae2"; //background left
 var poemColor = "FFFDFC"; //background right
 var treeColor = "D7C9E2";
+var graphColor = "4DC0C7"
+
 var treeStroke = "B2A7BC";
 // =======
 // var listColor = "#adb9c7"; //background left
@@ -38,11 +41,13 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
 "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
 "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
-"do","not","go","come","here","into","that","so","an","shall","no","by"];
+"do","not","go","come","here","into","that","so","an","shall","no","by",
+"who","he","had","you","one","oh","all","with","out"];
 var head;
 var dist = 2;
-var maxWidth = 500;
-var maxHeight = 2000;
+var maxWidth = 300;
+var maxWidthList = 100;
+var maxHeight =300;
 var center = null;
 
 
@@ -51,6 +56,7 @@ function init() {
     poemPaper = new Raphael('poem','100%','100%');
     selectBar = new Raphael('list','100%','100%');
     treePaper = new Raphael('tree','100%','100%');
+    graphPaper = new Raphael('graph','100%','100%')
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
     rect1.attr("fill", poemColor);
@@ -62,8 +68,12 @@ function init() {
 
     var rect3 = treePaper.rect(0, 0, '100%', '100%');
     rect3.attr("fill", treeColor);
-    rect3.attr("stroke-width", 10);
+    //rect3.attr("stroke-width", 10);
     rect3.attr("stroke", treeStroke);
+
+    var rect4 = graphPaper.rect(0,0,'100%','100%');
+    rect4.attr("fill",graphColor);
+    rect4.attr("stroke",graphColor);
 
     adjustSizes();
 
@@ -74,14 +84,21 @@ function init() {
 }
 
 function adjustSizes(){
-  poemPaper.setSize('100%', maxHeight+30);
-  $(poemPaper.canvas).parent().height("400px");
+  poemPaper.setSize('100%', maxHeight+(buffer*2));
+  //$(poemPaper.canvas).parent().height("400px");
+  document.getElementById('poem').style.height = maxHeight+(buffer*2);
+  document.getElementById('poem').style.width = maxWidth;
 
-  selectBar.setSize(maxWidth, maxHeight);
-  $(selectBar.canvas).parent().height("400px");
+  selectBar.setSize(maxWidth, maxHeight+(buffer*2));
+  //$(selectBar.canvas).parent().height(maxHeight+(buffer*2));
+  document.getElementById('list').style.height = maxHeight+(buffer*2);
+  document.getElementById('list').style.width = maxWidth;
 
-  treePaper.setSize('100%', 800);
-  $(treePaper.canvas).parent().height("400px");
+  treePaper.setSize('100%', maxWidth);
+  document.getElementById('tree').style.height = maxHeight+(buffer*2);
+  document.getElementById('tree').style.width = maxWidth;
+
+  //$(treePaper.canvas).parent().height("400px");
 }
 
 function handleFileSelect(evt) {

@@ -36,11 +36,13 @@ div {
 	overflow: auto;
   box-shadow: -3px 3px 5px #888888;
 }
-#graphdiv{
+#graph{
   margin-top:20px;
-	width:100%;
-	height:100px;
+	width:95%;
+	height:400px;
 	display:block;
+  position: relative;
+  float: middle;
   box-shadow: -3px 3px 5px #888888;
 }
 #tree {
