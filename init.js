@@ -7,6 +7,7 @@ var graphPaper;
 var poems = [];
 var context;
 var poemPaper;
+var treejson = {};
 
 var canvasBuffer = 30;
 var buffer = 20; //border buffer
@@ -43,14 +44,15 @@ var maxWidth = 300;
 var maxWidthList = 100;
 var maxHeight =300;
 var center = null;
-
+var graph;
+var tree;
 
 //initializes canvases
 function init() {
     poemPaper = new Raphael('poem','100%','100%');
     selectBar = new Raphael('list','100%','100%');
-    treePaper = new Raphael('tree','100%','100%');
-    graphPaper = new Raphael('graph','100%','100%')
+    //treePaper = new Raphael('tree','100%','100%');
+    //graphPaper = new Raphael('graph','100%','100%');
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
     rect1.attr("fill", poemColor);
@@ -59,20 +61,30 @@ function init() {
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", listColor);
         rect2.attr("stroke", listColor);
-
-    var rect3 = treePaper.rect(0, 0, '100%', '100%');
-    rect3.attr("fill", treeColor);
+    //var rect3 = treePaper.rect(0, 0, '100%', '100%');
+    //rect3.attr("fill", treeColor);
     //rect3.attr("stroke-width", 10);
-    rect3.attr("stroke", treeStroke);
+    //rect3.attr("stroke", treeStroke);
 
-    var rect4 = graphPaper.rect(0,0,'100%','100%');
-    rect4.attr("fill",graphColor);
-    rect4.attr("stroke",graphColor);
+    //var rect4 = graphPaper.rect(0,0,'100%','100%');
+    //rect4.attr("fill",graphColor);
+    //rect4.attr("stroke",graphColor);
 
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
+// <<<<<<< Updated upstream
+// =======
+//     drawGraph();
+//
+// >>>>>>> Stashed changes
 }
+
+function drawGraph(){
+
+
+
+  }
 
 function adjustSizes(){
   poemPaper.setSize(maxWidth*1.3, maxHeight+(buffer*2));
@@ -81,8 +93,13 @@ function adjustSizes(){
   selectBar.setSize(maxWidth, maxHeight+(buffer*2));
   $(selectBar.canvas).parent().height("400px");
 
-  treePaper.setSize('100%', maxHeight);
-  $(treePaper.canvas).parent().height("400px");
+// <<<<<<< Updated upstream
+//   treePaper.setSize('100%', maxHeight);
+//   $(treePaper.canvas).parent().height("400px");
+// =======
+//   //treePaper.setSize('100%', maxWidth);
+// //  $(treePaper.canvas).parent().height("400px");
+// >>>>>>> Stashed changes
   //document.getElementById('tree').style.height = maxHeight+(buffer*2);
   //document.getElementById('tree').style.width = maxWidth;
 
@@ -166,7 +183,9 @@ function Poem(data) {
                     var word = normalize(this.attr("text")); //get rid of case and punctuation
                     currWord = word; //this is now the selected word
                     searchPoems(); //search all the poems for this word
-                    displayTree();
+
+
+                    //displayTree();
                 });
                 this.sigWords.push(thisWord); //add this word to the searchable word list
             }
@@ -203,6 +222,7 @@ Poem.prototype.showPoem = function() {
 function searchPoems() {
   var foundLeft = [];
   var foundRight = [];
+  var foundAll = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
         var found = false; //marks whether we found the word in the poem
@@ -212,20 +232,28 @@ function searchPoems() {
                 p.sigWords[j].attr("fill", containsColor); //color it
                 found = true; //and remember that you found one
 
-                for(var d = j-dist; d<j; d++){
-                  if(d>=0){
-                    var word = normalize(p.sigWords[d].attr('text'));
-                    if(!isInList(word,foundLeft) && word != "")
-                    foundLeft.push(word);
-                  }
+                for(var d = j-dist; d<=j+dist; d++){
+                  if(d>=0 && d<p.sigWords.length){
+                  var word = normalize(p.sigWords[d].attr('text'));
+                  if(!isInList(word,foundAll) && word != "" && word!=currWord) foundAll.push(word);
                 }
-                for(var d = j+1; d<j+dist; d++){
-                  if(d<p.sigWords.length){
-                    var word = normalize(p.sigWords[d].attr('text'));
-                    if(!isInList(word,foundRight) && word != "")
-                      foundRight.push(word);
-                  }
-                }
+              }
+                // for(var d = j-dist; d<j; d++){
+                //   if(d>=0){
+                //     var word = normalize(p.sigWords[d].attr('text'));
+                //     if(!isInList(word,foundLeft) && word != "")
+                //     foundLeft.push(word);
+                //     foundAll.push(word);
+                //   }
+                // }
+                // for(var d = j+1; d<j+dist; d++){
+                //   if(d<p.sigWords.length){
+                //     var word = normalize(p.sigWords[d].attr('text'));
+                //     if(!isInList(word,foundRight) && word != "")
+                //       foundRight.push(word);
+                //       foundAll.push(word);
+                //   }
+                // }
 
             } else {
                 p.sigWords[j].attr("fill", deselectColor); //make sure its unselected
@@ -242,55 +270,139 @@ function searchPoems() {
     //+++++++++++++++++
     //this is where tree displaying stuff should happen vvv
     //+++++++++++++++++
-    var treeWidth = $("#tree").width();
-    var treeHeight = $("#tree").height();
-    var connLeft = treePaper.set();
-    var connRight = treePaper.set();
-    var headX = treeWidth/2;
-    var headY = treeHeight/2;
-    var temp = treePaper.text(headX, headY, currWord);
-    if(center==null){
-      center = treePaper.ellipse(headX, headY, temp.node.getBBox().width+5, temp.node.getBBox().height+5);
-      center.attr("fill", 'FFFFFF');
-      center.attr("stroke", 'FFFFFF');
+    // var treeWidth = $("#tree").width();
+    // var treeHeight = $("#tree").height();
+    // var connLeft = treePaper.set();
+    // var connRight = treePaper.set();
+    // var headX = treeWidth/2;
+    // var headY = treeHeight/2;
+    // var temp = treePaper.text(headX, headY, currWord);
+    // if(center==null){
+    //   center = treePaper.ellipse(headX, headY, temp.node.getBBox().width+5, temp.node.getBBox().height+5);
+    //   center.attr("fill", 'FFFFFF');
+    //   center.attr("stroke", 'FFFFFF');
+    // }
+    // else{
+    //   center.animate({rx: temp.node.getBBox().width+5},time);
+    // //  center.rx = headWord.node.getBBox().width;
+    //   //center.ry = headWord.node.getBBox().height;
+    // }
+    // temp.hide();
+    // var headWord = treePaper.text(headX,headY,currWord);
+    //
+    // var x = headX - buffer*5;
+    // var y = headY-(foundLeft.length/2*lineSpacing);
+    // for(var k=0; k<foundLeft.length; k++){
+    //   var thisWord = treePaper.text(x,y,foundLeft[k]);
+    //   thisWord.click(function() { //make it clickable
+    //       //var word = normalize(this.attr("text")); //get rid of case and punctuation
+    //       currWord = this.attr('text'); //this is now the selected word
+    //       searchPoems(); //search all the poems for this word
+    //   });
+    //   connLeft.push(thisWord);
+    //   y += lineSpacing;
+    // }
+    // x = headX+ (buffer*5);
+    // y = headY-(foundRight.length/2*lineSpacing);
+    // for(var k=0; k<foundRight.length; k++){
+    //   var thisWord = treePaper.text(x,y,foundRight[k]);
+    //   thisWord.click(function() { //make it clickable
+    //       //var word = normalize(this.attr("text")); //get rid of case and punctuation
+    //       currWord = this.attr('text'); //this is now the selected word
+    //       searchPoems(); //search all the poems for this word
+    //   });
+    //   connRight.push(thisWord);
+    //   y += lineSpacing;
+    // }
+    treejson.name = currWord;
+    treejson.children = [];
+    for(var h=0;h<foundAll.length;h++){
+      //console.log(foundAll[h]);
+        treejson.children[h] = {"name" : foundAll[h],"children":[]};
     }
-    else{
-      center.animate({rx: temp.node.getBBox().width+5},time);
-    //  center.rx = headWord.node.getBBox().width;
-      //center.ry = headWord.node.getBBox().height;
-    }
-    temp.hide();
-    var headWord = treePaper.text(headX,headY,currWord);
+    //treejson.children = foundAll;
 
-    var x = headX - buffer*5;
-    var y = headY-(foundLeft.length/2*lineSpacing);
-    for(var k=0; k<foundLeft.length; k++){
-      var thisWord = treePaper.text(x,y,foundLeft[k]);
-      thisWord.click(function() { //make it clickable
-          //var word = normalize(this.attr("text")); //get rid of case and punctuation
-          currWord = this.attr('text'); //this is now the selected word
-          searchPoems(); //search all the poems for this word
-      });
-      connLeft.push(thisWord);
-      y += lineSpacing;
-    }
-    x = headX+ (buffer*5);
-    y = headY-(foundRight.length/2*lineSpacing);
-    for(var k=0; k<foundRight.length; k++){
-      var thisWord = treePaper.text(x,y,foundRight[k]);
-      thisWord.click(function() { //make it clickable
-          //var word = normalize(this.attr("text")); //get rid of case and punctuation
-          currWord = this.attr('text'); //this is now the selected word
-          searchPoems(); //search all the poems for this word
-      });
-      connRight.push(thisWord);
-      y += lineSpacing;
-    }
+    makeTree(treejson);
 
-    var next = new Node(headWord,connLeft,connRight,head);
-    head = next;
-    displayTree();
+    //JSON.stringify(treejson);
+    //console.log(treejson);
+
+    //saveAsFile(this,treejson,"tree");
+    //saveAs(treejson,"tree.json");
+    //var next = new Node(headWord,connLeft,connRight,head);
+    //head = next;
+    //displayTree();
 }
+function saveAsFile(link, content, filename) {
+    var blob = new Blob([content], {type: "text/text"});
+    var url  = URL.createObjectURL(blob);
+
+    // update link to new 'url'
+    link.download    = filename + ".json";
+    link.href        = url;
+
+    console.log("save");
+}
+
+
+function findConnections(word){
+  currWord = word;
+  var foundLeft = [];
+  var foundRight = [];
+  var foundAll = [];
+    for (var i = 0; i < poemList.length; i++) { //go through every poem
+        var p = poemList[i].data('poem'); //grab its respective poem
+        var found = false; //marks whether we found the word in the poem
+        for (var j = 0; j < p.sigWords.length; j++) { //go through every word in this poem
+            var w = normalize(p.sigWords[j].attr('text')); //get rid of case and punctuation
+            if (w == currWord) { //this is the word we're looking for
+                p.sigWords[j].attr("fill", containsColor); //color it
+                found = true; //and remember that you found one
+
+
+                for(var d = j-dist; d<=j+dist; d++){
+                  if(d>=0 && d<p.sigWords.length){
+                  var word = normalize(p.sigWords[d].attr('text'));
+                  if(!isInList(word,foundAll) && word != "" && word!=currWord) foundAll.push(word);
+                }
+              }
+                // for(var d = j-dist; d<j; d++){
+                //   if(d>=0){
+                //     var word = normalize(p.sigWords[d].attr('text'));
+                //     if(!isInList(word,foundLeft) && word != "")
+                //     foundLeft.push(word);
+                //     foundAll.push(word);
+                //   }
+                // }
+                // for(var d = j+1; d<j+dist; d++){
+                //   if(d<p.sigWords.length){
+                //     var word = normalize(p.sigWords[d].attr('text'));
+                //     if(!isInList(word,foundRight) && word != "")
+                //       foundRight.push(word);
+                //       foundAll.push(word);
+                //   }
+                // }
+
+            } else {
+                p.sigWords[j].attr("fill", deselectColor); //make sure its unselected
+            }
+        }
+        if (found) { //found the current word in this poem
+            if (poemList[i] == selected) poemList[i].attr("fill", selectColor); //if this is the currently selected poem, selected color
+            else poemList[i].attr("fill", containsColor); //highlight this poem if we found it
+        } else {
+            poemList[i].attr("fill", deselectColor); //did not find the word in this poem
+        }
+    }
+    var children = [];
+    for(var h=0;h<foundAll.length;h++){
+        children[h] = {"name" : foundAll[h],"children":[]};
+    }
+    return children;
+}
+
+
+//saveAsFile(this, "YourContent", "HelloWorldFile");
 
 //returns whether this poem contains the current word
 Poem.prototype.contains = function() {
