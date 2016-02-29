@@ -12,26 +12,19 @@ var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
 var selected = null; //selected poem
-//<<<<<<< HEAD
-//<<<<<<< Updated upstream
+
+//Colors
 var listColor = "aabae2"; //background left
 var poemColor = "FFFDFC"; //background right
 var treeColor = "D7C9E2";
 var graphColor = "4DC0C7"
 
 var treeStroke = "B2A7BC";
-// =======
-// var listColor = "#adb9c7"; //background left
-// var poemColor = "#fffefe"; //background right
-// >>>>>>> Stashed changes
-// =======
-//
-// var selectBarColor = "aabae2"; //background left
-// var displayColor = "FFFDFC"; //background right
-// >>>>>>> origin/master
+
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
+
 var lineSpacing = 12;
 var time = 80;
 var poemList; //list of poem name raphael objects
@@ -43,6 +36,7 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
 "do","not","go","come","here","into","that","so","an","shall","no","by",
 "who","he","had","you","one","oh","all","with","out"];
+
 var head;
 var dist = 2;
 var maxWidth = 300;
@@ -78,20 +72,16 @@ function init() {
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
-
 }
 
 function adjustSizes(){
-  poemPaper.setSize('100%', maxHeight+(buffer*2));
+  poemPaper.setSize(maxWidth*1.3, maxHeight+(buffer*2));
   $(poemPaper.canvas).parent().height("400px");
 
   selectBar.setSize(maxWidth, maxHeight+(buffer*2));
-  //$(selectBar.canvas).parent().height(maxHeight+(buffer*2));
   $(selectBar.canvas).parent().height("400px");
-  //document.getElementById('list').style.height = maxHeight+(buffer*2);
-  //document.getElementById('list').style.width = maxWidth;
 
-  treePaper.setSize('100%', maxWidth);
+  treePaper.setSize('100%', maxHeight);
   $(treePaper.canvas).parent().height("400px");
   //document.getElementById('tree').style.height = maxHeight+(buffer*2);
   //document.getElementById('tree').style.width = maxWidth;
