@@ -61,3 +61,21 @@ Click on line and read whole poem
 - dragging lines to playground (right) / clickable adding to dynamic graph
 - insignificant words
 - scrolling
+
+
+
+3/4 issues:
+- scrolling tree --> TORI
+- load tree in center --> TORI
+- drawing new tree --> TORI
+- change edge/node color when clicked/expanded --> TORI
+
+- highlighting of words --> ALEXIA
+- uploading poems faster --> ALEXIA
+
+
+3/4 goals:
+- clickable edges
+- delete edges/nodes
+- line density?
+- keep track of edges already in tree
