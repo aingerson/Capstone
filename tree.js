@@ -3,9 +3,10 @@
     // Calculate total nodes, max label length
 
   function makeTree(treeData){
-    //console.log(treeData);
+
     var totalNodes = 0;
     var maxLabelLength = 0;
+
     // variables for drag/drop
     var selectedNode = null;
     var draggingNode = null;
@@ -324,7 +325,6 @@
       //console.log("toggle children");
       //d.children = findConnections(d.name);
       //console.log(d);
-
 
       if(d.children == [] || d.children == null){
         //console.log("none");

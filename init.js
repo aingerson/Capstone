@@ -344,7 +344,6 @@ function saveAsFile(link, content, filename) {
     console.log("save");
 }
 
-
 function findConnections(word){
   currWord = word;
   var foundLeft = [];
