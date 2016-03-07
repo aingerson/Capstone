@@ -36,7 +36,7 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
 "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
 "do","not","go","come","here","into","that","so","an","shall","no","by",
-"who","he","had","you","one","oh","all","with","out"];
+"who","he","had","you","one","oh","all","with","out","through", " "];
 
 var head;
 var dist = 2;
