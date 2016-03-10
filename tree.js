@@ -2,7 +2,10 @@
     // = treejson;
     // Calculate total nodes, max label length
 
+  var tree = null;
+
   function makeTree(treeData){
+    $("#tree").empty();
 
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -23,7 +26,7 @@
     // var viewerHeight = $("tree").height();
     var viewerHeight = document.getElementById("toprow").offsetHeight;
     var viewerWidth = document.getElementById("tree").offsetWidth;
-    var tree = d3.layout.tree()
+    tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
     // define a d3 diagonal projection for use by the node paths later on.
     var diagonal = d3.svg.diagonal()
@@ -540,7 +543,7 @@
     // Layout the tree initially and center on the root node.
 
     update(root);
-    //centerNode(root);
-    if(treeData.children!=null) centerNode(treeData.children[0]);
+    centerNode(root);
+    //if(treeData.children!=null) centerNode(treeData.children[0]);
 
 }

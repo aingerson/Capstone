@@ -93,6 +93,8 @@ function adjustSizes(){
   selectBar.setSize(maxWidth, maxHeight+(buffer*2));
   $(selectBar.canvas).parent().height("400px");
 
+  //$('tree').height("400px");
+
 // <<<<<<< Updated upstream
 //   treePaper.setSize('100%', maxHeight);
 //   $(treePaper.canvas).parent().height("400px");
@@ -460,6 +462,7 @@ function Node(thisWord,left,right,prev){
   this.connRight = right;
   this.prev = prev;//Node
 }
+
 
 //when the page is done loading, initialize
 $(document).ready(function() {
