@@ -1,6 +1,7 @@
 //treeJSON = d3.json("flare.json", function(error, treeData) {
     // = treejson;
     // Calculate total nodes, max label length
+var nodes;
 
   var tree = null;
 
@@ -9,7 +10,11 @@
 
     var totalNodes = 0;
     var maxLabelLength = 0;
+<<<<<<< Updated upstream
 
+=======
+    nodes = null;
+>>>>>>> Stashed changes
     // variables for drag/drop
     var selectedNode = null;
     var draggingNode = null;
@@ -19,7 +24,10 @@
     // Misc. variables
     var i = 0;
     var duration = 750;
-    var root;
+    var root = {
+      "name": "",
+      "children":[]
+    };
 
     // size of the diagram
     // var viewerWidth = $("tree").width();
@@ -380,7 +388,7 @@
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
-        var nodes = tree.nodes(root).reverse(),
+          nodes = tree.nodes(root).reverse(),
             links = tree.links(nodes);
 
         // Set widths between levels based on maxLabelLength.
@@ -539,11 +547,12 @@
     root = treeData;
     root.x0 = viewerHeight / 5;
     root.y0 = 0;
-
+    update(root);
     // Layout the tree initially and center on the root node.
 
     update(root);
     centerNode(root);
+
     //if(treeData.children!=null) centerNode(treeData.children[0]);
 
 }
