@@ -10,8 +10,12 @@ var nodes;
     tree = null;
 
     var totalNodes = 0;
-    var maxLabelLength = 0;
+    var maxLabelLength = 0;/*
+<<<<<<< HEAD
     nodes = null;
+=======
+
+>>>>>>> 4a890306a58ec7f6a0a6b4af41572ab36b46740b*/
     // variables for drag/drop
     var selectedNode = null;
     var draggingNode = null;
@@ -21,10 +25,7 @@ var nodes;
     // Misc. variables
     var i = 0;
     var duration = 750;
-    var root = {
-      "name": "",
-      "children":[]
-    };
+    var root = treeData;
 
     // size of the diagram
     // var viewerWidth = $("tree").width();
@@ -340,6 +341,7 @@ var nodes;
       }
       else{
         //console.log("has children");
+        clearChildren(d.name);
         d.children = [];
       }
 
