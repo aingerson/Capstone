@@ -36,7 +36,11 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
 "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
 "do","not","go","come","here","into","that","so","an","shall","no","by",
-"who","he","had","you","one","oh","all","with","out","through", " "];
+"who","he","had","you","one","oh","all","with","out","through", "",
+"let","if","\n","'all","i'll","me","'no","would","nor","o","are",
+"going","this","their","up","last","must","any","further","down","after",
+"other","there","about","were","among","their","like","once","then","need",
+"only","high","him","when","are","than","be","will"];
 
 var head;
 var dist = 2;
@@ -110,48 +114,105 @@ function adjustSizes(){
 
 function handleFileSelect(evt) {
     var files = evt.target.files;
-    var output = [];
-
-    for (var i = 0, f; f = files[i]; i++) { //read every file
-        var reader = new FileReader();
-        var result;
-        reader.onload = function(e) {
-            var text = e.target.result;
-            var lines = text.split("\n");
-
-            for (var i = 0; i < lines.length; i++) { //scan the whole text file
-                output.push(lines[i]);
-            }
-            var thisPoem = new Poem(output); //make a new poem with the file contents
-            var item = selectBar.text(buffer, listY, output[0]); //this is the poem name in the select bar
-            output = []; //clear data buffer
-
-            item.attr({
-                font: "12px Fontin-Sans, Helvetica",
-                fill: deselectColor,
-                "text-anchor": "start"
-            });
-            listY += lineSpacing + 2;
-            item.data("poem", thisPoem); //link actual Poem object to clickable raphael object
-            poemList.push(item); //add it to the list
-            item.click(function() { //click function for poem name
-                if (selected != null) { //if other poem was selected before this
-                    selected.data('poem').hidePoem(); //hide this poem
-                    if (selected.data('poem').contains()) selected.attr("fill", containsColor); //if contains the current word, red
-                    else selected.attr("fill", deselectColor); //else black
-                }
-                selected = this; //now this one is selected
-                this.attr("fill", selectColor); //change the color of this item
-                this.data('poem').showPoem(); //and show its poem
-            });
-        };
-        reader.readAsText(f, "UTF-8");
-        reader.onloadend = function(e){
-          adjustSizes();
-        };
+    var numFiles = 5;
+    for(var i=0;i<files.length;i+=numFiles){
+      if(i+numFiles<files.length){
+        scanFiles(files,i,i+numFiles);
+      }
+      else{
+        scanFiles(files,i,files.length);
+      }
     }
+
+
+
+
+    // var output = [];
+    //
+    // for (var i = 0, f; f = files[i]; i++) { //read every file
+    //     var reader = new FileReader();
+    //     var result;
+    //     reader.onload = function(e) {
+    //         var text = e.target.result;
+    //         var lines = text.split("\n");
+    //
+    //         for (var i = 0; i < lines.length; i++) { //scan the whole text file
+    //             output.push(lines[i]);
+    //         }
+    //         var thisPoem = new Poem(output); //make a new poem with the file contents
+    //         var item = selectBar.text(buffer, listY, output[0]); //this is the poem name in the select bar
+    //         output = []; //clear data buffer
+    //
+    //         item.attr({
+    //             font: "12px Fontin-Sans, Helvetica",
+    //             fill: deselectColor,
+    //             "text-anchor": "start"
+    //         });
+    //         listY += lineSpacing + 2;
+    //         item.data("poem", thisPoem); //link actual Poem object to clickable raphael object
+    //         poemList.push(item); //add it to the list
+    //         item.click(function() { //click function for poem name
+    //             if (selected != null) { //if other poem was selected before this
+    //                 selected.data('poem').hidePoem(); //hide this poem
+    //                 if (selected.data('poem').contains()) selected.attr("fill", containsColor); //if contains the current word, red
+    //                 else selected.attr("fill", deselectColor); //else black
+    //             }
+    //             selected = this; //now this one is selected
+    //             this.attr("fill", selectColor); //change the color of this item
+    //             this.data('poem').showPoem(); //and show its poem
+    //         });
+    //     };
+    //     reader.readAsText(f, "UTF-8");
+    //     reader.onloadend = function(e){
+    //       adjustSizes();
+    //     };
+    // }
     //console.log(maxWidth);
     //console.log(maxHeight);
+}
+
+function scanFiles(files,i,j){
+  var output = [];
+  var f;
+  for (;i<j; i++) { //read every file
+      f = files[i];
+      var reader = new FileReader();
+      var result;
+      reader.onload = function(e) {
+          var text = e.target.result;
+          var lines = text.split("\n");
+
+          for (var i = 0; i < lines.length; i++) { //scan the whole text file
+              output.push(lines[i]);
+          }
+          var thisPoem = new Poem(output); //make a new poem with the file contents
+          var item = selectBar.text(buffer, listY, output[0]); //this is the poem name in the select bar
+          output = []; //clear data buffer
+
+          item.attr({
+              font: "12px Fontin-Sans, Helvetica",
+              fill: deselectColor,
+              "text-anchor": "start"
+          });
+          listY += lineSpacing + 2;
+          item.data("poem", thisPoem); //link actual Poem object to clickable raphael object
+          poemList.push(item); //add it to the list
+          item.click(function() { //click function for poem name
+              if (selected != null) { //if other poem was selected before this
+                  selected.data('poem').hidePoem(); //hide this poem
+                  if (selected.data('poem').contains()) selected.attr("fill", containsColor); //if contains the current word, red
+                  else selected.attr("fill", deselectColor); //else black
+              }
+              selected = this; //now this one is selected
+              this.attr("fill", selectColor); //change the color of this item
+              this.data('poem').showPoem(); //and show its poem
+          });
+      };
+      reader.readAsText(f, "UTF-8");
+      reader.onloadend = function(e){
+        adjustSizes();
+      };
+  }
 }
 
 //creates a new Poem object
@@ -172,35 +233,80 @@ function Poem(data) {
     for (var i = 1; i < data.length; i++) { //go through every line
         var splitLine = data[i].split(" "); //split the line into an array of words
         x = buffer; //start on the left
+        var building = "";
         for (var j = 0; j < splitLine.length; j++) { //go through every word
-            var thisWord = poemPaper.text(x, y, splitLine[j]); //make a new text box
-            thisWord.attr({
+            var w = normalize(splitLine[j]);
+            if(isInList(w,insigWords)){
+              building+=splitLine[j] + " ";
+            }
+            else{
+              //console.log(w);
+
+
+              if(building!=""){
+                var prevWord = poemPaper.text(x,y,building);
+                prevWord.attr({
+                  font: "10px Fontin-Sans, Helvetica",
+                  fill: deselectColor,
+                  "text-anchor":"start"
+                });
+                x+= prevWord.node.getBBox().width+5;
+                this.words.push(prevWord);
+                prevWord.hide();
+              }
+
+              var thisWord = poemPaper.text(x,y,splitLine[j]);
+              thisWord.attr({
                 font: "10px Fontin-Sans, Helvetica",
                 fill: deselectColor,
-                "text-anchor": "start"
-            });
-            var w = normalize(splitLine[j]); //get rid of case and punctuation to check word
-            if (!isInList(w,insigWords)) { //if this word is a significant word
-                thisWord.click(function() { //make it clickable
-                    var word = normalize(this.attr("text")); //get rid of case and punctuation
-                    currWord = word; //this is now the selected word
-                    searchPoems(); //search all the poems for this word
-
-
-                    //displayTree();
-                });
-                this.sigWords.push(thisWord); //add this word to the searchable word list
+                "text-anchor":"start"
+              });
+              thisWord.click(function(){
+                currWord = normalize(this.attr("text"));
+                searchPoems();
+              });
+              this.sigWords.push(thisWord);
+              this.words.push(thisWord);
+              x += thisWord.node.getBBox().width+3;
+              thisWord.hide();
+              building="";
             }
-            this.words.push(thisWord); //and no matter what, add this word to the complete word list
-            x += thisWord.node.getBBox().width + 5; //move the x coordinate over by the length of this word box
-            thisWord.hide(); //when word is created, start hidden
-        };
-        y += lineSpacing; //move to the next line
-        if(x>localWidth) localWidth = x;
-    }
+          }
+          if(x>localWidth) localWidth = x;
+          y+=lineSpacing;
+        }
+        if(localWidth>maxWidth) maxWidth = localWidth;
+        if(y>maxHeight) maxHeight = y;
 
-    if(localWidth>maxWidth) maxWidth = localWidth;
-    if(y>maxHeight) maxHeight = y;
+        //
+        //     var thisWord = poemPaper.text(x, y, splitLine[j]); //make a new text box
+        //     thisWord.attr({
+        //         font: "10px Fontin-Sans, Helvetica",
+        //         fill: deselectColor,
+        //         "text-anchor": "start"
+        //     });
+        //     var w = normalize(splitLine[j]); //get rid of case and punctuation to check word
+        //     if (!isInList(w,insigWords)) { //if this word is a significant word
+        //         thisWord.click(function() { //make it clickable
+        //             var word = normalize(this.attr("text")); //get rid of case and punctuation
+        //             currWord = word; //this is now the selected word
+        //             searchPoems(); //search all the poems for this word
+        //
+        //
+        //             //displayTree();
+        //         });
+        //         this.sigWords.push(thisWord); //add this word to the searchable word list
+        //     }
+        //     this.words.push(thisWord); //and no matter what, add this word to the complete word list
+        //     x += thisWord.node.getBBox().width + 5; //move the x coordinate over by the length of this word box
+        //     thisWord.hide(); //when word is created, start hidden
+        // };
+        // y += lineSpacing; //move to the next line
+        // if(x>localWidth) localWidth = x;
+  //  }
+    //
+    // if(localWidth>maxWidth) maxWidth = localWidth;
+    // if(y>maxHeight) maxHeight = y;
 }
 
 //hides entire poem
@@ -420,10 +526,29 @@ Poem.prototype.contains = function() {
 //gets rid of casing and punctuation
 function normalize(w) {
     w = w.toLowerCase();
-    if (w.includes(',') || w.includes('.') || w.includes('?') || w.includes('!') || w.includes(';') || w.includes(':')) {
-        w = w.substring(0, w.length - 1);
+    var c = has(w);
+    while(c!=""){
+        var index = w.indexOf(c);
+        if(index==0) w = w.substring(1,w.length);
+        else if(index==w.length-1) w = w.substring(0,w.length-1);
+        else w = w.substring(0,index) + w.substring(index+1,w.length);
+        c = has(w);
     }
     return w;
+
+}
+
+function has(w){
+  if(w.includes('\'')) return ('\'');
+  if(w.includes(',')) return (',');
+  if(w.includes('.')) return ('.');
+  if(w.includes('?')) return ('?');
+  if(w.includes('!')) return ('!');
+  if(w.includes(';')) return (';');
+  if(w.includes(',')) return (',');
+  if(w.includes(':')) return (':');
+
+  return "";
 }
 
 //Searches list of insignificant words (defined globally) and returns whether it is insignificant
