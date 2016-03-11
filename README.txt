@@ -66,8 +66,8 @@ Click on line and read whole poem
 
 3/4 issues:
 - scrolling tree --> TORI
-- load tree in center --> TORI
-- drawing new tree --> TORI
+- load tree in center --> TORI (done)
+- drawing new tree --> TORI (done)
 - change edge/node color when clicked/expanded --> TORI
 
 - highlighting of words --> ALEXIA

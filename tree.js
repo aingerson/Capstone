@@ -11,11 +11,7 @@ var nodes;
 
     var totalNodes = 0;
     var maxLabelLength = 0;
-<<<<<<< Updated upstream
-
-=======
     nodes = null;
->>>>>>> Stashed changes
     // variables for drag/drop
     var selectedNode = null;
     var draggingNode = null;

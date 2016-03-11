@@ -45,6 +45,7 @@ div {
   box-shadow: -3px 3px 5px #888888;
 }
 #tree {
+  display:block;
 	overflow: auto;
 	float:left;
 	width:40%;
