@@ -11,11 +11,7 @@ var nodes;
 
     var totalNodes = 0;
     var maxLabelLength = 0;
-<<<<<<< Updated upstream
 
-=======
-    nodes = null;
->>>>>>> Stashed changes
     // variables for drag/drop
     var selectedNode = null;
     var draggingNode = null;
@@ -25,10 +21,7 @@ var nodes;
     // Misc. variables
     var i = 0;
     var duration = 750;
-    var root = {
-      "name": "",
-      "children":[]
-    };
+    var root = treeData;
 
     // size of the diagram
     // var viewerWidth = $("tree").width();
@@ -344,6 +337,7 @@ var nodes;
       }
       else{
         //console.log("has children");
+        clearChildren(d.name);
         d.children = [];
       }
 

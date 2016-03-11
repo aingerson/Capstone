@@ -50,6 +50,8 @@ var maxHeight =300;
 var center = null;
 var graph;
 var tree;
+var edges = [];
+
 
 //initializes canvases
 function init() {
@@ -91,10 +93,10 @@ function drawGraph(){
   }
 
 function adjustSizes(){
-  poemPaper.setSize(maxWidth*1.3, maxHeight+(buffer*2));
+  poemPaper.setSize(maxWidth*1.3, maxHeight+(buffer*10));
   $(poemPaper.canvas).parent().height("400px");
 
-  selectBar.setSize(maxWidth, maxHeight+(buffer*2));
+  selectBar.setSize(maxWidth, maxHeight+(buffer*10));
   $(selectBar.canvas).parent().height("400px");
 
   //$('tree').height("400px");
@@ -278,35 +280,6 @@ function Poem(data) {
         if(localWidth>maxWidth) maxWidth = localWidth;
         if(y>maxHeight) maxHeight = y;
 
-        //
-        //     var thisWord = poemPaper.text(x, y, splitLine[j]); //make a new text box
-        //     thisWord.attr({
-        //         font: "10px Fontin-Sans, Helvetica",
-        //         fill: deselectColor,
-        //         "text-anchor": "start"
-        //     });
-        //     var w = normalize(splitLine[j]); //get rid of case and punctuation to check word
-        //     if (!isInList(w,insigWords)) { //if this word is a significant word
-        //         thisWord.click(function() { //make it clickable
-        //             var word = normalize(this.attr("text")); //get rid of case and punctuation
-        //             currWord = word; //this is now the selected word
-        //             searchPoems(); //search all the poems for this word
-        //
-        //
-        //             //displayTree();
-        //         });
-        //         this.sigWords.push(thisWord); //add this word to the searchable word list
-        //     }
-        //     this.words.push(thisWord); //and no matter what, add this word to the complete word list
-        //     x += thisWord.node.getBBox().width + 5; //move the x coordinate over by the length of this word box
-        //     thisWord.hide(); //when word is created, start hidden
-        // };
-        // y += lineSpacing; //move to the next line
-        // if(x>localWidth) localWidth = x;
-  //  }
-    //
-    // if(localWidth>maxWidth) maxWidth = localWidth;
-    // if(y>maxHeight) maxHeight = y;
 }
 
 //hides entire poem
@@ -328,6 +301,7 @@ Poem.prototype.showPoem = function() {
 
 //searches all poems for the currently selected word and changes highlighting appropriately
 function searchPoems() {
+  edges = [];
   var foundLeft = [];
   var foundRight = [];
   var foundAll = [];
@@ -343,26 +317,15 @@ function searchPoems() {
                 for(var d = j-dist; d<=j+dist; d++){
                   if(d>=0 && d<p.sigWords.length){
                   var word = normalize(p.sigWords[d].attr('text'));
-                  if(!isInList(word,foundAll) && word != "" && word!=currWord) foundAll.push(word);
+                  if(!isInList(word,foundAll) && word != "" && word!=currWord){
+                    if(!isEdge(currWord,word)){
+                      foundAll.push(word);
+                      edges.push(new Edge(currWord,word));
+                    }
+
+                  }
                 }
               }
-                // for(var d = j-dist; d<j; d++){
-                //   if(d>=0){
-                //     var word = normalize(p.sigWords[d].attr('text'));
-                //     if(!isInList(word,foundLeft) && word != "")
-                //     foundLeft.push(word);
-                //     foundAll.push(word);
-                //   }
-                // }
-                // for(var d = j+1; d<j+dist; d++){
-                //   if(d<p.sigWords.length){
-                //     var word = normalize(p.sigWords[d].attr('text'));
-                //     if(!isInList(word,foundRight) && word != "")
-                //       foundRight.push(word);
-                //       foundAll.push(word);
-                //   }
-                // }
-
             } else {
                 p.sigWords[j].attr("fill", deselectColor); //make sure its unselected
             }
@@ -374,54 +337,6 @@ function searchPoems() {
             poemList[i].attr("fill", deselectColor); //did not find the word in this poem
         }
     }
-    //console.log(foundWords);
-    //+++++++++++++++++
-    //this is where tree displaying stuff should happen vvv
-    //+++++++++++++++++
-    // var treeWidth = $("#tree").width();
-    // var treeHeight = $("#tree").height();
-    // var connLeft = treePaper.set();
-    // var connRight = treePaper.set();
-    // var headX = treeWidth/2;
-    // var headY = treeHeight/2;
-    // var temp = treePaper.text(headX, headY, currWord);
-    // if(center==null){
-    //   center = treePaper.ellipse(headX, headY, temp.node.getBBox().width+5, temp.node.getBBox().height+5);
-    //   center.attr("fill", 'FFFFFF');
-    //   center.attr("stroke", 'FFFFFF');
-    // }
-    // else{
-    //   center.animate({rx: temp.node.getBBox().width+5},time);
-    // //  center.rx = headWord.node.getBBox().width;
-    //   //center.ry = headWord.node.getBBox().height;
-    // }
-    // temp.hide();
-    // var headWord = treePaper.text(headX,headY,currWord);
-    //
-    // var x = headX - buffer*5;
-    // var y = headY-(foundLeft.length/2*lineSpacing);
-    // for(var k=0; k<foundLeft.length; k++){
-    //   var thisWord = treePaper.text(x,y,foundLeft[k]);
-    //   thisWord.click(function() { //make it clickable
-    //       //var word = normalize(this.attr("text")); //get rid of case and punctuation
-    //       currWord = this.attr('text'); //this is now the selected word
-    //       searchPoems(); //search all the poems for this word
-    //   });
-    //   connLeft.push(thisWord);
-    //   y += lineSpacing;
-    // }
-    // x = headX+ (buffer*5);
-    // y = headY-(foundRight.length/2*lineSpacing);
-    // for(var k=0; k<foundRight.length; k++){
-    //   var thisWord = treePaper.text(x,y,foundRight[k]);
-    //   thisWord.click(function() { //make it clickable
-    //       //var word = normalize(this.attr("text")); //get rid of case and punctuation
-    //       currWord = this.attr('text'); //this is now the selected word
-    //       searchPoems(); //search all the poems for this word
-    //   });
-    //   connRight.push(thisWord);
-    //   y += lineSpacing;
-    // }
     treejson.name = currWord;
     treejson.children = [];
     for(var h=0;h<foundAll.length;h++){
@@ -441,6 +356,15 @@ function searchPoems() {
     //head = next;
     //displayTree();
 }
+
+function isEdge(word1,word2){
+  for(var m = 0;m<edges.length;m++){
+    if(edges[m]==null) continue;
+    if((word1==edges[m].w1 && word2==edges[m].w2) || (word1==edges[m].w2 && word2==edges[m].w1)) return true;
+  }
+  return false;
+
+}
 function saveAsFile(link, content, filename) {
     var blob = new Blob([content], {type: "text/text"});
     var url  = URL.createObjectURL(blob);
@@ -450,6 +374,11 @@ function saveAsFile(link, content, filename) {
     link.href        = url;
 
     console.log("save");
+}
+
+function Edge(w1,w2){
+  this.w1 = w1;
+  this.w2 = w2;
 }
 
 function findConnections(word){
@@ -470,25 +399,16 @@ function findConnections(word){
                 for(var d = j-dist; d<=j+dist; d++){
                   if(d>=0 && d<p.sigWords.length){
                   var word = normalize(p.sigWords[d].attr('text'));
-                  if(!isInList(word,foundAll) && word != "" && word!=currWord) foundAll.push(word);
+                  if(!isInList(word,foundAll) && word != "" && word!=currWord){
+                    if(!isEdge(currWord,word)){
+                      foundAll.push(word);
+                      edges.push(new Edge(currWord,word));
+                      //console.log(edges[edges.length-1]);
+
+                    }
+                  }
                 }
               }
-                // for(var d = j-dist; d<j; d++){
-                //   if(d>=0){
-                //     var word = normalize(p.sigWords[d].attr('text'));
-                //     if(!isInList(word,foundLeft) && word != "")
-                //     foundLeft.push(word);
-                //     foundAll.push(word);
-                //   }
-                // }
-                // for(var d = j+1; d<j+dist; d++){
-                //   if(d<p.sigWords.length){
-                //     var word = normalize(p.sigWords[d].attr('text'));
-                //     if(!isInList(word,foundRight) && word != "")
-                //       foundRight.push(word);
-                //       foundAll.push(word);
-                //   }
-                // }
 
             } else {
                 p.sigWords[j].attr("fill", deselectColor); //make sure its unselected
@@ -559,6 +479,15 @@ function isInList(e,list) {
     return false;
 }
 
+function clearChildren(name){
+  for(var m = 0;m<edges.length;m++){
+
+    if(edges[m]==null) continue;
+    if(edges[m].w1 == name){
+      edges[m] = null;
+    }
+  }
+}
 
 function displayTree(){
   if(head.prev!=null){
