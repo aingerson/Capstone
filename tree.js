@@ -6,6 +6,7 @@
 
   function makeTree(treeData){
     $("#tree").empty();
+    tree = null;
 
     var totalNodes = 0;
     var maxLabelLength = 0;
