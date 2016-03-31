@@ -1,0 +1,7 @@
+- figure out how to access the SVG element of the tree
+
+- insert the trash icon svg code into the tree svg
+
+- figure out how to edit the drag listener in order to delete nodes dragged onto a certain area
+
+- map that area to the area which is displaying the icon

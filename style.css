@@ -10,6 +10,13 @@ input {
 div {
   margin:10px;
 }
+#icon {
+  padding-top:0px;
+  padding-left:0px;
+  width:50px;
+  height:50px;
+  position:absolute;
+}
 #toprow {
 	margin-top:35px;
 	height:400px;
@@ -78,7 +85,7 @@ div {
 
   .templink {
     fill: none;
-    stroke: red;
+    stroke: blue;
     stroke-width: 3px;
   }
 

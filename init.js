@@ -18,7 +18,7 @@ var selected = null; //selected poem
 var listColor = "aabae2"; //background left
 var poemColor = "FFFDFC"; //background right
 var treeColor = "D7C9E2";
-var graphColor = "4DC0C7"
+var graphColor = "4DC0C7";
 
 var treeStroke = "B2A7BC";
 

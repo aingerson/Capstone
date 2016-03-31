@@ -10,18 +10,14 @@ var nodes;
     tree = null;
 
     var totalNodes = 0;
-    var maxLabelLength = 0;/*
-<<<<<<< HEAD
-    nodes = null;
-=======
+    var maxLabelLength = 0;
 
->>>>>>> 4a890306a58ec7f6a0a6b4af41572ab36b46740b*/
     // variables for drag/drop
     var selectedNode = null;
     var draggingNode = null;
     // panning variables
-    var panSpeed = 200;
-    var panBoundary = 20; // Within 20px from edges will pan when dragging.
+    var panSpeed = 100;
+    var panBoundary = 100; // Within 20px from edges will pan when dragging.
     // Misc. variables
     var i = 0;
     var duration = 750;
@@ -114,10 +110,22 @@ var nodes;
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
+    function displayTrashIcon(){
+      var icon = "<svg width='50' height='50' version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px'viewBox='0 0 24 24' enable-background='new 0 0 24 24' xml:space='preserve'><style>path,polygon{fill:gray;}</style><path d='M6,8L6,8c0-1.1,0.9-2,2-2h2l1-1h2l1,1h2c1.1,0,2,0.9,2,2v0H6z'/><polygon points='7,9 17,9 16,20 8,20 '/></svg>"
+      document.getElementById("icon").innerHTML = icon;
+      var pos = document.getElementById("tree").getBoundingClientRect();
+      document.getElementById("icon").style.top = 0;
+      document.getElementById("icon").style.left = pos.left-20;
+      //console.log(document.getElementById("icon").getBoundingClientRect());
+
+    }
+    function hideTrashIcon(){
+      document.getElementById("icon").innerHTML = "";
+    }
+
     function initiateDrag(d, domNode) {
+        displayTrashIcon();
         draggingNode = d;
-        d3.select(domNode).select('.ghostCircle').attr('pointer-events', 'none');
-        d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
         d3.select(domNode).attr('class', 'node activeDrag');
 
         svgGroup.selectAll("g.node").sort(function(a, b) { // select the parent and sort the path's
@@ -159,14 +167,13 @@ var nodes;
     var baseSvg = d3.select("#tree").append("svg")
         .attr("width", viewerWidth)
         .attr("height", viewerHeight)
-        .attr("class", "overlay");
-        //.call(zoomListener);
-
-
+        .attr("class", "overlay")
+        .call(zoomListener);
 
     // Define the drag listeners for drag/drop behaviour of nodes.
     dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
+          //Do nothing if the node is root
             if (d == root) {
                 return;
             }
@@ -184,57 +191,17 @@ var nodes;
                 initiateDrag(d, domNode);
             }
 
-            // get coords of mouseEvent relative to svg container to allow for panning
-            relCoords = d3.mouse($('svg').get(0));
-            if (relCoords[0] < panBoundary) {
-                panTimer = true;
-                pan(this, 'left');
-            } else if (relCoords[0] > ($('svg').width() - panBoundary)) {
-
-                panTimer = true;
-                pan(this, 'right');
-            } else if (relCoords[1] < panBoundary) {
-                panTimer = true;
-                pan(this, 'up');
-            } else if (relCoords[1] > ($('svg').height() - panBoundary)) {
-                panTimer = true;
-                pan(this, 'down');
-            } else {
-                try {
-                    clearTimeout(panTimer);
-                } catch (e) {
-
-                }
-            }
-
             d.x0 += d3.event.dy;
             d.y0 += d3.event.dx;
             var node = d3.select(this);
             node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
-            updateTempConnector();
+            
         }).on("dragend", function(d) {
             if (d == root) {
                 return;
             }
             domNode = this;
             if (selectedNode) {
-                // now remove the element from the parent, and insert it into the new elements children
-                var index = draggingNode.parent.children.indexOf(draggingNode);
-                if (index > -1) {
-                    draggingNode.parent.children.splice(index, 1);
-                }
-                if (typeof selectedNode.children !== 'undefined' || typeof selectedNode._children !== 'undefined') {
-                    if (typeof selectedNode.children !== 'undefined') {
-                        selectedNode.children.push(draggingNode);
-                    } else {
-                        selectedNode._children.push(draggingNode);
-                    }
-                } else {
-                    selectedNode.children = [];
-                    selectedNode.children.push(draggingNode);
-                }
-                // Make sure that the node being added to is expanded so user can see added node is correctly moved
-                expand(selectedNode);
                 sortTree();
                 endDrag();
             } else {
@@ -243,12 +210,12 @@ var nodes;
         });
 
     function endDrag() {
+      hideTrashIcon();
         selectedNode = null;
         d3.selectAll('.ghostCircle').attr('class', 'ghostCircle');
         d3.select(domNode).attr('class', 'node');
         // now restore the mouseover event or we won't be able to drag a 2nd time
         d3.select(domNode).select('.ghostCircle').attr('pointer-events', '');
-        updateTempConnector();
         if (draggingNode !== null) {
             update(root);
             centerNode(draggingNode);
@@ -406,7 +373,7 @@ var nodes;
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
-            //.call(dragListener)
+            .call(dragListener)
             .attr("class", "node")
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
@@ -551,7 +518,7 @@ var nodes;
 
     update(root);
     centerNode(root);
-
+    document.getElementById('tree')
     //if(treeData.children!=null) centerNode(treeData.children[0]);
 
 }
