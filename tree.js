@@ -25,7 +25,7 @@ var nodes;
     // Misc. variables
     var i = 0;
     var duration = 750;
-    var root = treeData;
+    var root;
 
     // size of the diagram
     // var viewerWidth = $("tree").width();
@@ -159,8 +159,8 @@ var nodes;
     var baseSvg = d3.select("#tree").append("svg")
         .attr("width", viewerWidth)
         .attr("height", viewerHeight)
-        .attr("class", "overlay");
-        //.call(zoomListener);
+        .attr("class", "overlay")
+        .call(zoomListener);
 
 
 
@@ -406,7 +406,7 @@ var nodes;
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
-            //.call(dragListener)
+            .call(dragListener)
             .attr("class", "node")
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";

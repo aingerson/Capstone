@@ -89,3 +89,13 @@ div {
   .ghostCircle, .activeDrag .ghostCircle{
        display: none;
   }
+
+  .graphNode {
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+
+  .graphLink {
+    fill: none;
+    stroke: #bbb;
+  }
