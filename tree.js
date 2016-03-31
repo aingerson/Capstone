@@ -21,7 +21,7 @@ var nodes;
     // Misc. variables
     var i = 0;
     var duration = 750;
-    var root = treeData;
+    var root;
 
     // size of the diagram
     // var viewerWidth = $("tree").width();
@@ -169,7 +169,6 @@ var nodes;
         .attr("height", viewerHeight)
         .attr("class", "overlay")
         .call(zoomListener);
-
     // Define the drag listeners for drag/drop behaviour of nodes.
     dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
@@ -195,7 +194,7 @@ var nodes;
             d.y0 += d3.event.dx;
             var node = d3.select(this);
             node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
-            console.log(node[0];
+            console.log(node[0]);
 
         }).on("dragend", function(d) {
             if (d == root) {

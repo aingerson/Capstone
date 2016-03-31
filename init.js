@@ -40,7 +40,7 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "let","if","\n","'all","i'll","me","'no","would","nor","o","are",
 "going","this","their","up","last","must","any","further","down","after",
 "other","there","about","were","among","their","like","once","then","need",
-"only","high","him","when","are","than","be","will"];
+"only","high","him","when","are","than","be","will","should","till"];
 
 var head;
 var dist = 2;
@@ -51,6 +51,8 @@ var center = null;
 var graph;
 var tree;
 var edges = [];
+
+
 
 
 //initializes canvases
@@ -67,30 +69,23 @@ function init() {
     var rect2 = selectBar.rect(0, 0, '100%', '100%');
     rect2.attr("fill", listColor);
         rect2.attr("stroke", listColor);
-    //var rect3 = treePaper.rect(0, 0, '100%', '100%');
-    //rect3.attr("fill", treeColor);
-    //rect3.attr("stroke-width", 10);
-    //rect3.attr("stroke", treeStroke);
-
-    //var rect4 = graphPaper.rect(0,0,'100%','100%');
-    //rect4.attr("fill",graphColor);
-    //rect4.attr("stroke",graphColor);
 
     poemList = selectBar.set();
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
-// <<<<<<< Updated upstream
-// =======
-//     drawGraph();
-//
-// >>>>>>> Stashed changes
+
+    // d3.json("miserables.json",function(data){
+    // return data;
+    // });
+    graph = {};
+    graph.nodes = [];
+    graph.links = [];
+    //graph = Utils.loadJSON("miserables.json");
+
+    //console.log(graph);
+   makeGraph(graph);//initial test graph
 }
 
-function drawGraph(){
-
-
-
-  }
 
 function adjustSizes(){
   poemPaper.setSize(maxWidth*1.3, maxHeight+(buffer*10));
@@ -98,20 +93,6 @@ function adjustSizes(){
 
   selectBar.setSize(maxWidth, maxHeight+(buffer*10));
   $(selectBar.canvas).parent().height("400px");
-
-  //$('tree').height("400px");
-
-// <<<<<<< Updated upstream
-//   treePaper.setSize('100%', maxHeight);
-//   $(treePaper.canvas).parent().height("400px");
-// =======
-//   //treePaper.setSize('100%', maxWidth);
-// //  $(treePaper.canvas).parent().height("400px");
-// >>>>>>> Stashed changes
-  //document.getElementById('tree').style.height = maxHeight+(buffer*2);
-  //document.getElementById('tree').style.width = maxWidth;
-
-  //$(treePaper.canvas).parent().height("400px");
 }
 
 function handleFileSelect(evt) {
@@ -125,52 +106,72 @@ function handleFileSelect(evt) {
         scanFiles(files,i,files.length);
       }
     }
+}
 
+function addToGraph(){
+  //edges - w1,w2
+  //graph - links (source,target,value(1)),nodes
+  for(var i=0;i<edges.length;i++){
+    if(!nodeInGraph(edges[i].w1)){//if w1 not in graph yet, create new node
+      var newNode = {};
+      newNode.name = edges[i].w1;
+      newNode.group = 1;
+      graph.nodes.push(newNode);
+      //console.log("Create new node 1");
+    }
+    if(!nodeInGraph(edges[i].w2)){//if w2 not in graph yet, create new nodeInGraph
+      var newNode = {};
+      newNode.name = edges[i].w2;
+      newNode.group = 1;
+      graph.nodes.push(newNode);
+      //console.log("Create new node 2");
+    }
+    if(!edgeInGraph(edges[i])){//if no link exists between already, create new link
+      var link = {};
+      link.source=findIndex(edges[i].w1);
+      link.target=findIndex(edges[i].w2);
+      graph.links.push(link);
+    }
+  }
+  makeGraph(graph);
+  //console.log(edges);
+  //console.log(graph);
+}
 
+function nodeInGraph(node){
+  //console.log("Searching for " + node);
+  for(var j=0;j<graph.nodes.length;j++){
+    //console.log(graph.nodes[j]+"!="+node);
+    if(graph.nodes[j].name==node){
+      //console.log(node +" already in graph");
+      return true;
+    }
+  }
+  return false;
+}
 
+function edgeInGraph(edge){
+  for(var j=0;j<graph.links;j++){
+    if((source==findIndex(edge.w1) && target==findIndex(edge.w2)) || (source==findIndex(edge.w1) && target==findIndex(edge.w2))){
+      return true;
+    }
+  }
+  return false;
+}
 
-    // var output = [];
-    //
-    // for (var i = 0, f; f = files[i]; i++) { //read every file
-    //     var reader = new FileReader();
-    //     var result;
-    //     reader.onload = function(e) {
-    //         var text = e.target.result;
-    //         var lines = text.split("\n");
-    //
-    //         for (var i = 0; i < lines.length; i++) { //scan the whole text file
-    //             output.push(lines[i]);
-    //         }
-    //         var thisPoem = new Poem(output); //make a new poem with the file contents
-    //         var item = selectBar.text(buffer, listY, output[0]); //this is the poem name in the select bar
-    //         output = []; //clear data buffer
-    //
-    //         item.attr({
-    //             font: "12px Fontin-Sans, Helvetica",
-    //             fill: deselectColor,
-    //             "text-anchor": "start"
-    //         });
-    //         listY += lineSpacing + 2;
-    //         item.data("poem", thisPoem); //link actual Poem object to clickable raphael object
-    //         poemList.push(item); //add it to the list
-    //         item.click(function() { //click function for poem name
-    //             if (selected != null) { //if other poem was selected before this
-    //                 selected.data('poem').hidePoem(); //hide this poem
-    //                 if (selected.data('poem').contains()) selected.attr("fill", containsColor); //if contains the current word, red
-    //                 else selected.attr("fill", deselectColor); //else black
-    //             }
-    //             selected = this; //now this one is selected
-    //             this.attr("fill", selectColor); //change the color of this item
-    //             this.data('poem').showPoem(); //and show its poem
-    //         });
-    //     };
-    //     reader.readAsText(f, "UTF-8");
-    //     reader.onloadend = function(e){
-    //       adjustSizes();
-    //     };
-    // }
-    //console.log(maxWidth);
-    //console.log(maxHeight);
+function findIndex(name){
+  for(var i=0;i<graph.nodes.length;i++){
+    if(graph.nodes[i].name==name) return i;
+  }
+  return -1;
+}
+
+function deleteFromEdges(deleteWord){
+  for(var i=0;i<edges.length;i++){
+    if(edges[i].w1==deleteWord || edges[i].w2==deleteWord){
+      edges.splice(i,1);
+    }
+  }
 }
 
 function scanFiles(files,i,j){
