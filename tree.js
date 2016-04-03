@@ -4,7 +4,7 @@
 var nodes;
 
   var tree = null;
-
+  mode = "norm"
   function makeTree(treeData){
     $("#tree").empty();
     tree = null;
@@ -107,26 +107,49 @@ var nodes;
     }
 
 
+    function displayTrashIcon(){
+      var icon = changeTrashColor();
+      document.getElementById("icon_1").innerHTML = icon;
+      var pos = document.getElementById("tree").getBoundingClientRect();
+      document.getElementById("icon_1").style.top = 0;
+      document.getElementById("icon_1").style.left = pos.left-20;
+      document.getElementById("icon_1").addEventListener("click", trashClick);
+
+    }
+    function displayGraphIcon(){
+      var icon = changeGraphColor();
+      document.getElementById("icon_2").innerHTML = icon;
+      var pos = document.getElementById("tree").getBoundingClientRect();
+      document.getElementById("icon_2").style.top = 0;
+      document.getElementById("icon_2").style.left = pos.left+20;
+      document.getElementById("icon_2").addEventListener("click", trashClick);
+    }
+
+    displayGraphIcon();
+    displayTrashIcon();
+
+    function changeTrashColor(){
+      var color = "gray";
+      if(mode === "del"){
+        var color = "red"
+      }
+      return "<svg width='50' height='50' version='1.1' id='trashicon' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px'viewBox='0 0 24 24' enable-background='new 0 0 24 24' xml:space='preserve'><style>path,polygon{fill:"+color+";}</style><path d='M6,8L6,8c0-1.1,0.9-2,2-2h2l1-1h2l1,1h2c1.1,0,2,0.9,2,2v0H6z'/><polygon points='7,9 17,9 16,20 8,20 '/></svg>"
+    }
+    function trashClick(){
+      if(mode === "norm") mode = "del";
+      else if (mode === "del") mode = "norm";
+      displayTrashIcon();
+    }
+
+    function changeGraphColor(){
+      var color = "gray";
+      return "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' class='' pageAlignment='none' x='0px' y='0px' width='50px' height='50px' viewBox='0 0 150 125' enable-background='new 0 0 150 125' xml:space='preserve'><defs/><g type='LAYER' name='workspace' id='workspace' locked='true'/><g type='LAYER' name='Layer 01' id='Layer 01'><path transform='matrix(1 0 0 1 62.93055555555978 32.36111111111106)' width='46.27777777777777' height='46.27777777777777' stroke-width='7' stroke-miterlimit='3' stroke='#000000' fill='#FFFFFF' d='M0,23.138888888888886 C0,10.359632266666665 10.359632266666665,0 23.138888888888886,0 C35.918145511111106,0 46.27777777777777,10.359632266666665 46.27777777777777,23.138888888888886 C46.27777777777777,35.918145511111106 35.918145511111106,46.27777777777777 23.138888888888886,46.27777777777777 C10.359632266666665,46.27777777777777 0,35.918145511111106 0,23.138888888888886 Z '/><path transform='matrix(1 0 0 1 37.037037037040704 98.47222222222149)' width='23.1388888888888' height='23.1388888888888' stroke-width='3.499999999999992' stroke-miterlimit='3' stroke='#000000' fill='#000000' d='M0,11.569444444444429 C0,5.179816133333333 5.179816133333304,2.842170943040401e-14 11.569444444444343,2.842170943040401e-14 C17.95907275555544,2.842170943040401e-14 23.1388888888888,5.179816133333333 23.1388888888888,11.569444444444429 C23.1388888888888,17.959072755555525 17.95907275555544,23.13888888888883 11.569444444444343,23.13888888888883 C5.179816133333304,23.13888888888883 0,17.959072755555525 0,11.569444444444429 Z '/><path transform='matrix(1 0 0 1 117.47222222222565 2.0601851851847197)' width='29.199074074074133' height='29.199074074074133' stroke-width='4.416666666666681' stroke-miterlimit='3' stroke='#000000' fill='#FFFFFF' d='M0,14.599537037037038 C0,6.536434644444427 6.536434644444398,-2.842170943040401e-14 14.599537037037067,-2.842170943040401e-14 C22.66263942962962,-2.842170943040401e-14 29.199074074074133,6.536434644444427 29.199074074074133,14.599537037037038 C29.199074074074133,22.662639429629678 22.66263942962962,29.199074074074105 14.599537037037067,29.199074074074105 C6.536434644444398,29.199074074074105 0,22.662639429629678 0,14.599537037037038 Z '/><path transform='matrix(1 0 0 1 2.8796296296329515 25.199074074073646)' width='33.60648148148147' height='33.60648148148155' stroke-width='5.0833333333333455' stroke-miterlimit='3' stroke='#000000' fill='#FFFFFF' d='M1.1368683772161603e-13,16.803240740740762 C1.1368683772161603e-13,7.523066288888828 7.523066288888913,-8.526512829121202e-14 16.803240740740762,-8.526512829121202e-14 C26.08341519259261,-8.526512829121202e-14 33.60648148148158,7.523066288888828 33.60648148148158,16.803240740740762 C33.60648148148158,26.08341519259264 26.08341519259261,33.60648148148147 16.803240740740762,33.60648148148147 C7.523066288888913,33.60648148148147 1.1368683772161603e-13,26.08341519259264 1.1368683772161603e-13,16.803240740740762 Z '/><path transform='matrix(1 0 0 1 64.03240740741165 51.09259259259244)' width='28.15910158681288' height='4.577837819227682' stroke-width='4' stroke-miterlimit='3' stroke='#000000' fill='#FFFFFF' d='M0,0 L-28.15910158681288,-4.577837819227682 '/><path transform='matrix(1 0 0 1 106.09823096449539 43.9054711059387)' width='15.38204786872467' height='17.197467719487236' stroke-width='5' stroke-miterlimit='3' stroke='#000000' fill='#FFFFFF' d='M0,0 L15.38204786872467,-17.197467719487236 '/><path transform='matrix(1 0 0 1 77.473757860549 76.98969981548896)' width='22.209834450410597' height='26.065149760156544' stroke-width='5' stroke-miterlimit='3' stroke='"+color+"' fill='none' d='M0,0 L-22.209834450410597,26.065149760156544 '/></g></svg>"
+    }
+
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
-    function displayTrashIcon(){
-      var icon = "<svg width='50' height='50' version='1.1' id='Layer_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px'viewBox='0 0 24 24' enable-background='new 0 0 24 24' xml:space='preserve'><style>path,polygon{fill:gray;}</style><path d='M6,8L6,8c0-1.1,0.9-2,2-2h2l1-1h2l1,1h2c1.1,0,2,0.9,2,2v0H6z'/><polygon points='7,9 17,9 16,20 8,20 '/></svg>"
-      //d3.select('#tree').append(icon);
-      document.getElementById("icon").innerHTML = icon;
-      var pos = document.getElementById("tree").getBoundingClientRect();
-      document.getElementById("icon").style.top = 0;
-      document.getElementById("icon").style.left = pos.left-20;
-      //console.log(document.getElementById("icon").getBoundingClientRect());
-      
-
-    }
-    function hideTrashIcon(){
-      document.getElementById("icon").innerHTML = "";
-    }
-
     function initiateDrag(d, domNode) {
-        displayTrashIcon();
         draggingNode = d;
         d3.select(domNode).attr('class', 'node activeDrag');
 
@@ -196,8 +219,6 @@ var nodes;
             d.y0 += d3.event.dx;
             var node = d3.select(this);
             node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
-            console.log(node[0]);
-            console.log(node[0][0].offsetLeft);
 
         }).on("dragend", function(d) {
             if (d == root) {
@@ -213,7 +234,6 @@ var nodes;
         });
 
     function endDrag() {
-      hideTrashIcon();
         selectedNode = null;
         d3.selectAll('.ghostCircle').attr('class', 'ghostCircle');
         d3.select(domNode).attr('class', 'node');
@@ -330,10 +350,20 @@ var nodes;
     // Toggle children on click.
 
     function click(d) {
-        if (d3.event.defaultPrevented) return; // click suppressed
+              if (d3.event.defaultPrevented) return; // click suppressed
+        if(currentMode() == "del"){
+          deleteFromEdges(d.name);
+          //TODO tree.delete d
+          console.log('delete '+d.name);
+        } else{
         d = toggleChildren(d);
         update(d);
         centerNode(d);
+      }
+    }
+
+    function currentMode(){
+      return mode;
     }
 
     function update(source) {

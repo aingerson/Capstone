@@ -172,6 +172,7 @@ function deleteFromEdges(deleteWord){
       edges.splice(i,1);
     }
   }
+  console.log(edges);
 }
 
 function scanFiles(files,i,j){
