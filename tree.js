@@ -122,7 +122,7 @@ var nodes;
       var pos = document.getElementById("tree").getBoundingClientRect();
       document.getElementById("icon_2").style.top = 0;
       document.getElementById("icon_2").style.left = pos.left+20;
-      document.getElementById("icon_2").addEventListener("click", trashClick);
+      document.getElementById("icon_2").addEventListener("click", addToGraph());
     }
 
     displayGraphIcon();
