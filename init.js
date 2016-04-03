@@ -112,6 +112,7 @@ function addToGraph(){
   //edges - w1,w2
   //graph - links (source,target,value(1)),nodes
   for(var i=0;i<edges.length;i++){
+    if(edges[i]==null) continue;
     if(!nodeInGraph(edges[i].w1)){//if w1 not in graph yet, create new node
       var newNode = {};
       newNode.name = edges[i].w1;
