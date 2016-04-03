@@ -219,6 +219,10 @@ var nodes;
             d.y0 += d3.event.dx;
             var node = d3.select(this);
             node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
+<<<<<<< Updated upstream
+=======
+            //console.log(node[0]);
+>>>>>>> Stashed changes
 
         }).on("dragend", function(d) {
             if (d == root) {
