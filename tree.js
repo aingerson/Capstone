@@ -122,7 +122,7 @@ var nodes;
       var pos = document.getElementById("tree").getBoundingClientRect();
       document.getElementById("icon_2").style.top = 0;
       document.getElementById("icon_2").style.left = pos.left+20;
-      document.getElementById("icon_2").addEventListener("click", trashClick);
+      document.getElementById("icon_2").addEventListener("click", graphClick);
     }
 
     displayGraphIcon();
@@ -131,14 +131,22 @@ var nodes;
     function changeTrashColor(){
       var color = "gray";
       if(mode === "del"){
-        var color = "red"
+        var color = "red";
       }
       return "<svg width='50' height='50' version='1.1' id='trashicon' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px'viewBox='0 0 24 24' enable-background='new 0 0 24 24' xml:space='preserve'><style>path,polygon{fill:"+color+";}</style><path d='M6,8L6,8c0-1.1,0.9-2,2-2h2l1-1h2l1,1h2c1.1,0,2,0.9,2,2v0H6z'/><polygon points='7,9 17,9 16,20 8,20 '/></svg>"
     }
     function trashClick(){
-      if(mode === "norm") mode = "del";
-      else if (mode === "del") mode = "norm";
+      if(mode == "norm") mode = "del";
+      else if (mode == "del") mode = "norm";
       displayTrashIcon();
+    }
+
+    function graphClick(){
+      addToGraph();
+
+      // if(mode === "norm") mode = "graph";
+      // else if (mode === "graph") mode = "norm";
+      // displayGraphIcon();
     }
 
     function changeGraphColor(){
@@ -351,10 +359,15 @@ var nodes;
     // Toggle children on click.
 
     function click(d) {
+      console.log(d3.select(this).node().parentNode.data);
               if (d3.event.defaultPrevented) return; // click suppressed
         if(currentMode() == "del"){
-          deleteFromEdges(d.name);
+          deleteFroxmEdges(d.name);
+          //console.log(this);
           //TODO tree.delete d
+          //this.select("circle.nodeCircle");//.attr('class','nodeCircle');
+
+          //this.s.attr('class','nodeCircle');
           console.log('delete '+d.name);
         } else{
         d = toggleChildren(d);
@@ -547,12 +560,13 @@ var nodes;
     root = treeData;
     root.x0 = viewerHeight / 5;
     root.y0 = 0;
-    update(root);
+    //update(root);
     // Layout the tree initially and center on the root node.
 
     update(root);
     centerNode(root);
-    document.getElementById('tree')
+
+  //  document.getElementById('tree');
     //if(treeData.children!=null) centerNode(treeData.children[0]);
 
 }
