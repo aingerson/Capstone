@@ -33,64 +33,166 @@ function makeGraph(newGraph) {
   //   bilinks.push([s, i, t]);
   // });
 
+  // force
+  //     .nodes(graph.nodes)
+  //     .links(graph.links)
+  //     .start();
+  //
+  //
+  //     var link = svg.selectAll(".graphLink")
+  //          .data(graph.links)
+  //        .enter().append("line")
+  //          .attr("class", "graphLink")
+  //          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+  //
+  //
+  //          var node = svg.selectAll(".graphNode")
+  //                .data(graph.nodes);
+  //            var elemEnter = node.enter();
+  //            //
+  //            // var circle = elemEnter.append("circle")
+  //            //     .attr("class", "node")
+  //            //     .attr("r", 5)
+  //            //     .style("fill", function(d) { return color(d.group); })
+  //            //     .call(force.drag);
+  //
+  //            elemEnter.append("text")
+  //              .text(function(d){return d.name})
+  //              .attr({
+  //                "font-size":10
+  //              })
+  //              .call(force.drag);
+  //
+  //            node.append("title")
+  //                .text(function(d) { return d.name; })
+  //                .attr("dx",function(d){return d.dx;})
+  //                .attr("dy",function(d){return d.dy;});
+  //
+  //
+  //   //        var node = svg.selectAll(".graphNode")
+  //   //    .data(graph.nodes)
+  //   //  .enter().append("text")
+  //   //   .text(function(d){return d.name})
+  //   //    .attr({
+  //   //      "font-size":10
+  //   //     })
+  //   //    .call(force.drag);
+  //
+  //               //  node.append("text")
+  //               //  .text(function(d) {return d.name;});
+  //
+  //         // var elemEnter = node.enter();
+  //         // var text = elemEnter.append("text")
+  //         // .text(function(d){return d.name;})
+  //         // .attr({
+  //         //   "font-size":10
+  //         // });
+  //         // var node = svg.selectAll(".graphNode")
+  //         //       .data(graph.nodes);
+  //         //   var nodeEnter = node.enter()
+  //         //     .append("g")
+  //         //     .call(force.drag)
+  //         //     .attr("class", "node");
+  //         //   //
+  //         //   nodeEnter.append("circle")
+  //         //       .attr('class', 'nodeCircle')
+  //         //       .attr("r", 5)
+  //         //       .style("fill", "red");
+  //         //
+  //         //   nodeEnter.append("text")
+  //         //       .attr('class', 'nodeText')
+  //         //       .text(function(d) {
+  //         //           return d.name;
+  //         //       });
+  //
+  //
+  //
+  //
+  //           // var circle = elemEnter.append("circle")
+  //           //     .attr("class", "node")
+  //           //     .attr("r", 5)
+  //           //     .style("fill", function(d) { return color(d.group); })
+  //           //     .call(force.drag);
+  //
+  //           // elemEnter.append("text")
+  //           //   .text(function(d){return d.name})
+  //           //   .attr({
+  //           //     "font-size":10
+  //           //   })
+  //           //   .call(force.drag);
+  //
+  //             node.append("title")
+  //                   .text(function(d) { return d.name; })
+  //                   .attr("dx",function(d){return d.dx;})
+  //                   .attr("dy",function(d){return d.dy;});
+  //
+  //     force.on("tick", function() {
+  //       link.attr("x1", function(d) { return d.source.x; })
+  //           .attr("y1", function(d) { return d.source.y; })
+  //           .attr("x2", function(d) { return d.target.x; })
+  //           .attr("y2", function(d) { return d.target.y; });
+  //
+  //       node.attr("cx", function(d) { return d.x; })
+  //           .attr("cy", function(d) { return d.y; });
+  //     });
+
+
   force
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .start();
+        .nodes(graph.nodes)
+        .links(graph.links)
+        .start();
 
+    var link = svg.selectAll(".graphLink")
+        .data(graph.links)
+      .enter().append("line")
+        .attr("class", "link")
+        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
-      var link = svg.selectAll(".link")
-           .data(graph.links)
-         .enter().append("line")
-           .attr("class", "link")
-           .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+    var node = svg.selectAll(".graphNode")
+        .data(graph.nodes)
+      .enter().append("circle")
+        .attr("class", "node")
+        .attr("r", 5)
+        .style("fill", function(d) { return color(d.group); })
+        .call(force.drag);
 
-    //        var node = svg.selectAll(".node")
-    //    .data(graph.nodes)
-    //  .enter().append("circle")
-    //    .attr("class", "node")
-    //    .attr("r", 5)
-    //    .style("fill", function(d) { return color(d.group); })
-    //    .call(force.drag);
+    node.append("title")
+        .text(function(d) { return d.name; });
 
-                //  node.append("text")
-                //  .text(function(d) {return d.name;});
+    force.on("tick", function() {
+      link.attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
 
-          // var elemEnter = node.enter();
-          // var text = elemEnter.append("text")
-          // .text(function(d){return d.name;})
-          // .attr({
-          //   "font-size":10
-          // });
-          var node = svg.selectAll(".graphNode")
-                .data(graph.nodes);
-            var elemEnter = node.enter();
-            //
-            var circle = elemEnter.append("circle")
-                .attr("class", "node")
-                .attr("r", 5)
-                .style("fill", function(d) { return color(d.group); })
-                .call(force.drag);
+      node.attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; });
+    });
 
-            // elemEnter.append("text")
-            //   .text(function(d){return d.name})
-            //   .attr({
-            //     "font-size":10
-            //   })
-            //   .call(force.drag);
-
-              node.append("title")
-                    .text(function(d) { return d.name; })
-                    .attr("dx",function(d){return d.dx;})
-                    .attr("dy",function(d){return d.dy;});
-
-      force.on("tick", function() {
-        link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-
-        node.attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
-      });
+//  var link = svg.selectAll(".graphLink")
+ //     .data(graph.links)
+ //   .enter().append("line")
+ //     .attr("class", "link")
+ //     .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+ //
+ // var node = svg.selectAll(".graphNode")
+ //     .data(graph.nodes)
+ //   .enter().append("circle")
+ //     .attr("class", "node")
+ //     .attr("r", 5)
+ //     .style("fill", function(d) { return color(d.group); })
+ //     .call(force.drag);
+ //
+ // node.append("title")
+ //     .text(function(d) { return d.name; });
+ //
+ // force.on("tick", function() {
+ //   link.attr("x1", function(d) { return d.source.x; })
+ //       .attr("y1", function(d) { return d.source.y; })
+ //       .attr("x2", function(d) { return d.target.x; })
+ //       .attr("y2", function(d) { return d.target.y; });
+ //
+ //   node.attr("cx", function(d) { return d.x; })
+ //       .attr("cy", function(d) { return d.y; });
+ // });
 }

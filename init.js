@@ -169,6 +169,7 @@ function findIndex(name){
 
 function deleteFromEdges(deleteWord){
   for(var i=0;i<edges.length;i++){
+    if(edges[i]==null) continue;
     if(edges[i].w1==deleteWord || edges[i].w2==deleteWord){
       edges.splice(i,1);
     }

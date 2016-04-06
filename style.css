@@ -107,3 +107,14 @@ div {
     fill: none;
     stroke: #bbb;
   }
+  #trashicon {
+    fill:gray;
+    position:absolute;
+    visibility:hidden;
+  }
+  #graphicon {
+    fill:white;
+    stroke:gray;
+    position:absolute;
+    visibility: hidden;
+  }
