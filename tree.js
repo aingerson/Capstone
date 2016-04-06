@@ -24,8 +24,6 @@ var nodes;
     var root;
 
     // size of the diagram
-    // var viewerWidth = $("tree").width();
-    // var viewerHeight = $("tree").height();
     var viewerHeight = document.getElementById("toprow").offsetHeight;
     var viewerWidth = document.getElementById("tree").offsetWidth;
     tree = d3.layout.tree()
@@ -113,6 +111,7 @@ var nodes;
       var pos = document.getElementById("tree").getBoundingClientRect();
       document.getElementById("icon_1").style.top = 0;
       document.getElementById("icon_1").style.left = pos.left-20;
+
       document.getElementById("icon_1").addEventListener("click", trashClick);
 
     }
@@ -122,6 +121,7 @@ var nodes;
       var pos = document.getElementById("tree").getBoundingClientRect();
       document.getElementById("icon_2").style.top = 0;
       document.getElementById("icon_2").style.left = pos.left+25;
+
       document.getElementById("icon_2").addEventListener("mousedown", graphClick);
       document.getElementById("icon_2").addEventListener("mouseup", graphEndClick);
     }
@@ -352,11 +352,11 @@ var nodes;
     // Toggle children on click.
 
     function click(d) {
-      console.log(d3.select(this).node().parentNode.data);
+      //console.log(d3.select(this).node().parentNode.data);
               if (d3.event.defaultPrevented) return; // click suppressed
         if(currentMode() == "del"){
+          console.log(d.node);
           deleteFromEdges(d.name);
-          //console.log(this);
           //TODO tree.delete d
           //this.select("circle.nodeCircle");//.attr('class','nodeCircle');
 
@@ -553,13 +553,8 @@ var nodes;
     root = treeData;
     root.x0 = viewerHeight / 5;
     root.y0 = 0;
-    //update(root);
     // Layout the tree initially and center on the root node.
 
     update(root);
     centerNode(root);
-
-  //  document.getElementById('tree');
-    //if(treeData.children!=null) centerNode(treeData.children[0]);
-
 }
