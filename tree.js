@@ -141,10 +141,12 @@ var nodes;
 
     function graphClick(){
       document.getElementById("graphicon").style.stroke='red';
-      addToGraph();
+      //console.log("graphclick");
     }
     function graphEndClick(){
       document.getElementById("graphicon").style.stroke='gray';
+      addToGraph();
+
     }
 
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents

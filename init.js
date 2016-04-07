@@ -106,6 +106,7 @@ function handleFileSelect(evt) {
 function addToGraph(){
   //edges - w1,w2
   //graph - links (source,target,value(1)),nodes
+
   for(var i=0;i<edges.length;i++){
     if(edges[i]==null) continue;
     if(edges[i].w1){//if w1 not in graph yet, create new node
@@ -123,12 +124,13 @@ function addToGraph(){
       //console.log("Create new node 2");
     }
     if(!edgeInGraph(edges[i])){//if no link exists between already, create new link
-      var link = {};
-      link.source=findIndex(edges[i].w1);
-      link.target=findIndex(edges[i].w2);
-      graph.links.push(link);
+      var newLink = {};
+      newLink.source=findIndex(edges[i].w1);
+      newLink.target=findIndex(edges[i].w2);
+      graph.links.push(newLink);
     }
   }
+  console.log(graph);
   makeGraph(graph);
 }
 
@@ -299,8 +301,8 @@ Poem.prototype.showPoem = function() {
 //searches all poems for the currently selected word and changes highlighting appropriately
 function searchPoems() {
   edges = [];
-  var foundLeft = [];
-  var foundRight = [];
+  //var foundLeft = [];
+  //var foundRight = [];
   var foundAll = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
@@ -317,7 +319,11 @@ function searchPoems() {
                   if(!isInList(word,foundAll) && word != "" && word!=currWord){
                     if(!isEdge(currWord,word)){
                       foundAll.push(word);
-                      edges.push(new Edge(currWord,word));
+                      edges.push(new Edge(currWord,word,p));
+                    }
+                    else{
+                      var thisEdge= getEdges(currWord,word);
+                      thisEdge.addPoem(p);
                     }
 
                   }
@@ -341,7 +347,7 @@ function searchPoems() {
         treejson.children[h] = {"name" : foundAll[h],"children":[]};
     }
     //treejson.children = foundAll;
-
+    console.log(edges);
     makeTree(treejson);
 
     //JSON.stringify(treejson);
@@ -373,9 +379,11 @@ function saveAsFile(link, content, filename) {
     console.log("save");
 }
 
-function Edge(w1,w2){
+function Edge(w1,w2,p){
   this.w1 = w1;
   this.w2 = w2;
+  this.poems = [];
+  this.poems.push(p);
 }
 
 function findConnections(word){
@@ -438,6 +446,28 @@ Poem.prototype.contains = function() {
         }
     }
     return 0; //couldn't find one
+}
+
+Edge.prototype.getEdge = function (word1,word2){
+  for(var g = 0; g<edges.length;g++){
+    if((edges[g].w1==word1 && edges[g].w2==word2) || (edges[g].w1==word2 && edges[g].w2==word1)){
+      return edges[g];
+    }
+  }
+  return [];
+}
+
+//   var ret = [];
+//   for(var t = 0;t<edges.length;t++){
+//     if((edges[t].w1==word1 && edges[t].w2==word2) || (edges[t].w1==word2 && edges[t].w2==word1)){
+//       ret.push(edges[t]);
+//     }
+//   }
+//   return ret;
+// }
+
+Edge.prototype.addPoem = function(p){
+  this.poems.add(p);
 }
 
 //gets rid of casing and punctuation
