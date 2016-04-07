@@ -1,36 +1,31 @@
-var poemContext;
-var poemCanvas;
-var poemPaper;
-var treePaper;
-var graphPaper;
 
-var poems = [];
-var context;
+//Canvases
 var poemPaper;
+var selectBar;
+// Array of Poems
+var poems = [];
+// JSON for tree
 var treejson = {};
 
+
+//Misc values
 var canvasBuffer = 30;
 var buffer = 20; //border buffer
 var ratio = 2.1; //ratio between poem list screen and poem display screen
-var selected = null; //selected poem
+var lineSpacing = 12;
 
-//Colors
+//Background colors
 var listColor = "aabae2"; //background left
 var poemColor = "FFFDFC"; //background right
-var treeColor = "D7C9E2";
-var graphColor = "4DC0C7";
-
-var treeStroke = "B2A7BC";
-
+//Font colors
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
 var containsColor = "d12e22"; //font color of selected word
 
-var lineSpacing = 12;
-var time = 80;
 var poemList; //list of poem name raphael objects
 var listY = buffer + lineSpacing; //y coordinate of poem list names
 var currWord = ""; //current selected word
+var selected = null; //current selected poem
 var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
 "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
@@ -52,15 +47,22 @@ var graph;
 var tree;
 var edges = [];
 
+/*
+//TODO ignore this i'm just testing some stuff
+function setInsigWords(){
+  console.log(document.getElementById("poem"));
+  var temp = "test text<button>";
+  document.getElementById("poem").innerHTML = temp;
+  console.log(document.getElementById("poem"));
 
-
+}
+setInsigWords();
+*/
 
 //initializes canvases
 function init() {
     poemPaper = new Raphael('poem','100%','100%');
     selectBar = new Raphael('list','100%','100%');
-    //treePaper = new Raphael('tree','100%','100%');
-    //graphPaper = new Raphael('graph','100%','100%');
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
     rect1.attr("fill", poemColor);
@@ -74,16 +76,9 @@ function init() {
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 
-    // d3.json("miserables.json",function(data){
-    // return data;
-    // });
     graph = {};
     graph.nodes = [];
     graph.links = [];
-    //graph = Utils.loadJSON("miserables.json");
-
-    //console.log(graph);
-   makeGraph(graph);//initial test graph
 }
 
 
@@ -113,7 +108,7 @@ function addToGraph(){
   //graph - links (source,target,value(1)),nodes
   for(var i=0;i<edges.length;i++){
     if(edges[i]==null) continue;
-    if(!nodeInGraph(edges[i].w1)){//if w1 not in graph yet, create new node
+    if(edges[i].w1){//if w1 not in graph yet, create new node
       var newNode = {};
       newNode.name = edges[i].w1;
       newNode.group = 1;
@@ -135,8 +130,6 @@ function addToGraph(){
     }
   }
   makeGraph(graph);
-  //console.log(edges);
-  //console.log(graph);
 }
 
 function nodeInGraph(node){

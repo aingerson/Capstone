@@ -198,17 +198,19 @@ var nodes;
     // Define the drag listeners for drag/drop behaviour of nodes.
     dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
+          return;
           //Do nothing if the node is root
-            if (d == root) {
+            /*if (d == root) {
                 return;
             }
             dragStarted = true;
             nodes = tree.nodes(d);
-            d3.event.sourceEvent.stopPropagation();
+            d3.event.sourceEvent.stopPropagation();*/
             // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
         })
         .on("drag", function(d) {
-            if (d == root) {
+          return;
+            /*if (d == root) {
                 return;
             }
             if (dragStarted) {
@@ -220,9 +222,10 @@ var nodes;
             d.y0 += d3.event.dx;
             var node = d3.select(this);
             node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
-
+            */
 
         }).on("dragend", function(d) {
+          return;/*
             if (d == root) {
                 return;
             }
@@ -232,11 +235,11 @@ var nodes;
                 endDrag();
             } else {
                 endDrag();
-            }
+            }*/
         });
 
     function endDrag() {
-        selectedNode = null;
+        /*selectedNode = null;
         d3.selectAll('.ghostCircle').attr('class', 'ghostCircle');
         d3.select(domNode).attr('class', 'node');
         // now restore the mouseover event or we won't be able to drag a 2nd time
@@ -245,7 +248,7 @@ var nodes;
             update(root);
             centerNode(draggingNode);
             draggingNode = null;
-        }
+        }*/
     }
 
     // Helper functions for collapsing and expanding nodes.
@@ -308,6 +311,7 @@ var nodes;
     // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
 
     function centerNode(source) {
+      console.log(source.name);
         scale = zoomListener.scale();
         x = -source.y0;
         y = -source.x0;
@@ -517,7 +521,11 @@ var nodes;
                     source: o,
                     target: o
                 });
-            });
+            })
+            .attr('pointer-events', 'click')
+            .on("click", function(link) {
+                console.log("Link was clicked between ["+link.source.name+"] and ["+link.target.name+"] .");
+            });;
 
         // Transition links to their new position.
         link.transition()
@@ -551,8 +559,8 @@ var nodes;
 
     // Define the root
     root = treeData;
-    root.x0 = viewerHeight / 5;
-    root.y0 = 0;
+    root.x0 = viewerWidth / 2;
+    root.y0 = viewerHeight / 2;
     // Layout the tree initially and center on the root node.
 
     update(root);

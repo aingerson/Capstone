@@ -79,6 +79,7 @@ div {
   }
 
   .link {
+    cursor:pointer;
     fill: none;
     stroke: #ccc;
     stroke-width: 1.5px;
@@ -108,11 +109,13 @@ div {
     stroke: #bbb;
   }
   #trashicon {
+    cursor:pointer;
     fill:gray;
     position:absolute;
     visibility:hidden;
   }
   #graphicon {
+    cursor:pointer;
     fill:white;
     stroke:gray;
     position:absolute;
