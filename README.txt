@@ -79,3 +79,13 @@ Click on line and read whole poem
 - delete edges/nodes
 - line density?
 - keep track of edges already in tree
+
+
+
+4/8
+- trash icon becomes unclickable?
+- deletion of leaves only
+- coordinate bug
+- graph has words and nodes
+- optimize poem viewing
+- clicking on links highlights words too
