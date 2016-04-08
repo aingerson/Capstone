@@ -3,11 +3,11 @@
     // Calculate total nodes, max label length
 var nodes;
 
-  var tree = null;
+  //var tree = null;
   mode = "norm"
   function makeTree(treeData){
     $("#tree").empty();
-    tree = null;
+    //tree = null;
 
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -26,7 +26,7 @@ var nodes;
     // size of the diagram
     var viewerHeight = document.getElementById("toprow").offsetHeight;
     var viewerWidth = document.getElementById("tree").offsetWidth;
-    tree = d3.layout.tree()
+    var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
     // define a d3 diagonal projection for use by the node paths later on.
     var diagonal = d3.svg.diagonal()
@@ -313,7 +313,7 @@ var nodes;
     // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
 
     function centerNode(source) {
-      console.log(source.name);
+      //console.log(source.name);
         scale = zoomListener.scale();
         x = -source.y0;
         y = -source.x0;
@@ -336,6 +336,10 @@ var nodes;
       if(d.children == [] || d.children == null){
         //console.log("none");
         d.children = findConnections(d.name);
+        // for(var k=0;k<d.children;k++){
+        //   d.children[k].children = [];
+        // }
+        //console.log("Searched "+d.children);
       }
       else{
         //console.log("has children");
@@ -361,22 +365,87 @@ var nodes;
       //console.log(d3.select(this).node().parentNode.data);
               if (d3.event.defaultPrevented) return; // click suppressed
         if(currentMode() == "del"){
-          console.log(d.node);
+        //  console.log(d.node);
+
+        if(d.name==root.name) return;
           deleteFromEdges(d.name);
           //TODO tree.delete d
           //this.select("circle.nodeCircle");//.attr('class','nodeCircle');
-
+          //console.log(traverse(root,d.name));
           //this.s.attr('class','nodeCircle');
-          console.log('delete '+d.name);
+          //console.log('delete '+d.name);
+
+          var parent = getParent(root,d.name);
+
+          var index = indexOf(parent,d.name);
+          //parent.children.splice(index,index+1);
+
+          parent.children = deleteFrom(parent,index);
+
+
+          //console.log(parent.children);
+          updateTree(root);
+          //console.log(parent);
+          //findAndReplace(root,parent);
+          //console.log(root);
+          update(parent);
+          //update(parent);
+
         } else{
         d = toggleChildren(d);
+
         update(d);
         centerNode(d);
       }
     }
 
+    function deleteFrom(parent,index){
+      var ret = [];
+      for(var m = 0;m<parent.children.length;m++){
+        if(m!=index) ret.push(parent.children[m]);
+      }
+      return ret;
+    }
+
+    function findAndReplace(start,toReplace){
+      if(start.name==toReplace.name) return toReplace;
+      for(var m=0;m<start.children.length;m++){
+        start.children[m] = findAndReplace(start.children[m],toReplace);
+      }
+      return start;
+    }
+
+    function indexOf(parent,childName){
+      for(var m=0; m<parent.children.length;m++){
+        if(parent.children[m].name==childName) return m;
+      }
+      return -1;
+    }
+
+    function getParent(start,goal){
+        var child = isParentOf(start,goal);//check if this is the parent
+        if(child==null){//not correct node
+          for(var n=0;n<start.children.length;n++){
+            var recursed = getParent(start.children[n],goal);
+            if(recursed!=null) return recursed;
+          }
+        }
+        else{
+          return start;
+        }
+    }
+
     function currentMode(){
       return mode;
+    }
+
+    function isParentOf(par,child){
+      if (typeof(par.children) == 'undefined') par.children = [];
+
+      for(var k=0;k<par.children.length;k++){
+        if(par.children[k].name==child) return par.children[k];
+      }
+      return null;
     }
 
     function update(source) {
@@ -526,7 +595,9 @@ var nodes;
             })
             .attr('pointer-events', 'click')
             .on("click", function(link) {
-                console.log("Link was clicked between ["+link.source.name+"] and ["+link.target.name+"] .");
+
+              showConnections(link.source.name,link.target.name);
+              //  console.log("Link was clicked between ["+link.source.name+"] and ["+link.target.name+"] .");
             });;
 
         // Transition links to their new position.

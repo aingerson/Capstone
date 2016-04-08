@@ -145,13 +145,20 @@ function makeGraph(newGraph) {
     var link = svg.selectAll(".graphLink")
         .data(graph.links)
       .enter().append("line")
-        .attr("class", "link")
-        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+        .attr("class", "graphLink")
+        .style("stroke-width", function(d) { return Math.sqrt(d.value); })
+        .attr('pointer-events', 'click')
+        .on("click", function(link) {
+
+//          console.log(link.source.name+","+link.target.name);
+        showConnections(link.source.name,link.target.name);
+          //  console.log("Link was clicked between ["+link.source.name+"] and ["+link.target.name+"] .");
+        });
 
     var node = svg.selectAll(".graphNode")
         .data(graph.nodes)
       .enter().append("circle")
-        .attr("class", "node")
+        .attr("class", "graphNode")
         .attr("r", 5)
         .style("fill", function(d) { return color(d.group); })
         .call(force.drag);

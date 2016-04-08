@@ -82,7 +82,7 @@ div {
     cursor:pointer;
     fill: none;
     stroke: #ccc;
-    stroke-width: 1.5px;
+    stroke-width: 3px;
   }
 
   .templink {
@@ -106,7 +106,9 @@ div {
 
   .graphLink {
     fill: none;
+    cursor: pointer;
     stroke: #bbb;
+    stroke-width: 3px;
   }
   #trashicon {
     cursor:pointer;

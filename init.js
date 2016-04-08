@@ -106,10 +106,11 @@ function handleFileSelect(evt) {
 function addToGraph(){
   //edges - w1,w2
   //graph - links (source,target,value(1)),nodes
-
+  //console.log(edges);
   for(var i=0;i<edges.length;i++){
     if(edges[i]==null) continue;
-    if(edges[i].w1){//if w1 not in graph yet, create new node
+    if(!nodeInGraph(edges[i].w1)){//if w1 not in graph yet, create new node
+    //  console.log("Adding "+edges[i].w1);
       var newNode = {};
       newNode.name = edges[i].w1;
       newNode.group = 1;
@@ -117,6 +118,8 @@ function addToGraph(){
       //console.log("Create new node 1");
     }
     if(!nodeInGraph(edges[i].w2)){//if w2 not in graph yet, create new nodeInGraph
+    //  console.log("Adding "+edges[i].w2);
+
       var newNode = {};
       newNode.name = edges[i].w2;
       newNode.group = 1;
@@ -130,7 +133,7 @@ function addToGraph(){
       graph.links.push(newLink);
     }
   }
-  console.log(graph);
+  //console.log(graph);
   makeGraph(graph);
 }
 
@@ -169,7 +172,7 @@ function deleteFromEdges(deleteWord){
       edges.splice(i,1);
     }
   }
-  console.log(edges);
+//  console.log(edges);
 }
 
 function scanFiles(files,i,j){
@@ -306,6 +309,7 @@ function searchPoems() {
   var foundAll = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
+        var poemTitle = poemList[i];
         var found = false; //marks whether we found the word in the poem
         for (var j = 0; j < p.sigWords.length; j++) { //go through every word in this poem
             var w = normalize(p.sigWords[j].attr('text')); //get rid of case and punctuation
@@ -319,11 +323,11 @@ function searchPoems() {
                   if(!isInList(word,foundAll) && word != "" && word!=currWord){
                     if(!isEdge(currWord,word)){
                       foundAll.push(word);
-                      edges.push(new Edge(currWord,word,p));
+                      edges.push(new Edge(currWord,word,poemTitle));
                     }
                     else{
-                      var thisEdge= getEdges(currWord,word);
-                      thisEdge.addPoem(p);
+                      var thisEdge= getEdge(currWord,word);
+                      thisEdge.addPoem(poemTitle);
                     }
 
                   }
@@ -347,7 +351,7 @@ function searchPoems() {
         treejson.children[h] = {"name" : foundAll[h],"children":[]};
     }
     //treejson.children = foundAll;
-    console.log(edges);
+  //  console.log(edges);
     makeTree(treejson);
 
     //JSON.stringify(treejson);
@@ -359,6 +363,27 @@ function searchPoems() {
     //head = next;
     //displayTree();
 }
+
+function showConnections(word1, word2){
+  //console.log("Show "+word1+", "+word2);
+  var e = getEdge(word1,word2);
+  //console.log(e);
+  //console.log(edges);
+  if(e==null) return;
+    selected.data('poem').hidePoem();
+    for(var j = 0;j<poemList.length;j++){
+      poemList[j].attr("fill",deselectColor);
+    }
+    for(var j = 0;j<e.poems.length;j++){
+      e.poems[j].attr("fill",containsColor);
+    }
+    if(e.poems.length==1){
+      selected = e.poems[0];
+      selected.data('poem').showPoem();
+      selected.attr("fill",selectColor);
+    }
+}
+
 
 function isEdge(word1,word2){
   for(var m = 0;m<edges.length;m++){
@@ -393,6 +418,7 @@ function findConnections(word){
   var foundAll = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
+        var poemTitle = poemList[i];
         var found = false; //marks whether we found the word in the poem
         for (var j = 0; j < p.sigWords.length; j++) { //go through every word in this poem
             var w = normalize(p.sigWords[j].attr('text')); //get rid of case and punctuation
@@ -406,9 +432,17 @@ function findConnections(word){
                   var word = normalize(p.sigWords[d].attr('text'));
                   if(!isInList(word,foundAll) && word != "" && word!=currWord){
                     if(!isEdge(currWord,word)){
-                      foundAll.push(word);
-                      edges.push(new Edge(currWord,word));
+                      // foundAll.push(word);
+                      // edges.push(new Edge(currWord,word));
                       //console.log(edges[edges.length-1]);
+                      if(!isEdge(currWord,word)){
+                        foundAll.push(word);
+                        edges.push(new Edge(currWord,word,poemTitle));
+                      }
+                      else{
+                        var thisEdge= getEdge(currWord,word);
+                        thisEdge.addPoem(poemTitle);
+                      }
 
                     }
                   }
@@ -433,7 +467,9 @@ function findConnections(word){
     return children;
 }
 
-
+function updateTree(newTree){
+  tree = newTree;
+}
 //saveAsFile(this, "YourContent", "HelloWorldFile");
 
 //returns whether this poem contains the current word
@@ -448,13 +484,14 @@ Poem.prototype.contains = function() {
     return 0; //couldn't find one
 }
 
-Edge.prototype.getEdge = function (word1,word2){
+function getEdge(word1,word2){
   for(var g = 0; g<edges.length;g++){
+    if(edges[g]==null) continue;
     if((edges[g].w1==word1 && edges[g].w2==word2) || (edges[g].w1==word2 && edges[g].w2==word1)){
       return edges[g];
     }
   }
-  return [];
+  return null;
 }
 
 //   var ret = [];
