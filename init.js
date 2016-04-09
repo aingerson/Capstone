@@ -150,8 +150,8 @@ function nodeInGraph(node){
 }
 
 function edgeInGraph(edge){
-  for(var j=0;j<graph.links;j++){
-    if((source==findIndex(edge.w1) && target==findIndex(edge.w2)) || (source==findIndex(edge.w1) && target==findIndex(edge.w2))){
+  for(var j=0;j<graph.links.length;j++){
+    if((graph.links[j].source.name==edge.w1 && graph.links[j].target.name==edge.w2) || (graph.links[j].source.name==edge.w1 && graph.links[j].target.name==edge.w2)){
       return true;
     }
   }

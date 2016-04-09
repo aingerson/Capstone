@@ -1,7 +1,8 @@
 function makeGraph(newGraph) {
   $("#graph").empty();
-
   var graph = newGraph;
+  //console.log(graph);
+
   var width = document.getElementById("graph").offsetWidth;
   var height = document.getElementById("graph").offsetHeight;
 
@@ -13,6 +14,11 @@ function makeGraph(newGraph) {
       .friction(0.5)
       .charge(-100)
       .size([width, height]);
+
+  // var force = d3.layout.force()
+  //     .charge(-120)
+  //     .linkDistance(30)
+  //     .size([width, height]);
 
   var svg = d3.select("#graph").append("svg")
       .attr("width", width)
@@ -157,23 +163,35 @@ function makeGraph(newGraph) {
 
     var node = svg.selectAll(".graphNode")
         .data(graph.nodes)
-      .enter().append("circle")
-        .attr("class", "graphNode")
-        .attr("r", 5)
-        .style("fill", function(d) { return color(d.group); })
+      .enter().append("text")
+        //.attr("class", "graphNode")
+        //.attr("r", 5)
+        //.style("fill", function(d) { return color(d.group); })
+        .text(function(d){return d.name;})
+        .attr({
+          "font-size" :10
+        })
         .call(force.drag);
+
+
+        // elemEnter.append("text")
+        //           //   .text(function(d){return d.name})
+        //           //   .attr({
+        //           //     "font-size":10
+        //           //   })
+        //           //   .call(force.drag);
 
     node.append("title")
         .text(function(d) { return d.name; });
 
     force.on("tick", function() {
-      link.attr("x1", function(d) { return d.source.x; })
-          .attr("y1", function(d) { return d.source.y; })
-          .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
+      link.attr("x1", function(d) { if(d.source.x== NaN) return 0; return d.source.x; })
+          .attr("y1", function(d) { if(d.source.y== NaN) return 0; return d.source.y; })
+          .attr("x2", function(d) { if(d.target.x== NaN) return 0; return d.target.x; })
+          .attr("y2", function(d) { if(d.target.y== NaN) return 0; return d.target.y; });
 
-      node.attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; });
+      node.attr("x", function(d) { return d.x; })
+          .attr("y", function(d) { return d.y; });
     });
 
 //  var link = svg.selectAll(".graphLink")

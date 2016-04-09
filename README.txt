@@ -85,7 +85,7 @@ Click on line and read whole poem
 4/8
 - trash icon becomes unclickable?
 - deletion of leaves only
-- coordinate bug
-- graph has words and nodes
+- coordinate bug -- FIXED
+- graph has words and nodes -- JUST WORDS
 - optimize poem viewing
 - clicking on links highlights words too
