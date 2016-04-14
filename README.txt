@@ -89,3 +89,37 @@ Click on line and read whole poem
 - graph has words and nodes -- JUST WORDS
 - optimize poem viewing
 - clicking on links highlights words too
+
+
+
+
+4/14
+Bugs:
+- trash icon sometimes unclickable -- TORI
+- tree snapping to corner -- TORI
+
+
+- moving word -- ALEXIA
+- invisible word -- ALEXIA
+- tree deletion first word -- ALEXIA
+
+??
+- Tori's weird snapping corner
+
+
+
+Extensions:
+
+- optimization of poem display -- TORI
+- highlighting of words -- TORI
+
+- clear graph -- ALEXIA
+- change distance and significant words -- ALEXIA
+- file load only text -- ALEXIA
+- deleting from graph -- ALEXIA
+- saving the state/loading -- ALEXIA
+
+
+- play with graphing variables -- TBD
+- graphing algorithms -- TBD
+- general user interface -- LATER TOGETHER
