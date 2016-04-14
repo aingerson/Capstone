@@ -164,7 +164,7 @@ function makeGraph(newGraph) {
     var node = svg.selectAll(".graphNode")
         .data(graph.nodes)
       .enter().append("text")
-        //.attr("class", "graphNode")
+        .attr("class", "graphNode")
         //.attr("r", 5)
         //.style("fill", function(d) { return color(d.group); })
         .text(function(d){return d.name;})

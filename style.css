@@ -47,10 +47,9 @@ div {
 #graph{
   margin-top:20px;
 	width:90%;
-	height:400px;
+	height:600px;
 	display:block;
   float: middle;
-  box-shadow: -3px 3px 5px #888888;
 }
 #tree {
   display:block;
@@ -100,8 +99,7 @@ div {
   }
 
   .graphNode {
-    stroke: #fff;
-    stroke-width: 1.5px;
+    cursor:all-scroll;
   }
 
   .graphLink {
