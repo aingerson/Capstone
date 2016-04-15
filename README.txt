@@ -120,6 +120,9 @@ Extensions:
 - saving the state/loading -- ALEXIA
 
 
-- play with graphing variables -- TBD
+- play with graphing variables -- TBD modes?
 - graphing algorithms -- TBD
+- UNDO Button
+- Lock nodes
 - general user interface -- LATER TOGETHER
+- code cleanup

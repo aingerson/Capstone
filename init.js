@@ -61,7 +61,7 @@ setInsigWords();
 
 //initializes canvases
 function init() {
-    poemPaper = new Raphael('poem','100%','100%');
+    /*poemPaper = new Raphael('poem','100%','100%');
     selectBar = new Raphael('list','100%','100%');
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
@@ -73,6 +73,7 @@ function init() {
         rect2.attr("stroke", listColor);
 
     poemList = selectBar.set();
+    */
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 
