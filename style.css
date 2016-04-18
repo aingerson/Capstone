@@ -58,6 +58,9 @@ div {
 	width:40%;
   box-shadow: -3px 3px 5px #888888;
 }
+.highlight {
+  background-color: yellow;
+}
 	.node {
     cursor: pointer;
   }

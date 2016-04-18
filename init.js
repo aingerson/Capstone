@@ -61,7 +61,7 @@ setInsigWords();
 
 //initializes canvases
 function init() {
-    /*poemPaper = new Raphael('poem','100%','100%');
+    poemPaper = new Raphael('poem','100%','100%');
     selectBar = new Raphael('list','100%','100%');
 
     var rect1 = poemPaper.rect(0, 0, '100%','100%');
@@ -73,7 +73,7 @@ function init() {
         rect2.attr("stroke", listColor);
 
     poemList = selectBar.set();
-    */
+
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 
@@ -222,6 +222,16 @@ function scanFiles(files,i,j){
 
 //creates a new Poem object
 function Poem(data) {
+    //TODO:
+    //1. Split each poem into lines
+    //2. Split each line into an array of words
+    //3. Display each word
+    //4. Add a click function to each word
+    this.title = data[0];
+    this.lines = [];
+    this.sigWords = [];
+
+
     var localWidth = 0;
     var y = buffer; //y coordinate for title and lines
     this.title = poemPaper.text(buffer, y, data[0]); //poem title text
@@ -232,6 +242,7 @@ function Poem(data) {
     });
     this.sigWords = []; //list of significant words (clickable, searchable words)
     this.words = []; //all words of this poem (for displaying purposes)
+    this.plaintext = [];
     this.title.hide(); //Poem created on load, start with poem hidden
     y += lineSpacing; //move y coordinate down for first line
 
@@ -259,8 +270,8 @@ function Poem(data) {
                 this.words.push(prevWord);
                 prevWord.hide();
               }
-
-              var thisWord = poemPaper.text(x,y,splitLine[j]);
+              var plainw = splitLine[j];
+              var thisWord = poemPaper.text(x,y,plainw);
               thisWord.attr({
                 font: "10px Fontin-Sans, Helvetica",
                 fill: deselectColor,
@@ -272,6 +283,7 @@ function Poem(data) {
               });
               this.sigWords.push(thisWord);
               this.words.push(thisWord);
+              this.plaintext.push(plainw);
               x += thisWord.node.getBBox().width+3;
               thisWord.hide();
               building="";
@@ -280,6 +292,12 @@ function Poem(data) {
           if(x>localWidth) localWidth = x;
           y+=lineSpacing;
         }
+        console.log(this.plaintext);
+        var poemstr = "<span class='highlight'>HIGHLIGHT TEST</span>";
+        for(var p=0;p<this.plaintext.length;p++){
+          poemstr = poemstr + this.plaintext[p] + "\n"
+        }
+        document.getElementById("tree").innerHTML = poemstr;
         if(localWidth>maxWidth) maxWidth = localWidth;
         if(y>maxHeight) maxHeight = y;
 
