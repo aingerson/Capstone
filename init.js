@@ -56,11 +56,19 @@ var mode = "norm";
 
 //initializes canvases
 function init() {
+<<<<<<< Updated upstream
     //Raphael canvas for poem list
+=======
+    poemPaper = new Raphael('poem','100%','100%');
+>>>>>>> Stashed changes
     selectBar = new Raphael('list','100%','100%');
     poemList = selectBar.set();
+<<<<<<< Updated upstream
 
     //File select listener
+=======
+    
+>>>>>>> Stashed changes
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 

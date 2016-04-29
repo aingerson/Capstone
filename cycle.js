@@ -3,16 +3,20 @@ var visited;
 var cycles;
 var prev;
 var currCycle;
+var visitedEdges;
 
 function findCycles(){
   visited = [];
   cycles = [];
   prev = -1;
   currCycle = [];
-
+  visitedEdges = [];
   for(var j=0;j<graph.nodes.length;j++){
     visited.push(0);
   //  onStack.push(0);
+  }
+  for(var j=0;j<graph.links.length;j++){
+    visitedEdges.push(0);
   }
   for(var g=0;g<graph.nodes.length;g++){
     dfs(g);
@@ -33,6 +37,7 @@ function dfs(current){
   //onStack[current] = 1;
   visited[current] = 1;
   var nexts = getNext(current);
+  var nextIndex = getLinkIndex(current,nexts);
   //console.log("Next:");
   //printCycle(nexts);
   currCycle.push(current);
@@ -42,9 +47,11 @@ function dfs(current){
       //  printCycle(currCycle);
         cycles.push(copyCycle(currCycle));
       }
-      else if(visited[nextVal] == 0){
+      else if(visited[nextVal] == 0 && visitedEdges[nextIndex[k]] == 0){
         prev = current;
+        visitedEdges[nextIndex[k]] = 1;
         dfs(nextVal);
+        visitedEdges[nextIndex[k]] = 0;
       }
   }
   currCycle.splice(currCycle.length-1,1);
@@ -87,6 +94,22 @@ function getNext(val){
   }
   return ret;
 }
+
+function getLinkIndex(wordIndex,nextIndex){
+  var ret = [];
+  for(var r=0;r<graph.links.length;r++){
+    for(var r2=0;r2<nextIndex.length;r2++){
+      if(graph.links[r].target.index==wordIndex && nextIndex[r2]){
+        ret.push(r);
+      }
+      else if(graph.links[r].source.index==wordIndex && nextIndex[r2]){
+        ret.push(r);
+      }
+    }
+  }
+  return ret;
+}
+
 
 // int visited[NUM_NODE + 1];
 // int onStack[NUM_NODE + 1];
