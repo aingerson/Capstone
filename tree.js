@@ -1,13 +1,15 @@
-//treeJSON = d3.json("flare.json", function(error, treeData) {
+//treeJSON = d3.json("flare.json", function(error, treejson) {
     // = treejson;
     // Calculate total nodes, max label length
-var nodes;
 
   //var tree = null;
-  mode = "norm"
-  function makeTree(treeData){
+  //var mode = "norm"
+  function makeTree(){
+
+    //console.log(root);
     $("#tree").empty();
     //tree = null;
+    var nodes;
 
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -21,7 +23,6 @@ var nodes;
     // Misc. variables
     var i = 0;
     var duration = 750;
-    var root;
 
     // size of the diagram
     var viewerHeight = document.getElementById("toprow").offsetHeight;
@@ -51,7 +52,7 @@ var nodes;
     }
 
     // Call visit function to establish maxLabelLength
-    visit(treeData, function(d) {
+    visit(root, function(d) {
       //console.log("d:"+d);
         totalNodes++;
         maxLabelLength = Math.max(d.name.length, maxLabelLength);
@@ -105,29 +106,29 @@ var nodes;
     }
 
 
-    function displayTrashIcon(){
-      document.getElementById('trashicon').style.visibility='visible';
-
-      var pos = document.getElementById("tree").getBoundingClientRect();
-      document.getElementById("icon_1").style.top = 0;
-      document.getElementById("icon_1").style.left = pos.left-20;
-
-      document.getElementById("icon_1").addEventListener("click", trashClick);
-
-    }
-    function displayGraphIcon(){
-      document.getElementById("graphicon").style.visibility='visible';
-
-      var pos = document.getElementById("tree").getBoundingClientRect();
-      document.getElementById("icon_2").style.top = 0;
-      document.getElementById("icon_2").style.left = pos.left+25;
-
-      document.getElementById("icon_2").addEventListener("mousedown", graphClick);
-      document.getElementById("icon_2").addEventListener("mouseup", graphEndClick);
-    }
-
-    displayTrashIcon();
-    displayGraphIcon();
+    // function displayTrashIcon(){
+    //   document.getElementById('trashicon').style.visibility='visible';
+    //
+    //   var pos = document.getElementById("tree").getBoundingClientRect();
+    //   document.getElementById("icon_1").style.top = 0;
+    //   document.getElementById("icon_1").style.left = pos.left-20;
+    //
+    //   document.getElementById("icon_1").addEventListener("click", trashClick);
+    //
+    // }
+    // function displayGraphIcon(){
+    //   document.getElementById("graphicon").style.visibility='visible';
+    //
+    //   var pos = document.getElementById("tree").getBoundingClientRect();
+    //   document.getElementById("icon_2").style.top = 0;
+    //   document.getElementById("icon_2").style.left = pos.left+25;
+    //
+    //   document.getElementById("icon_2").addEventListener("mousedown", graphClick);
+    //   document.getElementById("icon_2").addEventListener("mouseup", graphEndClick);
+    // }
+    //
+    // displayTrashIcon();
+    // displayGraphIcon();
 
     function trashClick(){
       icon = document.getElementById("trashicon");
@@ -362,34 +363,21 @@ var nodes;
     // Toggle children on click.
 
     function click(d) {
-      //console.log(d3.select(this).node().parentNode.data);
               if (d3.event.defaultPrevented) return; // click suppressed
         if(currentMode() == "del"){
-        //  console.log(d.node);
 
         if(d.name==root.name) return;
-          deleteFromEdges(d.name);
-          //TODO tree.delete d
-          //this.select("circle.nodeCircle");//.attr('class','nodeCircle');
-          //console.log(traverse(root,d.name));
-          //this.s.attr('class','nodeCircle');
-          //console.log('delete '+d.name);
+      //  prevTree = root;
+      prevTree = copyTree(root);
+        //console.log(prevTree);
+        lastAction = stateTree;
 
-          var parent = getParent(root,d.name);
+        deleteFromEdges(d.name);
+        root = deleteFromTree(root,d.name);
+        update(d);
+        //prevTree = tree;
+      updateTree(root);
 
-          var index = indexOf(parent,d.name);
-          //parent.children.splice(index,index+1);
-
-          parent.children = deleteFrom(parent,index);
-
-
-          //console.log(parent.children);
-          updateTree(root);
-          //console.log(parent);
-          //findAndReplace(root,parent);
-          //console.log(root);
-          update(parent);
-          //update(parent);
 
         } else{
         d = toggleChildren(d);
@@ -399,23 +387,34 @@ var nodes;
       }
     }
 
+
+
+    function deleteFromTree(start,word){
+      if(typeof(start.children)=='undefined'){
+        start.children = [];
+        return start;
+      }
+      for(var p=0;p<start.children.length;p++){
+        //console.log(start.children[p].name);
+        start.children[p] = deleteFromTree(start.children[p],word);
+      }
+      var index = indexOf(start,word);
+      if(index==-1) return start;
+      return deleteFrom(start,index);
+
+    }
+
     function deleteFrom(parent,index){
       var ret = [];
       for(var m = 0;m<parent.children.length;m++){
         if(m!=index) ret.push(parent.children[m]);
       }
-      return ret;
-    }
-
-    function findAndReplace(start,toReplace){
-      if(start.name==toReplace.name) return toReplace;
-      for(var m=0;m<start.children.length;m++){
-        start.children[m] = findAndReplace(start.children[m],toReplace);
-      }
-      return start;
+      parent.children = ret;
+      return parent;
     }
 
     function indexOf(parent,childName){
+      if(typeof(parent.children)=='undefined') parent.children = [];
       for(var m=0; m<parent.children.length;m++){
         if(parent.children[m].name==childName) return m;
       }
@@ -435,15 +434,17 @@ var nodes;
         }
     }
 
-    function currentMode(){
-      return mode;
-    }
 
     function isParentOf(par,child){
-      if (typeof(par.children) == 'undefined') par.children = [];
-
+      if (typeof(par.children) == 'undefined'){
+        par.children = [];
+        return null;
+      }
       for(var k=0;k<par.children.length;k++){
-        if(par.children[k].name==child) return par.children[k];
+        if(typeof(par.children[k].children) == 'undefined' && par.children[k].name==child){
+          par.children[k].children = [];
+          return par.children[k];
+        }
       }
       return null;
     }
@@ -631,7 +632,7 @@ var nodes;
     var svgGroup = baseSvg.append("g");
 
     // Define the root
-    root = treeData;
+    //root = treejson;
     root.x0 = viewerWidth / 2;
     root.y0 = viewerHeight / 2;
     // Layout the tree initially and center on the root node.
@@ -639,3 +640,19 @@ var nodes;
     update(root);
     centerNode(root);
 }
+
+    function currentMode(){
+      return mode;
+    }
+
+    function copyTree(toCopy){
+        var ret = {};
+        ret.name = toCopy.name;
+        ret.children = [];
+        if(typeof(toCopy.children)=='undefined') toCopy.children = [];
+        for(var t=0;t<toCopy.children.length;t++){
+          ret.children.push(copyTree(toCopy.children[t]));
+        }
+
+        return ret;
+    }
