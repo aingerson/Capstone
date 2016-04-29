@@ -32,12 +32,17 @@ div {
 	background-color:#B2A7BC;
   box-shadow: -3px 3px 5px #888888;
 }
-#poem {
-	width: 30%;
-	float:left;
-	overflow:auto;
+#poemContainer{
+  float:left;
   box-shadow: -3px 3px 5px #888888;
+  width: 30%;
+  overflow:scroll;
+  height:400px;
   background-color:#FFFDFC;
+}
+#poem {
+  padding:0;
+  margin:0;
 }
 #list {
 	width: 20%;

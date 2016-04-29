@@ -72,15 +72,17 @@ function init() {
     graph = {};
     graph.nodes = [];
     graph.links = [];
+    adjustSizes();
 }
 
 
 function adjustSizes(){
-  poemPaper.setSize(maxWidth*1.3, maxHeight+(buffer*10));
-  $(poemPaper.canvas).parent().height("400px");
-
-  selectBar.setSize(maxWidth, maxHeight+(buffer*10));
+  var selectHeight = poemList.length*15;
+  var newHeight = Math.max(400,selectHeight);
+  selectBar.setSize(maxWidth, newHeight);
   $(selectBar.canvas).parent().height("400px");
+  
+  $("poem").height(maxHeight);
 }
 
 function handleFileSelect(evt) {
