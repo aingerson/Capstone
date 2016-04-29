@@ -36,7 +36,7 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "going","this","their","up","last","must","any","further","down","after",
 "other","there","about","were","among","their","like","once","then","need",
 "only","high","him","when","are","than","be","will","should","till"];
-``
+
 var head;
 var dist = 2;
 var maxWidth = 300;
@@ -56,19 +56,19 @@ var mode = "norm";
 
 //initializes canvases
 function init() {
-<<<<<<< Updated upstream
-    //Raphael canvas for poem list
-=======
+// <<<<<<< Updated upstream
+//     //Raphael canvas for poem list
+// =======
     poemPaper = new Raphael('poem','100%','100%');
->>>>>>> Stashed changes
+// >>>>>>> Stashed changes
     selectBar = new Raphael('list','100%','100%');
     poemList = selectBar.set();
-<<<<<<< Updated upstream
-
-    //File select listener
-=======
-    
->>>>>>> Stashed changes
+// <<<<<<< Updated upstream
+//
+//     //File select listener
+// =======
+//
+// >>>>>>> Stashed changes
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 
@@ -496,15 +496,15 @@ function saveState(fileName){
 
   var toWrite = JSON.stringify(state);
 
-console.log(state);
+//console.log(state);
 return toWrite;
 
 }
 
 
 function restoreNewState(newState){
-  console.log(newState);
-  console.log(newState.tree);
+  // console.log(newState);
+  // console.log(newState.tree);
   root = newState.tree;
   graph = newState.graph;
   dist = newState.dist;
