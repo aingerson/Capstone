@@ -16,7 +16,7 @@ var lineSpacing = 12;
 
 //Background colors
 var listColor = "aabae2"; //background left
-var poemColor = "FFFDFC"; //background right
+var poemColor = "#fff"; //background right
 //Font colors
 var deselectColor = "#000"; //font color of all writing
 var selectColor = "#fff"; //font color of selected poem
@@ -36,7 +36,7 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
 "going","this","their","up","last","must","any","further","down","after",
 "other","there","about","were","among","their","like","once","then","need",
 "only","high","him","when","are","than","be","will","should","till"];
-
+``
 var head;
 var dist = 2;
 var maxWidth = 300;
@@ -61,19 +61,11 @@ setInsigWords();
 
 //initializes canvases
 function init() {
-    poemPaper = new Raphael('poem','100%','100%');
+    //Raphael canvas for poem list
     selectBar = new Raphael('list','100%','100%');
-
-    var rect1 = poemPaper.rect(0, 0, '100%','100%');
-    rect1.attr("fill", poemColor);
-        rect1.attr("stroke", poemColor);
-
-    var rect2 = selectBar.rect(0, 0, '100%', '100%');
-    rect2.attr("fill", listColor);
-        rect2.attr("stroke", listColor);
-
     poemList = selectBar.set();
 
+    //File select listener
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 
@@ -186,7 +178,6 @@ function scanFiles(files,i,j){
       reader.onload = function(e) {
           var text = e.target.result;
           var lines = text.split("\n");
-
           for (var i = 0; i < lines.length; i++) { //scan the whole text file
               output.push(lines[i]);
           }
@@ -204,7 +195,6 @@ function scanFiles(files,i,j){
           poemList.push(item); //add it to the list
           item.click(function() { //click function for poem name
               if (selected != null) { //if other poem was selected before this
-                  selected.data('poem').hidePoem(); //hide this poem
                   if (selected.data('poem').contains()) selected.attr("fill", containsColor); //if contains the current word, red
                   else selected.attr("fill", deselectColor); //else black
               }
@@ -220,141 +210,125 @@ function scanFiles(files,i,j){
   }
 }
 
+function clickTest(word){
+  toDeselect = $(idOf(currWord))
+  for(var i=0;i<toDeselect.length;i++){
+    toDeselect[i].classList.remove("currWord");
+  }
+  currWord = word;
+  searchPoems(word);
+}
+
 //creates a new Poem object
 function Poem(data) {
-    //TODO:
-    //1. Split each poem into lines
-    //2. Split each line into an array of words
-    //3. Display each word
-    //4. Add a click function to each word
     this.title = data[0];
+
+    this.sigWords = {};
+    this.allSigWords = [];
+    this.rawLines = data.slice(2);
     this.lines = [];
-    this.sigWords = [];
 
+    for(var i = 0; i<this.rawLines.length;i++){
+      var splitLine = this.rawLines[i].split(" ")
+      //All of the lines split into an array
 
-    var localWidth = 0;
-    var y = buffer; //y coordinate for title and lines
-    this.title = poemPaper.text(buffer, y, data[0]); //poem title text
-    this.title.attr({
-        font: "16px Fontin-Sans, Helvetica",
-        fill: deselectColor,
-        "text-anchor": "start"
-    });
-    this.sigWords = []; //list of significant words (clickable, searchable words)
-    this.words = []; //all words of this poem (for displaying purposes)
-    this.plaintext = [];
-    this.title.hide(); //Poem created on load, start with poem hidden
-    y += lineSpacing; //move y coordinate down for first line
+      var sigNormalized = [];
+      //This will hold all of the normalized significant words in this line
 
-    for (var i = 1; i < data.length; i++) { //go through every line
-        var splitLine = data[i].split(" "); //split the line into an array of words
-        x = buffer; //start on the left
-        var building = "";
-        for (var j = 0; j < splitLine.length; j++) { //go through every word
-            var w = normalize(splitLine[j]);
-            if(isInList(w,insigWords)){
-              building+=splitLine[j] + " ";
-            }
-            else{
-              //console.log(w);
+      for (var j = 0; j < splitLine.length; j++) {
+        if(j===0){
+          this.lines[i] = [];
+        }
+          this.lines[i].push(splitLine[j]);
 
-
-              if(building!=""){
-                var prevWord = poemPaper.text(x,y,building);
-                prevWord.attr({
-                  font: "10px Fontin-Sans, Helvetica",
-                  fill: deselectColor,
-                  "text-anchor":"start"
-                });
-                x+= prevWord.node.getBBox().width+5;
-                this.words.push(prevWord);
-                prevWord.hide();
-              }
-              var plainw = splitLine[j];
-              var thisWord = poemPaper.text(x,y,plainw);
-              thisWord.attr({
-                font: "10px Fontin-Sans, Helvetica",
-                fill: deselectColor,
-                "text-anchor":"start"
-              });
-              thisWord.click(function(){
-                currWord = normalize(this.attr("text"));
-                searchPoems();
-              });
-              this.sigWords.push(thisWord);
-              this.words.push(thisWord);
-              this.plaintext.push(plainw);
-              x += thisWord.node.getBBox().width+3;
-              thisWord.hide();
-              building="";
-            }
+          var w = normalize(splitLine[j]);
+          if(isInList(w,insigWords)){
+            continue;
           }
-          if(x>localWidth) localWidth = x;
-          y+=lineSpacing;
-        }
-        console.log(this.plaintext);
-        var poemstr = "<span class='highlight'>HIGHLIGHT TEST</span>";
-        for(var p=0;p<this.plaintext.length;p++){
-          poemstr = poemstr + this.plaintext[p] + "\n"
-        }
-        document.getElementById("tree").innerHTML = poemstr;
-        if(localWidth>maxWidth) maxWidth = localWidth;
-        if(y>maxHeight) maxHeight = y;
-
-}
-
-//hides entire poem
-Poem.prototype.hidePoem = function() {
-    this.title.hide(); //hide the title
-    for (var i = 0; i < this.words.length; i++) { //hide every word of this poem
-        this.words[i].hide();
+          else{
+            sigNormalized.push(w);
+            this.allSigWords.push(w);
+          }
+      }
+      this.sigWords[i] = sigNormalized;
+      sigNormalized = [];
     }
 }
-
 
 //displays entire poem
 Poem.prototype.showPoem = function() {
-    this.title.show(); //display title
-    for (var i = 0; i < this.words.length; i++) { //display every word of this poem
-        this.words[i].show();
+    //Header for poem section
+    var html = "<h2 class='poemtitle'>"+this.title+"</h2><ul class='poemlines'>"
+    //For each line:
+    for (var i = 0; i<this.lines.length;i++){
+      var l = this.lines[i];
+      //Check if a blank line: if blank, add a break and continue
+      if(l == ""){
+        l = "<li>&nbsp;</li>";
+        html = html+l;
+        continue;
+      } else{
+      var lineID = "line_"+i;
+      html = html + "<li class='line' id="+lineID+">";
+      for(var w=0;w<l.length;w++){
+        var newHtml = "";
+        var n = normalize(l[w]);
+        if(!isInList(n,insigWords)){
+          var wordID = "word_"+n;
+          newHtml = "<span class="+wordID+" onclick=clickTest('"+n+"')>";
+          if(currWord == n){
+            newHtml = "<span class='"+wordID+" currWord' onclick=clickTest('"+n+"')>";
+          }
+          newHtml = newHtml + l[w];
+          newHtml = newHtml + "</span> "
+        } else{
+          newHtml = newHtml + l[w] + " ";
+        }
+        html = html+newHtml;
+      }
+      html = html + "</li>";
     }
+  }
+    html = html+"</ul>";
+    document.getElementById("poem").innerHTML = html;
+}
+
+function idOf(word){
+  return ".word_"+word;
 }
 
 //searches all poems for the currently selected word and changes highlighting appropriately
 function searchPoems() {
   edges = [];
-  //var foundLeft = [];
-  //var foundRight = [];
   var foundAll = [];
     for (var i = 0; i < poemList.length; i++) { //go through every poem
         var p = poemList[i].data('poem'); //grab its respective poem
         var poemTitle = poemList[i];
         var found = false; //marks whether we found the word in the poem
-        for (var j = 0; j < p.sigWords.length; j++) { //go through every word in this poem
-            var w = normalize(p.sigWords[j].attr('text')); //get rid of case and punctuation
-            if (w == currWord) { //this is the word we're looking for
-                p.sigWords[j].attr("fill", containsColor); //color it
-                found = true; //and remember that you found one
-
-                for(var d = j-dist; d<=j+dist; d++){
-                  if(d>=0 && d<p.sigWords.length){
-                  var word = normalize(p.sigWords[d].attr('text'));
-                  if(!isInList(word,foundAll) && word != "" && word!=currWord){
-                    if(!isEdge(currWord,word)){
-                      foundAll.push(word);
-                      edges.push(new Edge(currWord,word,poemTitle));
-                    }
-                    else{
-                      var thisEdge= getEdge(currWord,word);
-                      thisEdge.addPoem(poemTitle);
-                    }
-
-                  }
+        for (var j = 0; j < p.allSigWords.length; j++) { //go through every line in this poem
+              var w = p.allSigWords[j];
+              if (w == currWord) { //this is the word we're looking for
+                toSelect = $(idOf(w));
+                for(var y=0;y<toSelect.length;y++){
+                  toSelect[y].classList.add("currWord");
                 }
+                found = true; //and remember that you found one
+          for(var d = j-dist; d<=j+dist; d++){
+            if(d>=0 && d<p.allSigWords.length){
+            var word = p.allSigWords[d];
+            if(!isInList(word,foundAll) && word != "" && word!=currWord){
+              if(!isEdge(currWord,word)){
+                foundAll.push(word);
+                edges.push(new Edge(currWord,word,poemTitle));
               }
-            } else {
-                p.sigWords[j].attr("fill", deselectColor); //make sure its unselected
+              else{
+                var thisEdge= getEdge(currWord,word);
+                thisEdge.addPoem(poemTitle);
+              }
             }
+            }
+          }
+        }
         }
         if (found) { //found the current word in this poem
             if (poemList[i] == selected) poemList[i].attr("fill", selectColor); //if this is the currently selected poem, selected color
@@ -362,26 +336,14 @@ function searchPoems() {
         } else {
             poemList[i].attr("fill", deselectColor); //did not find the word in this poem
         }
-    }
+}
     treejson.name = currWord;
     treejson.children = [];
     for(var h=0;h<foundAll.length;h++){
-      //console.log(foundAll[h]);
         treejson.children[h] = {"name" : foundAll[h],"children":[]};
     }
-    //treejson.children = foundAll;
-  //  console.log(edges);
     makeTree(treejson);
-
-    //JSON.stringify(treejson);
-    //console.log(treejson);
-
-    //saveAsFile(this,treejson,"tree");
-    //saveAs(treejson,"tree.json");
-    //var next = new Node(headWord,connLeft,connRight,head);
-    //head = next;
-    //displayTree();
-}
+  }
 
 function showConnections(word1, word2){
   //console.log("Show "+word1+", "+word2);
@@ -494,10 +456,10 @@ function updateTree(newTree){
 //returns whether this poem contains the current word
 Poem.prototype.contains = function() {
     if (currWord == "") return 0; //no selected word
-    for (var i = 0; i < this.words.length; i++) { //for every line in this poem
-        var w = normalize(this.words[i].attr('text')); //get rid of case and punctuation
-        if (w == currWord) { //found one
-            return 1;
+    for (var i = 0; i < this.lines.length; i++) { //for every line in this poem
+        words = this.sigWords[i];
+        if($.inArray(currWord, words)){
+          return 1;
         }
     }
     return 0; //couldn't find one

@@ -37,12 +37,14 @@ div {
 	float:left;
 	overflow:auto;
   box-shadow: -3px 3px 5px #888888;
+  background-color:#FFFDFC;
 }
 #list {
 	width: 20%;
 	float:left;
 	overflow: auto;
   box-shadow: -3px 3px 5px #888888;
+  background-color:#aabae2;
 }
 #graph{
   margin-top:20px;
@@ -58,7 +60,7 @@ div {
 	width:40%;
   box-shadow: -3px 3px 5px #888888;
 }
-.highlight {
+.currWord {
   background-color: yellow;
 }
 	.node {
@@ -124,3 +126,17 @@ div {
     position:absolute;
     visibility: hidden;
   }
+h2.poemtitle {
+  font-size: 16px;
+  font-family: "Fontin-Sans, Helvetica";
+}
+.poemlines {
+  list-style-type:none;
+  padding-left:0;
+  margin:5px;
+}
+li.line {
+  margin: 0 0 5px 0;
+  font-size: 12px;
+  font-family: "Fontin-Sans, Helvetica";
+}
