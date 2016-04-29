@@ -105,31 +105,6 @@
         svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     }
 
-
-    // function displayTrashIcon(){
-    //   document.getElementById('trashicon').style.visibility='visible';
-    //
-    //   var pos = document.getElementById("tree").getBoundingClientRect();
-    //   document.getElementById("icon_1").style.top = 0;
-    //   document.getElementById("icon_1").style.left = pos.left-20;
-    //
-    //   document.getElementById("icon_1").addEventListener("click", trashClick);
-    //
-    // }
-    // function displayGraphIcon(){
-    //   document.getElementById("graphicon").style.visibility='visible';
-    //
-    //   var pos = document.getElementById("tree").getBoundingClientRect();
-    //   document.getElementById("icon_2").style.top = 0;
-    //   document.getElementById("icon_2").style.left = pos.left+25;
-    //
-    //   document.getElementById("icon_2").addEventListener("mousedown", graphClick);
-    //   document.getElementById("icon_2").addEventListener("mouseup", graphEndClick);
-    // }
-    //
-    // displayTrashIcon();
-    // displayGraphIcon();
-
     function trashClick(){
       icon = document.getElementById("trashicon");
       if(mode=='norm'){

@@ -1,56 +1,85 @@
+/*************/
+/*Global*/
+/*************/
 body {
-  background-color:linen;
+  background-color:#FFFFFF;
   font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
-input {
-	top:10;
-  float:left;
-}
 div {
+  border-radius:5px;
   margin:10px;
+}
+/*************/
+/*Header*/
+/*************/
+#header {
+  border-radius:10px;
+  text-align: center;
+	width:300px;
+	font-size:1.5em;
+  padding:5px;
+  font-weight: bold;
+  color:#4682B4;
+	background-color:#EEEEEE;
+  box-shadow: -3px 3px 5px #CDCDCD;
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+#instructions{
+  display:none;
+  margin-bottom:10px;
+  color:red;
+}
+#instructions_anchor{
+  font-size:10px;
+  cursor:help;
+}
+#instructions_anchor:hover + #instructions{
+  display:block;
+}
+input {
+  float:left;
 }
 h3 {
   font-size:8px;
   top:10;
   float:left;
 }
-#icon_1,#icon_2{
-  padding-top:0px;
-  padding-left:0px;
-  width:50px;
-  height:50px;
+hr {
+  border:none;
+  height:5px;
+  background-color:#4682B4;
+  border-radius:10px;
+  width:70%;
   float:left;
-  position:absolute;
+}
+.label {
+  margin-right:5px;
+  font-size:12px;
+  font-weight:bold;
+  float:left;
 }
 #inputRow{
-  /*margin-top: 35px;*/
-  height: 50px;
   width: 100%;
   float:middle;
-  /*display: block;*/
-  position: absolute;
 }
+/*************/
+/*App Display*/
+/*************/
 #toprow {
 	margin-top:35px;
-	height:400px;
+	height:350px;
 	width:100%;
 	float:middle;
 	display:block;
 	position:relative;
 }
-#header {
-	width:300px;
-	font-size:1.5em;
-	background-color:#B2A7BC;
-  box-shadow: -3px 3px 5px #888888;
-}
 #poemContainer{
   float:left;
-  box-shadow: -3px 3px 5px #888888;
+  box-shadow: -3px 3px 5px #CDCDCD;
   width: 30%;
   overflow:scroll;
-  height:400px;
-  background-color:#FFFDFC;
+  height:350px;
+  background-color:#EEEEEE;
 }
 #poem {
   padding:0;
@@ -60,8 +89,8 @@ h3 {
 	width: 20%;
 	float:left;
 	overflow: auto;
-  box-shadow: -3px 3px 5px #888888;
-  background-color:#aabae2;
+  box-shadow: -3px 3px 5px #CDCDCD;
+  background-color:#EEEEEE;
 }
 #graph{
   margin-top:20px;
@@ -69,13 +98,14 @@ h3 {
 	height:600px;
 	display:block;
   float: middle;
+  border:1px solid #4AA9F2;
+  background-color:#EEEEEE;
 }
 #tree {
-  display:block;
-	overflow: auto;
 	float:left;
 	width:40%;
-  box-shadow: -3px 3px 5px #888888;
+  background-color:#4AA9F2;
+  box-shadow: -3px 3px 5px #CDCDCD;
 }
 .currWord {
   background-color: yellow;
@@ -129,19 +159,6 @@ h3 {
     cursor: pointer;
     stroke: #bbb;
     stroke-width: 3px;
-  }
-  #trashicon {
-    cursor:pointer;
-    fill:gray;
-    position:absolute;
-    visibility:hidden;
-  }
-  #graphicon {
-    cursor:pointer;
-    fill:white;
-    stroke:gray;
-    position:absolute;
-    visibility: hidden;
   }
 h2.poemtitle {
   font-size: 16px;
