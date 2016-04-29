@@ -5,7 +5,7 @@ var selectBar;
 // Array of Poems
 var poems = [];
 // JSON for tree
-var treejson = {};
+var root = {};
 
 
 //Misc values
@@ -44,8 +44,16 @@ var maxWidthList = 100;
 var maxHeight =300;
 var center = null;
 var graph;
-var tree;
+//var tree;
 var edges = [];
+var stateTree = 0;
+var stateGraph = 1;
+var prevGraph = {};
+var prevTree = {};
+var prevEdges = [];
+var lastAction = -1;
+var mode = "norm";
+//var root = {};
 
 /*
 //TODO ignore this i'm just testing some stuff
@@ -108,41 +116,111 @@ function addToGraph(){
   //edges - w1,w2
   //graph - links (source,target,value(1)),nodes
   //console.log(edges);
+  var newGraph = {};
+  newGraph.nodes = [];
+  newGraph.links = [];
+  for(var p=0;p<graph.nodes.length;p++){
+    var newNode = {};
+    newNode.name = graph.nodes[p].name;
+    newNode.group = graph.nodes[p].group;
+    newGraph.nodes.push(newNode);
+  }
+  for(var p=0;p<graph.links.length;p++){
+    var newLink = {};
+    newLink.source = findIndex(graph.links[p].source.name,newGraph);
+    newLink.target = findIndex(graph.links[p].target.name,newGraph);
+    newGraph.links.push(newLink);
+  }
+
+
   for(var i=0;i<edges.length;i++){
     if(edges[i]==null) continue;
-    if(!nodeInGraph(edges[i].w1)){//if w1 not in graph yet, create new node
+    if(!nodeInGraph(edges[i].w1,newGraph)){//if w1 not in graph yet, create new node
     //  console.log("Adding "+edges[i].w1);
       var newNode = {};
       newNode.name = edges[i].w1;
       newNode.group = 1;
-      graph.nodes.push(newNode);
+      newGraph.nodes.push(newNode);
       //console.log("Create new node 1");
     }
-    if(!nodeInGraph(edges[i].w2)){//if w2 not in graph yet, create new nodeInGraph
+    if(!nodeInGraph(edges[i].w2,newGraph)){//if w2 not in graph yet, create new nodeInGraph
     //  console.log("Adding "+edges[i].w2);
 
       var newNode = {};
       newNode.name = edges[i].w2;
       newNode.group = 1;
-      graph.nodes.push(newNode);
+      newGraph.nodes.push(newNode);
       //console.log("Create new node 2");
     }
-    if(!edgeInGraph(edges[i])){//if no link exists between already, create new link
+    if(!edgeInGraph(edges[i],newGraph)){//if no link exists between already, create new link
       var newLink = {};
-      newLink.source=findIndex(edges[i].w1);
-      newLink.target=findIndex(edges[i].w2);
-      graph.links.push(newLink);
+      newLink.source=findIndex(edges[i].w1,newGraph);
+      newLink.target=findIndex(edges[i].w2,newGraph);
+      newGraph.links.push(newLink);
     }
   }
+  graph = newGraph;
   //console.log(graph);
-  makeGraph(graph);
+  makeGraph();
+}
+//
+// function updateGraph(newGraph){
+//   //lastAction = stateGraph;
+//   prevGraph = graph;
+//   graph = newGraph;
+// }
+
+function restore(){
+  //console.log("restoring");
+
+  //TODO fix undo graph function
+  if(lastAction==stateGraph){
+    //console.log("graph restore");
+    //console.log(prevGraph);
+    graph = prevGraph;
+    //makeGraph();
+  }
+  else if(lastAction==stateTree){
+    //console.log("tree restore");
+    //console.log(prevTree);
+    root = prevTree;
+    edges = prevEdges;
+      makeTree();
+    }
+  }
+
+function KeyPress(e) {
+      var evtobj = window.event? event : e
+      if (evtobj.keyCode == 90 && evtobj.ctrlKey){
+        restore();
+        lastAction = -1;
+      }
+      else if(evtobj.keyCode == 68){
+        mode = "del";
+      }
+      else if(evtobj.keyCode == 65){
+        addToGraph();
+      }
+      else if(evtobj.keyCode == 88 && evtobj.ctrlKey){
+        //console.log("key press");
+        var r = confirm("Are you sure you want to clear the graph?");
+        if(r==true) clearGraph();
+      }
 }
 
-function nodeInGraph(node){
+function KeyUp(e) {
+  //console.log("key up");
+  mode = "norm";
+}
+
+document.onkeydown = KeyPress;
+document.onkeyup = KeyUp;
+
+function nodeInGraph(node,aGraph){
   //console.log("Searching for " + node);
-  for(var j=0;j<graph.nodes.length;j++){
+  for(var j=0;j<aGraph.nodes.length;j++){
     //console.log(graph.nodes[j]+"!="+node);
-    if(graph.nodes[j].name==node){
+    if(aGraph.nodes[j].name==node){
       //console.log(node +" already in graph");
       return true;
     }
@@ -150,24 +228,27 @@ function nodeInGraph(node){
   return false;
 }
 
-function edgeInGraph(edge){
-  for(var j=0;j<graph.links.length;j++){
-    if((graph.links[j].source.name==edge.w1 && graph.links[j].target.name==edge.w2) || (graph.links[j].source.name==edge.w1 && graph.links[j].target.name==edge.w2)){
+function edgeInGraph(edge,aGraph){
+  for(var j=0;j<aGraph.links.length;j++){
+    if(typeof(aGraph.links[j]=='undefined')) continue;
+    if((aGraph.links[j].source.name==edge.w1 && aGraph.links[j].target.name==edge.w2) || (aGraph.links[j].source.name==edge.w1 && aGraph.links[j].target.name==edge.w2)){
       return true;
     }
   }
   return false;
 }
 
-function findIndex(name){
-  for(var i=0;i<graph.nodes.length;i++){
-    if(graph.nodes[i].name==name) return i;
+function findIndex(name,aGraph){
+  for(var i=0;i<aGraph.nodes.length;i++){
+    if(aGraph.nodes[i].name==name) return i;
   }
   return -1;
 }
 
 function deleteFromEdges(deleteWord){
+  prevEdges = [];
   for(var i=0;i<edges.length;i++){
+    prevEdges.push(edges[i]);
     if(edges[i]==null) continue;
     if(edges[i].w1==deleteWord || edges[i].w2==deleteWord){
       edges.splice(i,1);
@@ -176,11 +257,20 @@ function deleteFromEdges(deleteWord){
 //  console.log(edges);
 }
 
+function txtExtension(fileName){
+    var c = fileName.indexOf(".");
+    var w = fileName.substring(c+1,fileName.length);
+    if(w!="txt") return false;
+    return true;
+}
+
 function scanFiles(files,i,j){
   var output = [];
   var f;
   for (;i<j; i++) { //read every file
       f = files[i];
+      if(!txtExtension(f.name)) continue;
+
       var reader = new FileReader();
       var result;
       reader.onload = function(e) {
@@ -345,21 +435,22 @@ function searchPoems() {
             poemList[i].attr("fill", deselectColor); //did not find the word in this poem
         }
     }
-    treejson.name = currWord;
-    treejson.children = [];
+    root.name = currWord;
+    root.children = [];
     for(var h=0;h<foundAll.length;h++){
       //console.log(foundAll[h]);
-        treejson.children[h] = {"name" : foundAll[h],"children":[]};
+        root.children[h] = {"name" : foundAll[h],"children":[]};
     }
-    //treejson.children = foundAll;
+    //root.children = foundAll;
   //  console.log(edges);
-    makeTree(treejson);
+  //tree = root;
+    makeTree();
 
-    //JSON.stringify(treejson);
-    //console.log(treejson);
+    //JSON.stringify(root);
+    //console.log(root);
 
-    //saveAsFile(this,treejson,"tree");
-    //saveAs(treejson,"tree.json");
+    //saveAsFile(this,root,"tree");
+    //saveAs(root,"tree.json");
     //var next = new Node(headWord,connLeft,connRight,head);
     //head = next;
     //displayTree();
@@ -394,16 +485,56 @@ function isEdge(word1,word2){
   return false;
 
 }
-function saveAsFile(link, content, filename) {
-    var blob = new Blob([content], {type: "text/text"});
-    var url  = URL.createObjectURL(blob);
 
-    // update link to new 'url'
-    link.download    = filename + ".json";
-    link.href        = url;
+function saveState(fileName){
 
-    console.log("save");
+  var state = {};
+
+
+  var newGraph = {};
+  newGraph.nodes = [];
+  newGraph.links= [];
+  var newTree = copyTree(root);
+
+  for(var p=0;p<graph.nodes.length;p++){
+    var newNode = {};
+    newNode.name = graph.nodes[p].name;
+    newNode.group = graph.nodes[p].group;
+    newGraph.nodes.push(newNode);
+  }
+  for(var p=0;p<graph.links.length;p++){
+    var newLink = {};
+    newLink.source = findIndex(graph.links[p].source.name,newGraph);
+    newLink.target = findIndex(graph.links[p].target.name,newGraph);
+    newGraph.links.push(newLink);
+  }
+
+
+
+  state.tree = JSON.parse(JSON.stringify(newTree));
+  state.graph = JSON.parse(JSON.stringify(newGraph));
+  state.dist = dist;
+  state.insigWords = insigWords;
+
+  var toWrite = JSON.stringify(state);
+
+console.log(state);
+return toWrite;
+
 }
+
+
+function restoreNewState(newState){
+  console.log(newState);
+  console.log(newState.tree);
+  root = newState.tree;
+  graph = newState.graph;
+  dist = newState.dist;
+  insigWords = newState.insigWords;
+  makeTree();
+  makeGraph();
+}
+
 
 function Edge(w1,w2,p){
   this.w1 = w1;
@@ -469,7 +600,9 @@ function findConnections(word){
 }
 
 function updateTree(newTree){
-  tree = newTree;
+  lastAction = stateTree;
+//  prevTree = root;
+  root = newTree;
 }
 //saveAsFile(this, "YourContent", "HelloWorldFile");
 
@@ -583,7 +716,13 @@ function Node(thisWord,left,right,prev){
 }
 
 
+
+
 //when the page is done loading, initialize
 $(document).ready(function() {
+
+
     init();
+
+  //  console.log("ready");
 });

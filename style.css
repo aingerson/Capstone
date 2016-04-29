@@ -4,7 +4,7 @@ body {
 }
 input {
 	position:absolute;
-	top:50;
+	top:10;
   float:left;
 }
 div {
@@ -17,6 +17,14 @@ div {
   height:50px;
   float:left;
   position:absolute;
+}
+#inputRow{
+  /*margin-top: 35px;*/
+  height: 50px;
+  width: 100%;
+  float:middle;
+  /*display: block;*/
+  position: relative;
 }
 #toprow {
 	margin-top:35px;

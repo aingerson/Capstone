@@ -101,7 +101,7 @@ Bugs:
 
 - moving word -- ALEXIA
 - invisible word -- ALEXIA
-- tree deletion first word -- ALEXIA
+- tree deletion first word -- DONE
 
 ??
 - Tori's weird snapping corner
@@ -113,11 +113,11 @@ Extensions:
 - optimization of poem display -- TORI
 - highlighting of words -- TORI
 
-- clear graph -- ALEXIA
+- clear graph -- DONE
 - change distance and significant words -- ALEXIA
-- file load only text -- ALEXIA
-- deleting from graph -- ALEXIA
-- saving the state/loading -- ALEXIA
+- file load only text -- DONE
+- deleting from graph -- DONE (could change to delete unconnected words too -- easy fix if necessary)
+- saving the state/loading -- DONE
 
 
 - play with graphing variables -- TBD modes?
