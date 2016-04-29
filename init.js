@@ -26,6 +26,7 @@ var listY = buffer + lineSpacing; //y coordinate of poem list names
 var currWord = ""; //current selected word
 var selected = null; //current selected poem
 var insigWords = ["of", "a", "the", "in", "over", "to", "is",
+<<<<<<< HEAD
     "was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
     "can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
     "she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
@@ -37,6 +38,18 @@ var insigWords = ["of", "a", "the", "in", "over", "to", "is",
     "only", "high", "him", "when", "are", "than", "be", "will", "should", "till"
 ];
 ``
+=======
+"was", "and", "or", "its", "it", "for", "my", "your", "his", "though",
+"can", "at", "but", "from", "have", "has", "on", "as", "how", "her",
+"she", "they", "we", "i", "ii", "iii", "iv", "v", "vi", "vii", "viii",
+"do","not","go","come","here","into","that","so","an","shall","no","by",
+"who","he","had","you","one","oh","all","with","out","through", "",
+"let","if","\n","'all","i'll","me","'no","would","nor","o","are",
+"going","this","their","up","last","must","any","further","down","after",
+"other","there","about","were","among","their","like","once","then","need",
+"only","high","him","when","are","than","be","will","should","till"];
+
+>>>>>>> b8b31a7e8dfb8ef5b729d52ca304e6edc7bdac49
 var head;
 var dist = 2;
 var maxWidth = 300;
@@ -56,11 +69,24 @@ var mode = "norm";
 
 //initializes canvases
 function init() {
+<<<<<<< HEAD
     //Raphael canvas for poem list
     selectBar = new Raphael('list', '100%', '100%');
+=======
+// <<<<<<< Updated upstream
+//     //Raphael canvas for poem list
+// =======
+    poemPaper = new Raphael('poem','100%','100%');
+// >>>>>>> Stashed changes
+    selectBar = new Raphael('list','100%','100%');
+>>>>>>> b8b31a7e8dfb8ef5b729d52ca304e6edc7bdac49
     poemList = selectBar.set();
-
-    //File select listener
+// <<<<<<< Updated upstream
+//
+//     //File select listener
+// =======
+//
+// >>>>>>> Stashed changes
     document.getElementById('files').addEventListener('change', handleFileSelect, false);
     head = null;
 
@@ -484,8 +510,13 @@ function saveState(fileName) {
 
     var toWrite = JSON.stringify(state);
 
+<<<<<<< HEAD
     console.log(state);
     return toWrite;
+=======
+//console.log(state);
+return toWrite;
+>>>>>>> b8b31a7e8dfb8ef5b729d52ca304e6edc7bdac49
 
 }
 
