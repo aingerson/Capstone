@@ -284,6 +284,12 @@ function scanFiles(files, i, j) {
 }
 
 function wordClick(word) {
+  toDeselect = $(".currWord");
+  if(toDeselect!=null){
+  for (var y = 0; y < toDeselect.length; y++) {
+      toDeselect[y].classList.remove("currWord");
+  }
+}
     currWord = word;
     searchPoems(word);
 }
@@ -518,7 +524,7 @@ function findConnections(word) {
             toDeselect = $(".currWord");
             if(toDeselect!=null){
             for (var y = 0; y < toDeselect.length; y++) {
-                toDeselect[i].classList.remove("currWord");
+                toDeselect[y].classList.remove("currWord");
             }
           }
                 toSelect = $(idOf(w));
@@ -556,6 +562,7 @@ function findConnections(word) {
             "children": []
         };
     }
+    console.log(children);
     return children;
 }
 
@@ -587,7 +594,7 @@ function getEdge(word1, word2) {
 }
 
 Edge.prototype.addPoem = function(p) {
-    this.poems.add(p);
+    this.poems.push(p);
 }
 
 //gets rid of casing and punctuation
