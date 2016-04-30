@@ -6,7 +6,6 @@
   //var mode = "norm"
   function makeTree(){
 
-    console.log(root);
     $("#tree").empty();
     //tree = null;
     var nodes;
@@ -14,9 +13,6 @@
     var totalNodes = 0;
     var maxLabelLength = 0;
 
-    // variables for drag/drop
-    var selectedNode = null;
-    var draggingNode = null;
     // panning variables
     var panSpeed = 100;
     var panBoundary = 100; // Within 20px from edges will pan when dragging.
@@ -76,8 +72,6 @@
     }
     // Sort the tree initially incase the JSON isn't in a sorted order.
     sortTree();
-
-    // TODO: Pan function, can be better implemented.
 
     function pan(domNode, direction) {
         var speed = panSpeed;
@@ -170,15 +164,7 @@
     // Define the drag listeners for drag/drop behaviour of nodes.
     dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
-          return;
-          //Do nothing if the node is root
-            /*if (d == root) {
-                return;
-            }
-            dragStarted = true;
-            nodes = tree.nodes(d);
-            d3.event.sourceEvent.stopPropagation();*/
-            // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
+
         })
         .on("drag", function(d) {
           return;
@@ -333,12 +319,9 @@
 
     function click(d) {
               if (d3.event.defaultPrevented) return; // click suppressed
-        if(currentMode() == "del"){
-
+        if(currentMode() ==  "del"){
         if(d.name==root.name) return;
-      //  prevTree = root;
-      prevTree = copyTree(root);
-        //console.log(prevTree);
+        prevTree = copyTree(root);
         lastAction = stateTree;
 
         deleteFromEdges(d.name);
