@@ -53,12 +53,23 @@ hr {
   float:left;
 }
 .label {
+  float:left;
   margin-right:5px;
+  font-size:12px;
+  font-weight:bold;
+}
+.label2 {
+  float:left;
+  margin-left:10px;
+  margin-top:20px;
   font-size:12px;
   font-weight:bold;
 }
 select{
   width: 200px;
+  float:left;
+  margin:10px;
+  margin-top:10px;
 }
 #inputRow{
   width: 100%;
@@ -96,10 +107,10 @@ select{
 }
 #graph{
   margin-top:20px;
-	width:70%;
+	width:75%;
 	height:600px;
 	display:block;
-  float: middle;
+  float: left;
   border:1px solid #4AA9F2;
   background-color:#EEEEEE;
 }
