@@ -51,6 +51,7 @@ var prevTree = {};
 var prevEdges = [];
 var lastAction = -1;
 var mode = "norm";
+var currEdge;
 
 //initializes canvases
 function init() {
@@ -284,6 +285,7 @@ function scanFiles(files, i, j) {
 }
 
 function wordClick(word) {
+  currEdge = null;
   toDeselect = $(".currWord");
   if(toDeselect!=null){
   for (var y = 0; y < toDeselect.length; y++) {
@@ -357,6 +359,11 @@ Poem.prototype.showPoem = function() {
                     if (currWord == n) {
                         newHtml = "<span class='" + wordID + " currWord' onclick=wordClick('" + n + "')>";
                     }
+                    if(currEdge != null){
+                    if(currEdge.w1 == n || currEdge.w2 == n){
+                      newHtml = "<span class='" + wordID + " connection' onclick=wordClick('" + n + "')>";
+                    }
+                  }
                     newHtml = newHtml + l[w];
                     newHtml = newHtml + "</span> "
                 } else {
@@ -429,20 +436,25 @@ function searchPoems() {
 
 function showConnections(word1, word2) {
     var e = getEdge(word1, word2);
-
     if (e == null) return;
+
+    currEdge = e;
     selected.data('poem').hidePoem();
+
     for (var j = 0; j < poemList.length; j++) {
         poemList[j].attr("fill", deselectColor);
     }
+
     for (var j = 0; j < e.poems.length; j++) {
         e.poems[j].attr("fill", containsColor);
     }
+
     if (e.poems.length == 1) {
         selected = e.poems[0];
         selected.data('poem').showPoem();
         selected.attr("fill", selectColor);
     }
+
 }
 
 

@@ -190,3 +190,6 @@ li.line {
   font-size: 12px;
   font-family: "Fontin-Sans, Helvetica";
 }
+span.connection {
+  background-color:#4AA9F2;
+}
