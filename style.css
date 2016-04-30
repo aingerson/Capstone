@@ -190,6 +190,19 @@ li.line {
   font-size: 12px;
   font-family: "Fontin-Sans, Helvetica";
 }
+<<<<<<< HEAD
 span.connection {
   background-color:#4AA9F2;
 }
+=======
+
+.scrollable{
+   overflow: auto;
+   width: 150px; /* adjust this width depending to amount of text to display */
+   height: 200px; /* adjust height depending on number of options to display */
+   border: 1px silver solid;
+ }
+ .scrollable select{
+   border: none;
+ }
+>>>>>>> c8686f0802c5e93c01895135fc1dc391a8521601

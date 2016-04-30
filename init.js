@@ -66,6 +66,8 @@ function init() {
     graph.nodes = [];
     graph.links = [];
     adjustSizes();
+    makeTree();
+
 }
 
 
@@ -505,8 +507,8 @@ function saveState(fileName) {
 
 
 function restoreNewState(newState) {
-    console.log(newState);
-    console.log(newState.tree);
+    //console.log(newState);
+    //console.log(newState.tree);
     root = newState.tree;
     graph = newState.graph;
     dist = newState.dist;
@@ -574,7 +576,7 @@ function findConnections(word) {
             "children": []
         };
     }
-    console.log(children);
+    //console.log(children);
     return children;
 }
 
