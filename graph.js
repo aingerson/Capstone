@@ -137,14 +137,15 @@ function displayCycles(cycs){
   if(cycs.length==0){
     var cyc = printCycle(cycs[i]);
     var opt = document.createElement('none');
-    opt.value = "No cycles detected";
+    opt.value = "none";
+    opt.innerHTML = "No cycles detected";
     select.appendChild(opt);
   }
   for(var i=0;i<cycs.length;i++){
     var cyc = printCycle(cycs[i]);
     var opt = document.createElement('option');
     opt.value = ""+ cyc;
-    //opt.innerHTML = i;
+    opt.innerHTML = cyc;
     select.appendChild(opt);
   }
 }
