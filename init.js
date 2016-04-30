@@ -112,7 +112,6 @@ function addToGraph() {
         newGraph.links.push(newLink);
     }
 
-
     for (var i = 0; i < edges.length; i++) {
         if (edges[i] == null) continue;
         if (!nodeInGraph(edges[i].w1, newGraph)) { //if w1 not in graph yet, create new node
@@ -166,13 +165,13 @@ function restore() {
         edges = prevEdges;
         makeTree();
     }
+    lastAction = -1;
 }
 
 function KeyPress(e) {
     var evtobj = window.event ? event : e
     if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
         restore();
-        lastAction = -1;
     } else if (evtobj.keyCode == 68) {
         mode = "del";
     } else if (evtobj.keyCode == 65) {
@@ -296,6 +295,10 @@ function wordClick(word) {
 }
     currWord = word;
     searchPoems(word);
+    prevTree = copyTree(root);
+    prevEdges = edges;
+    lastAction = stateTree;
+    restore();
 }
 
 //creates a new Poem object

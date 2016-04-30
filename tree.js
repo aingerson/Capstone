@@ -6,11 +6,10 @@
   //var mode = "norm"
   function makeTree(){
 
-    console.log(root);
+    //console.log(root);
     $("#tree").empty();
     //tree = null;
     var nodes;
-
     var totalNodes = 0;
     var maxLabelLength = 0;
 
@@ -63,7 +62,7 @@
     });
     }
     else{
-      maxLabelLength = 10;
+        maxLabelLength = 8;
     }
 
 
@@ -345,7 +344,7 @@
         root = deleteFromTree(root,d.name);
         update(d);
         //prevTree = tree;
-      updateTree(root);
+      //updateTree(root);
 
 
         } else{
@@ -474,14 +473,15 @@
           }
 
         nodeEnter.append("text")
-            .attr("x", function(d) {
-                return d.children || d._children ? -10 : 10;
-            })
+            // .attr("x", function(d) {
+            //     return d.children || d._children ? -10 : 10;
+            // })
+            .attr("dx",10)
             .attr("dy", ".35em")
             .attr('class', 'nodeText')
-            .attr("text-anchor", function(d) {
-                return d.children || d._children ? "end" : "start";
-            })
+            // .attr("text-anchor", function(d) {
+            //     return d.children || d._children ? "end" : "start";
+            // })
             .text(function(d) {
                 return d.name;
             })
@@ -609,6 +609,7 @@
 
     update(root);
     centerNode(root);
+    //console.log(root);
 }
 
     function currentMode(){

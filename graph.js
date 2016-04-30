@@ -1,5 +1,6 @@
 
 function makeGraph() {
+
   $("#graph").empty();
   //console.log(graph);
 
