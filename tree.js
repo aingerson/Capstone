@@ -26,7 +26,7 @@
 
     // size of the diagram
     var viewerHeight = document.getElementById("toprow").offsetHeight;
-    var viewerWidth = document.getElementById("tree").offsetWidth;
+    var viewerWidth = document.getElementById("toprow").offsetWidth * 0.4;
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
     // define a d3 diagonal projection for use by the node paths later on.
@@ -52,14 +52,19 @@
     }
 
     // Call visit function to establish maxLabelLength
-    visit(root, function(d) {
+    if(typeof(root.name)!='undefined'){
+      visit(root, function(d) {
       //console.log("d:"+d);
         totalNodes++;
         maxLabelLength = Math.max(d.name.length, maxLabelLength);
 
-    }, function(d) {
+      }, function(d) {
         return d.children && d.children.length > 0 ? d.children : null;
     });
+    }
+    else{
+      maxLabelLength = 10;
+    }
 
 
     // sort the tree according to the node names
@@ -114,17 +119,6 @@
         mode = 'norm';
         icon.style.fill = "gray"};
     }
-
-    function graphClick(){
-      document.getElementById("graphicon").style.stroke='red';
-      //console.log("graphclick");
-    }
-    function graphEndClick(){
-      document.getElementById("graphicon").style.stroke='gray';
-      addToGraph();
-
-    }
-
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
@@ -470,13 +464,14 @@
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
             .on('click', click);
-
+            if(typeof(root.name)!='undefined'){
         nodeEnter.append("circle")
             .attr('class', 'nodeCircle')
             .attr("r", 0)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
+          }
 
         nodeEnter.append("text")
             .attr("x", function(d) {

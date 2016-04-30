@@ -123,10 +123,40 @@ function makeGraph() {
             toggle = 0;
         }
     }
+
+    function showCycle(){
+      if(graph.links.length>0){
+        link.style("color", function(o){
+          return "red";
+        });
+      }
+    }
+
     var foundCycles = findCycles();
     displayCycles(foundCycles);
+
 }
 
+
+function showCycle(e){
+  var nodeIndeces = e.options[e.selectedIndex].value;
+  var cycleLinks = [];
+  for(var p=0;p<nodeIndeces.length-1;p++){
+    var l = getLink(nodeIndeces[p],nodeIndeces[p+1]);
+  }
+}
+
+function getLink(w1,w2){
+  for(var g=0;g<graph.links.length;g++){
+    if(graph.nodes[graph.links[g].target.index].name==w1 && graph.nodes[graph.linkes[g].source.index].name==w2){
+      return graph.nodes[graph.links[g]];
+    }
+    else if(graph.nodes[graph.links[g].target.index].name==w2 && graph.nodes[graph.linkes[g].source.index].name==w1){
+      return graph.nodes[graph.links[g]];
+    }
+  }
+  return null;
+}
 
 function displayCycles(cycs){
   var select = document.getElementById('cycles');
@@ -135,16 +165,16 @@ function displayCycles(cycs){
     select.options[i] = null;
   }
   if(cycs.length==0){
-    var cyc = printCycle(cycs[i]);
+  //  var cyc = printCycle(cycs[i]);
     var opt = document.createElement('none');
-    opt.value = "none";
+    opt.value = [];
     opt.innerHTML = "No cycles detected";
     select.appendChild(opt);
   }
   for(var i=0;i<cycs.length;i++){
     var cyc = printCycle(cycs[i]);
     var opt = document.createElement('option');
-    opt.value = ""+ cyc;
+    opt.value = cycs[i];
     opt.innerHTML = cyc;
     select.appendChild(opt);
   }
