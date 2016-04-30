@@ -134,6 +134,12 @@ function displayCycles(cycs){
   for(var i=0;i<length;i++){
     select.options[i] = null;
   }
+  if(cycs.length==0){
+    var cyc = printCycle(cycs[i]);
+    var opt = document.createElement('none');
+    opt.value = "No cycles detected";
+    select.appendChild(opt);
+  }
   for(var i=0;i<cycs.length;i++){
     var cyc = printCycle(cycs[i]);
     var opt = document.createElement('option');
