@@ -21,6 +21,7 @@ function findCycles(){
   for(var g=0;g<graph.nodes.length;g++){
     dfs(g);
   }
+  sortCycles();
 //  printAllCycles();
   return cycles;
 }
@@ -30,6 +31,22 @@ function findCycles(){
 //     printCycle(cycles[j]);
 //   }
 // }
+
+function sortCycles(){
+  var count = 0;
+  var ret = [];
+  var i = 3;
+  while(count<cycles.length){
+    for(var h=0;h<cycles.length;h++){
+      if(cycles[h].length==i){
+        ret.push(cycles[h]);
+        count++;
+      }
+    }
+    i++;
+  }
+  cycles = ret;
+}
 
 function dfs(current){
   //curr = current;
