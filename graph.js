@@ -123,7 +123,24 @@ function makeGraph() {
             toggle = 0;
         }
     }
-    findCycles();
+    var foundCycles = findCycles();
+    displayCycles(foundCycles);
+}
+
+
+function displayCycles(cycs){
+  var select = document.getElementById('cycles');
+  var length = select.options.length;
+  for(var i=0;i<length;i++){
+    select.options[i] = null;
+  }
+  for(var i=0;i<cycs.length;i++){
+    var cyc = printCycle(cycs[i]);
+    var opt = document.createElement('option');
+    opt.value = ""+ cyc;
+    //opt.innerHTML = i;
+    select.appendChild(opt);
+  }
 }
 
 function deleteFromGraph(n){

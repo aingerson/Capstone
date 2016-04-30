@@ -21,14 +21,15 @@ function findCycles(){
   for(var g=0;g<graph.nodes.length;g++){
     dfs(g);
   }
-  printAllCycles();
+//  printAllCycles();
+  return cycles;
 }
-
-function printAllCycles(){
-  for(var j=0;j<cycles.length;j++){
-    printCycle(cycles[j]);
-  }
-}
+//
+// function printAllCycles(){
+//   for(var j=0;j<cycles.length;j++){
+//     printCycle(cycles[j]);
+//   }
+// }
 
 function dfs(current){
   //curr = current;
@@ -73,7 +74,7 @@ function printCycle(cyc){
       print+="->";
     }
   }
-  console.log(print);
+  return print;
 }
 
 
