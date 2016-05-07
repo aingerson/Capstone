@@ -1,0 +1,203 @@
+/*************/
+/*Global*/
+/*************/
+
+body {
+    background-color: #FFFFFF;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+div {
+    border-radius: 5px;
+    margin: 10px;
+}
+/*************/
+/*Header*/
+/*************/
+
+#header {
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    font-size: 1.5em;
+    padding: 5px;
+    font-weight: bold;
+    color: #4682B4;
+    background-color: #EEEEEE;
+    box-shadow: -3px 3px 5px #CDCDCD;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+#instructions {
+    display: none;
+    margin-bottom: 10px;
+    color: red;
+}
+#instructions_anchor {
+    font-size: 10px;
+    cursor: help;
+}
+#instructions_anchor:hover + #instructions {
+    display: block;
+}
+input {
+    float: left;
+}
+h3 {
+    font-size: 8px;
+    top: 10;
+    float: left;
+}
+hr {
+    border: none;
+    height: 5px;
+    background-color: #4682B4;
+    border-radius: 10px;
+    width: 70%;
+    float: left;
+}
+.label {
+    float: left;
+    margin-right: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.label2 {
+    float: left;
+    margin-left: 10px;
+    margin-top: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+select {
+    width: 200px;
+    float: left;
+    margin: 10px;
+    margin-top: 10px;
+}
+#inputRow {
+    width: 100%;
+    float: middle;
+}
+/*************/
+/*App Display*/
+/*************/
+
+#toprow {
+    margin-top: 35px;
+    height: 350px;
+    width: 100%;
+    float: middle;
+    display: block;
+    position: relative;
+}
+#poemContainer {
+    float: left;
+    box-shadow: -3px 3px 5px #CDCDCD;
+    width: 30%;
+    overflow: scroll;
+    height: 350px;
+    background-color: #EEEEEE;
+}
+#poem {
+    padding: 0;
+    margin: 0;
+}
+#list {
+    width: 20%;
+    float: left;
+    overflow: auto;
+    box-shadow: -3px 3px 5px #CDCDCD;
+    background-color: #EEEEEE;
+}
+#graph {
+    margin-top: 20px;
+    width: 75%;
+    height: 600px;
+    display: block;
+    float: left;
+    border: 1px solid #4AA9F2;
+    background-color: #EEEEEE;
+}
+#tree {
+    float: left;
+    width: 40%;
+    background-color: #EEEEEE;
+    box-shadow: -3px 3px 5px #CDCDCD;
+}
+#cycles {
+    style.visibility: 'hidden';
+}
+.currWord {
+    background-color: yellow;
+}
+.node {
+    cursor: pointer;
+}
+.overlay {
+    background-color: #EEE;
+}
+.node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+.node text {
+    font-size: 10px;
+    font-family: sans-serif;
+}
+.link {
+    cursor: pointer;
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 3px;
+}
+.templink {
+    fill: none;
+    stroke: blue;
+    stroke-width: 3px;
+}
+.ghostCircle.show {
+    display: block;
+}
+.ghostCircle,
+.activeDrag .ghostCircle {
+    display: none;
+}
+.graphNode {
+    cursor: all-scroll;
+}
+.graphLink {
+    fill: none;
+    cursor: pointer;
+    stroke: #bbb;
+    stroke-width: 3px;
+}
+h2.poemtitle {
+    font-size: 16px;
+    font-family: "Fontin-Sans, Helvetica";
+}
+.poemlines {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 5px;
+}
+li.line {
+    margin: 0 0 5px 0;
+    font-size: 12px;
+    font-family: "Fontin-Sans, Helvetica";
+}
+span.connection {
+    background-color: #4AA9F2;
+}
+/*.scrollable{
+   overflow: auto;
+   width: 150px; /* adjust this width depending to amount of text to display */
+
+height: 200px;
+/* adjust height depending on number of options to display */
+
+border: 1px silver solid;
+}
+*/ .scrollable select {
+    width: 150px;
+    overflow: auto: border: none;
+}

@@ -1,57 +1,56 @@
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-	<title>Metaphor Mapping</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Metaphor Mapping</title>
 
-	<script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
-	<script type="text/javascript" src="lib/utils.js"></script>
-	<script type="text/javascript" src="lib/raph.js"></script>
-	<script type="text/javascript" src="lib/parallel.js"></script>
-	<script type="text/javascript" src="init.js"></script>
-	<script type="text/javascript" src="lib/d3.min.js"></script>
-	<script type="text/javascript" src="tree.js"></script>
-	<script type="text/javascript" src="graph.js"></script>
-	<script type="text/javascript" src="download.js"></script>
-	<script type="text/javascript" src="cycle.js"></script>
+    <script type="text/javascript" src="lib/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="lib/utils.js"></script>
+    <script type="text/javascript" src="lib/raph.js"></script>
+    <script type="text/javascript" src="lib/d3.min.js"></script>
 
+    <script type="text/javascript" src="lib/init.js"></script>
+    <script type="text/javascript" src="lib/tree.js"></script>
+    <script type="text/javascript" src="lib/graph.js"></script>
+    <script type="text/javascript" src="lib/download.js"></script>
+    <script type="text/javascript" src="lib/cycle.js"></script>
 
-
-
-<link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
-  <body>
-<div id=header>
-Metaphor Mapping
-</div>
-<a id="instructions_anchor">Hover for instructions...</a>
-<div id=instructions>
-	<p>Hold D: Delete Mode</p>
-	<p>Press A: Add to Graph</p>
-	<p>Ctrl+Z: Undo</p>
-	<p>Ctrl+X: Clear Graph</p>
-</div>
-<div id=inputRow>
-	<span class='label'>Upload Files</span>
-	<input type="file" id="files" name="files[]" multiple/>
-			<span class='label'>Load State</span>
-	<button id="create">Save State</button><a download="info.txt" id="downloadlink" style="display: none">Download</a>
-	<input type ="file" id="upload">
-</div>
-<hr>
-<div id='toprow'>
-	<div id='list'></div>
-<div id='poemContainer'>
-	<div id='poem'></div>
-</div>
-	<div id='tree'>
-	</div>
-</div>
-<div id='graph'> </div>
-<span class="label2">Cycles Detected</span>
-<div class="scrollable">
-<select id='cycles' size="20" onchange="showCycle(this);">
+
+<body>
+    <div id=header>
+        Metaphor Mapping
+    </div>
+    <a id="instructions_anchor">Hover for instructions...</a>
+    <div id=instructions>
+        <p>Hold D: Delete Mode</p>
+        <p>Press A: Add to Graph</p>
+        <p>Ctrl+Z: Undo</p>
+        <p>Ctrl+X: Clear Graph</p>
+    </div>
+    <div id=inputRow>
+        <span class='label'>Upload Files</span>
+        <input type="file" id="files" name="files[]" multiple/>
+        <span class='label'>Load State</span>
+        <button id="create">Save State</button><a download="info.txt" id="downloadlink" style="display: none">Download</a>
+        <input type="file" id="upload">
+    </div>
+    <hr>
+    <div id='toprow'>
+        <div id='list'></div>
+        <div id='poemContainer'>
+            <div id='poem'></div>
+        </div>
+        <div id='tree'>
+        </div>
+    </div>
+    <div id='graph'> </div>
+    <span class="label2">Cycles Detected</span>
+    <div class="scrollable">
+        <select id='cycles' size="20" onchange="showCycle(this.value);">
   <option value="none">No cycles detected</option>
 </select>
-</div>
+    </div>
 </body>
+
 </html>
