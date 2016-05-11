@@ -67,7 +67,6 @@ function init() {
     graph.links = [];
     adjustSizes();
     makeTree();
-
 }
 
 
@@ -504,14 +503,11 @@ function saveState(fileName) {
 
     var toWrite = JSON.stringify(state);
 
-    //console.log(state);
     return toWrite;
 }
 
 
 function restoreNewState(newState) {
-    //console.log(newState);
-    //console.log(newState.tree);
     root = newState.tree;
     graph = newState.graph;
     dist = newState.dist;
@@ -579,7 +575,6 @@ function findConnections(word) {
             "children": []
         };
     }
-    //console.log(children);
     return children;
 }
 
@@ -698,6 +693,4 @@ $(document).ready(function() {
 
 
     init();
-
-    //  console.log("ready");
 });
